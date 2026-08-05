@@ -1,0 +1,910 @@
+# SMS — Full Feature Inventory (from the help file)
+
+Extracted from `ALMapping.chm` — **835 distinct help topics**, each a dialog / wizard / function in SMS. This is the authoritative breadth list for the parity goal. Grouped by functional area below; raw list in `analysis/chm_topics.txt`.
+
+## Import / read data  (37)
+
+- Assign Columns to Import - Weather Zone
+- Assign Import Data by Field Names
+- Download Sentinel Imagery Options
+- How to Download Soil Survey Data from the Internet
+- How to Sync Import from SMS Mobile
+- How to batch import data(i.e. ESRI Shape,and text files)
+- How to convert data into Installed Tile data
+- How to download imagery from the internet
+- How to download import LiDAR data automatically
+- How to download import Sentinel-2 Imagery
+- How to download read files and data from AgFiniti
+- How to export and import Transfer Information
+- How to import non-spatial data (i.e. Soil Lab Results).
+- Import Local Projects
+- Import Transfer Project Default File
+- Importing 3D Surface Model Information
+- LiDAR Download Options
+- Management Item Import Preview
+- SDTS to DEM Converter
+- SMS HTML/HID FILE OPENCARD
+- SMS HTML/HIDD LATLON IMPORT PG
+- SMS HTML/HIDD SELECT IMPORT TYPE
+- SMS HTML/HIDD TEMPLATE IMPORT DLG
+- SMS HTML/How to import Greenstar data
+- SMS HTML/How to import a GeoTIFF image file
+- SMS HTML/How to import an ASCII text file
+- SMS HTML/How to import an ESRI Shape file
+- SMS HTML/How to import data using a template
+- SMS HTML/Importing Data
+- Select Color Bands to Import
+- Select File Import Method
+- Select Files to Download and or Import From AgFiniti
+- Select Growers to Download Data Files for
+- Select Import Columns
+- Select Sentinel-2 Images to Download Process
+- Select Weather Zone - Import
+- Terraserver Download Options
+
+## Export / write data  (36)
+
+- Exporting Jobs and Tasks
+- GS2 Export Settings
+- How to export a Case IH or New Holland Voyager PRD Prescription file.
+- How to export a Job
+- How to export an Insight IRX Prescription File
+- IRX Export Options
+- Mobile Project Export Location Options
+- SMS HTML/Export Data Formats
+- SMS HTML/Export to AgFiniti
+- SMS HTML/Exporting Data
+- SMS HTML/HIDD EXPORT MAPSETTINGS
+- SMS HTML/HIDD EXPORT PREVIEW DLG
+- SMS HTML/HIDD EXPORT SETTINGS
+- SMS HTML/HIDD EXPORT SETTINGS DLG
+- SMS HTML/HIDD IMAGE EXPORT
+- SMS HTML/HIDD MULTIPRODUCT EXPORT
+- SMS HTML/HIDD PFN EXPORT
+- SMS HTML/HIDD SETUP EXPORT
+- SMS HTML/HIDD TGT EXPORT SETTINGS
+- SMS HTML/HIDD VYG EXPORT SETTINGS
+- SMS HTML/HIDD YLDEXPORTOPTIONS DLG
+- SMS HTML/How to create and export a Device Setup File s
+- SMS HTML/How to export a Case IH ENS Prescription File
+- SMS HTML/How to export a Case IH or Flexi Coil PRE Prescription File
+- SMS HTML/How to export a TGT prescription file
+- SMS HTML/How to export a bitmap or other image file type
+- SMS HTML/How to export an ASCII text file
+- SMS HTML/How to export an Ag Leader Basic or Advanced format file
+- SMS HTML/How to export an ESRI Shape file
+- Select Export Units
+- Select Job Export Format
+- Select a Display File Format to Export to
+- Select a Generic File Format to Export to
+- Select an Export Method
+- YLD File Export Settings
+- export to insurance provider
+
+## Prescriptions / VRA  (13)
+
+- Edit Prescription Rates
+- Falcon Prescription Settings
+- Mid Tech Prescription Settings
+- Plot Prescription Editor
+- Prescription Budget
+- Prescription Settings
+- SMS HTML/HIDD PRESCRIPTION GRID PG
+- SMS HTML/HIDD PRESCRIPTION LAYER SEL
+- SMS HTML/HIDR EDITPRESCRIPTION
+- SMS HTML/HIDR EDITPRESCRIPTION MENU
+- SMS HTML/How to create a variable rate prescription
+- SMS HTML/How to edit a prescription data set
+- Voyager Prescription Settings
+
+## Analysis  (56)
+
+- Aggregate Options
+- Agronomic Analysis
+- Analysis Document Window
+- Analysis Report Options
+- Analysis Wizard
+- Analysis menu
+- Assign Missing Zones
+- Assign Productivity Zone to Region
+- Booklet Batch Analysis Function Selection
+- Cluster Analysis Settings
+- Define Result Equation(s)
+- Edit Assigned Weather Zone
+- Edit Dataset Filter
+- Edit Print Properties - Analysis Box
+- Generate Zones from Image
+- Grid Options - Profit Loss Analysis
+- How to create Weather Zones and make weather charts.
+- How to create Zones from an Image (Advanced)
+- How to generate a Multi-Year aggregated dataset.
+- How to generate a Profit Loss dataset.
+- How to generate a Yield Analysis dataset
+- How to generate a cluster analysis dataset
+- How to generate an Agronomic Analysis dataset
+- How to generate comparison results.
+- How to run a batch comparison analysis.
+- How to write an equation
+- Management Zone Editor
+- Manual Equation Entry
+- Profit Loss Report Options
+- SMS HTML/Attribute Comparison Chart
+- SMS HTML/Data Analysis and Modification in SMS
+- SMS HTML/HIDD ANALYSIS REPROCESS
+- SMS HTML/HIDD CURRFILTER DLG
+- SMS HTML/HIDD FULLFILTER DLG
+- SMS HTML/HIDD SELECTION FILTER PG
+- SMS HTML/How to add a simple analysis function
+- SMS HTML/How to edit a simple analysis function s
+- SMS HTML/How to remove a simple analysis function s
+- SMS HTML/Product Comparison Chart
+- SMS HTML/Projection Zone Region Maps
+- Select Analysis Input Datasets
+- Select Analysis Type to Run
+- Select Datasets for Comparison
+- Select Iterative Data Filter
+- Select Projects to Analyze
+- Select Report Filter Items
+- Select Spatial Filter Items
+- Set Analysis Result Type(s)
+- Spatial Filter Results
+- Spatial Filter Type Selection
+- Understanding Equation Formatting
+- View Saved Analysis Details
+- Weather Zones
+- Yield Analysis
+- Yield Analysis Results Explained
+- multi-project analysis
+
+## Mapping & visualization  (89)
+
+- 3D Mapping and Plotting
+- 3D Plot Attribute Options
+- 3D View Settings
+- Background Layer Edit
+- Background Layer Utility
+- Chart Map Settings
+- Configure Layer Swath Segments
+- Coverage Map Options
+- Create Contoured Laterals (Preview)
+- Current Map Printing Options
+- Data Grid Tab
+- Field Trial - Reference Layer Settings
+- Grid Cell Definition
+- Grid Options
+- Grid Options Settings
+- How to display the 3D Terrain View.
+- Manage Reference Layers
+- Mapping 2 Settings
+- Mosaic Color Remap
+- Percentage Based Legend Settings
+- Print Layout Layer
+- Print Map Layer(s)
+- Remap Image Colors
+- Report Colors
+- SMS HTML/AFX HIDD COLOR
+- SMS HTML/About the Layer Window
+- SMS HTML/Current Map Layout
+- SMS HTML/HID LEGENDWND
+- SMS HTML/HID MAP PREV WND
+- SMS HTML/HID MAPPROPVIEW
+- SMS HTML/HID MAPQUERYVIEW
+- SMS HTML/HID NEXT PANE
+- SMS HTML/HID PREV PANE
+- SMS HTML/HIDD LAYER ADJUST
+- SMS HTML/HIDD LAYER DATA OPTIONS
+- SMS HTML/HIDD LAYEROPT LABELS ALIGN DLG
+- SMS HTML/HIDD LAYEROPT LABELS PG
+- SMS HTML/HIDD LEGEND LAYOUT PG
+- SMS HTML/HIDD LEGEND MAPPING PG
+- SMS HTML/HIDD LEGEND UTIL
+- SMS HTML/HIDD LNOTES DISPLAY
+- SMS HTML/HIDD LOADLEGEND
+- SMS HTML/HIDD MAP LAYOUT PG
+- SMS HTML/HIDD MAP PREVIEW PG
+- SMS HTML/HIDD MAP PRINT LAYOUT
+- SMS HTML/HIDD MAPSETTINGS UTILS
+- SMS HTML/HIDD POINT MAP EDIT
+- SMS HTML/HIDD SAMPLELEGEND
+- SMS HTML/HIDD SAVELEGEND
+- SMS HTML/HIDD SELECT LAYER PG
+- SMS HTML/HIDD SELECT QLAYERS
+- SMS HTML/HIDD SELECTLAYEROBJS PG
+- SMS HTML/HIDD SETTINGS LEGEND
+- SMS HTML/HIDD SETTINGS MAPPING
+- SMS HTML/HIDD UNUSED LEGEND DLG
+- SMS HTML/HIDD VALUELEGEND
+- SMS HTML/HIDR MAP SELECTTOOL MENU
+- SMS HTML/How to Add a Layer to a Map
+- SMS HTML/How to adjust layer and attribute property options
+- SMS HTML/How to change the items displayed in the summary
+- SMS HTML/How to edit a legend
+- SMS HTML/How to make a map
+- SMS HTML/How to migrate your data from Precision Map 2000 to SMS Basic
+- SMS HTML/How to print a custom map
+- SMS HTML/How to print a map of all layers
+- SMS HTML/How to print a map of the current layer
+- SMS HTML/How to print the Map Window summary information
+- SMS HTML/How to print the current map
+- SMS HTML/How to query a single layer
+- SMS HTML/How to query multiple layers
+- SMS HTML/How to set a map background s
+- SMS HTML/How to set your map projection
+- SMS HTML/Layer Options
+- SMS HTML/Layer and Attribute Property Options
+- SMS HTML/Layering in SMS
+- SMS HTML/Legends in SMS
+- SMS HTML/Map
+- SMS HTML/Map Backgrounds
+- SMS HTML/Map Properties
+- SMS HTML/Map Window
+- SMS HTML/Mapping Problems
+- SMS HTML/Mapping in SMS
+- SMS HTML/Single or Multi Layer Layout
+- SMS HTML/Sub Layer Options
+- SMS HTML/Using the Layer Window
+- Select Items to Display in Job Task Summary
+- Select Mappable Attributes Properties
+- Select Mosaic Layers
+- User Added Print Layer
+
+## 3D  (7)
+
+- 3D Plot Options
+- 3D Plot Settings
+- 3D Plot Settings Utility
+- 3D Plot Window
+- Edit Print Properties 3D Plot Box
+- How to create a 3D Plot.
+- Saving 3D Plot Options
+
+## Editing & cleaning  (117)
+
+- Add Edit Drainage Tile
+- Add Edit Field Trial
+- Add Edit Lookup Table
+- Add Edit Management Item Input
+- Add Edit Person - Person Info
+- Add Edit Pest
+- Add Edit Picture Notes for Selected Pest
+- Add Edit Setup Configuration - Drainage Tile
+- Add Edit Setup Configuration - Pest Setup
+- Add Edit Setup Configuration - Resource Tracking Setup
+- Add Edit Setup Configuration - Spatial Data Setup
+- Adjust Image
+- Adjust Yield
+- Analayis Editor
+- Attributes to offset
+- Crop Plan Editor
+- Edit Data Location
+- Edit Data Location Properties
+- Edit Grower - Address
+- Edit Input Dataset Settings
+- Edit Linked Item
+- Edit Pest Entries
+- Edit Plot Seed Count Trips
+- Edit Print Properties - Linked Image Box
+- Edit Print Properties - Picture Notes
+- Edit Print Properties - Query
+- Edit Print Properties - Tile Run Details
+- Edit Print Properties - Titles
+- Edit Print Properties - Weather Chart
+- Edit Print Properties - Weather Summary
+- Edit Print Properties Attributes Box
+- Edit Print Properties Field Summary Box
+- Edit Project
+- Edit Share
+- Edit Symbols
+- Field Trial Editor
+- Guidance Editor
+- How to create edit a custom Operation.
+- How to create split planter data.
+- How to edit Installed Tile data.
+- How to edit a crop plan
+- How to edit an image.
+- How to edit scouting data
+- How to use an Editor
+- Image Editor
+- Installed Tile Editor
+- Job Editor
+- Manually Adjust Heading
+- Mosaic Editor
+- Move Run
+- Operational Pair Editor
+- SMS HTML/Add Edit Setup Configuration - Products
+- SMS HTML/Edit Menu
+- SMS HTML/Editing Data in SMS
+- SMS HTML/HID EDIT CLEAR
+- SMS HTML/HID EDIT CLEAR ALL
+- SMS HTML/HID EDIT COPY
+- SMS HTML/HID EDIT CUT
+- SMS HTML/HID EDIT FIND
+- SMS HTML/HID EDIT PASTE
+- SMS HTML/HID EDIT PASTE LINK
+- SMS HTML/HID EDIT REDO
+- SMS HTML/HID EDIT REPEAT
+- SMS HTML/HID EDIT REPLACE
+- SMS HTML/HID EDIT UNDO
+- SMS HTML/HID OLE EDIT LINKS
+- SMS HTML/HID SC MOVE
+- SMS HTML/HID WINDOW SPLIT
+- SMS HTML/HIDD AREA ADJUST
+- SMS HTML/HIDD ASSOC DATA EDIT
+- SMS HTML/HIDD ATTRIBUTE EDITOR
+- SMS HTML/HIDD BACKGROUND EDIT
+- SMS HTML/HIDD BOUNDARY EDIT
+- SMS HTML/HIDD DELETE PREVIEW
+- SMS HTML/HIDD EDIT DLG
+- SMS HTML/HIDD EDIT GROUP LIST
+- SMS HTML/HIDD EDIT LIST SELECT DLG
+- SMS HTML/HIDD EDIT NOTES DLG
+- SMS HTML/HIDD EDIT SOIL DLG
+- SMS HTML/HIDD EDIT TREE PG
+- SMS HTML/HIDD ENUM EDIT DLG
+- SMS HTML/HIDD EPOCH EDIT
+- SMS HTML/HIDD FIELD MERGE DLG
+- SMS HTML/HIDD LIST EDIT
+- SMS HTML/HIDD NAV EDIT DLG
+- SMS HTML/HIDD OFFSET DIST DLG
+- SMS HTML/HIDD PERSCRIPTION EDIT
+- SMS HTML/HIDD PROPERTY EDIT
+- SMS HTML/HIDD REMOVE PROPERTIES
+- SMS HTML/HIDD ROW EDIT DLG
+- SMS HTML/How to edit a boundary
+- SMS HTML/How to edit an associated dataset
+- SMS HTML/How to edit generic data
+- SMS HTML/How to edit navigation points
+- SMS HTML/How to edit point data
+- SMS HTML/How to edit property data
+- SMS HTML/How to edit soil sampling data
+- SMS HTML/How to edit spatial notes
+- SMS HTML/How to manually move a Farm
+- SMS HTML/How to manually move a Field
+- SMS HTML/How to manually move other items Year Load etc
+- SMS HTML/How to merge cotton pickings
+- SMS HTML/How to split and sort a load region
+- SMS HTML/How to update a merged cotton dataset
+- SMS HTML/menu edit
+- Scouting Editor
+- Select Previous Future Offset Value
+- Select a Management Item Type to Move Data for
+- Select a Method to Optimize Swath Widths
+- Select a Operation to Move Your Selected Data to
+- Smooth Curves
+- Split Costs
+- Split Planter Equipment Settings
+- Split Planter Swath Settings
+- Task Editor
+- Tile Plan Editor
+- View Edit Weather Data
+
+## Boundaries  (5)
+
+- Create Guidance Along Boundary edge
+- Headland Settings
+- SMS HTML/How to create a boundary
+- SMS HTML/How to freeze a boundary
+- Trace Boundary
+
+## Guidance  (9)
+
+- Guidance Lines Preview
+- Guidance Settings
+- How to create a guidance dataset
+- New AB Line
+- Select Guidance Line
+- Select Guidance Line Creation Method
+- Select Reference Guidance Lines
+- Shift Guidance Line
+- Terrain Based Guidance Line Settings
+
+## Field trials  (7)
+
+- Field Trial - Placement Settings
+- Field Trial Setup
+- Field Trial Wizard - Select Define Trial
+- How to create a field trial (ADVANCED)
+- Insert Field Trial
+- Trial Datasets
+- Trial Information
+
+## Scouting / pests / notes  (7)
+
+- How to create a Scouting dataset
+- Pest
+- Picture Notes View
+- SMS HTML/How to create spatial notes
+- Scouting Report Preview
+- Select a Pest
+- Select a Scouting Report Type
+
+## Soil / sampling  (5)
+
+- SMS HTML/HIDD SAMPLING ATTR PG
+- SMS HTML/HIDD SAMPLING OPTIONS PG
+- SMS HTML/HIDD SAMPLING PREVIEW PG
+- SMS HTML/How to create a soil sampling dataset
+- Soil Survey Clipping Options
+
+## Weather  (11)
+
+- About the Weather View
+- Create Terrain Based Main
+- Save Weather Template
+- Using the Weather Chart View
+- Weather Attribute Settings
+- Weather Chart Document Window
+- Weather Chart Settings
+- Weather Chart Template Selection
+- Weather Chart Template Selection - Booklet
+- Weather Options
+- Weather Settings
+
+## Products / inputs  (14)
+
+- Assign Product Name
+- Multiple Product Settings for Operational Pair
+- SMS HTML/Crop Product Report
+- SMS HTML/HIDD GRASS SEED PG
+- SMS HTML/HIDD INPUT BOX
+- SMS HTML/HIDD PRODUCT COMPONENT DLG
+- SMS HTML/HIDD PRODUCT CONVERSION PG
+- SMS HTML/HIDD PRODUCT INFO
+- SMS HTML/HIDD PRODUCT MIX PG
+- SMS HTML/How to define Products
+- SMS HTML/Resource Tracking and Product Definition
+- Select Crop Plan Operation(s) and Product(s)
+- Select Crop Plan Products
+- Select Management Item Inputs
+
+## Equipment / config  (5)
+
+- Row Section Attribute Details - Equipment Report
+- SMS HTML/Device Setup
+- SMS HTML/HIDD DEVICE SELECT DLG
+- Summary Content - Equipment Report
+- Vehicle Implement - Wheel Track Spacing
+
+## Management tree / org  (25)
+
+- About the Financial Entries Tree
+- About the Job Tree
+- Add Field Expense Income
+- Enter Field Plot Settings
+- Field Selection
+- How to Link Items to Management Items
+- SMS HTML/About the Management Tree
+- SMS HTML/Farm Backgrounds
+- SMS HTML/Grower Report
+- SMS HTML/HIDD FARM DESCRIPTION PG
+- SMS HTML/HIDD FARM INFO
+- SMS HTML/HIDD FIELD DESCRIPTION PG
+- SMS HTML/HIDD FIELD INFO
+- SMS HTML/HIDD GROWER CONTACT
+- SMS HTML/HIDD GROWER INFO
+- SMS HTML/How to add a property to a management item or dataset
+- SMS HTML/How to spatially sort Fields into Farms
+- SMS HTML/Logical Farm Report
+- SMS HTML/Logical Field Report
+- SMS HTML/Operator Report
+- SMS HTML/Using the Management Tree
+- Select Field Name Column
+- Select Field to Load Reference Data From
+- Set Field Plot Baseline
+- Set Management Items for New Data
+
+## Jobs / tasks / calendar  (15)
+
+- About Jobs and Tasks
+- About the Calendar View
+- Calendar Summary Document Window
+- Creating Jobs and Tasks
+- Define Task Sorting Template
+- How to create a Job and Task(s).
+- How to use the Calendar View.
+- Job Summary Document Window
+- Job Summary Items
+- Job Task Summary Item Pairs
+- Job Viewer
+- SMS HTML/HID SC TASKLIST
+- SMS HTML/How to use Resource Tracking
+- Schedule Backup
+- Select Calendar Summary Grouping
+
+## Financial  (10)
+
+- Create New Account
+- Expense Income Info
+- Financial Details
+- Financial Entries
+- Financial Tracking
+- How to enter Financial Tracking entries.
+- How to generate a Financial Tracking report.
+- Request Account Information
+- Select Expense Income Type
+- Simple Expense Income Entries
+
+## Reports / print / charts  (46)
+
+- Add New Page
+- Booklet Document Window
+- Booklet Printing
+- Booklet Title Page
+- Chart Appearance
+- Chart Axes Label Options
+- Chart Document Window
+- Document Windows
+- Enter Manual Summary Values
+- How to create a custom chart.
+- How to create a custom report.
+- Linked Item Document Window
+- Report Document Window
+- Report Summary
+- SMS HTML/AFX HIDD PRINT
+- SMS HTML/AFX HIDD PRINTDLG
+- SMS HTML/AFX HIDD PRINTSETUP
+- SMS HTML/About Printing in SMS
+- SMS HTML/Generic Chart
+- SMS HTML/HID FILE PAGE SETUP
+- SMS HTML/HID FILE PRINT PREVIEW
+- SMS HTML/HID FILE PRINT SETUP
+- SMS HTML/HIDD CHART AXIS PAGE
+- SMS HTML/HIDD CHART LAYOUT PG
+- SMS HTML/HIDD CHART OPTION PAGE
+- SMS HTML/HIDD COPY SUMMARY DLG
+- SMS HTML/HIDD MANUAL SUMMARY
+- SMS HTML/HIDD REPORT ATTRIB PAGE
+- SMS HTML/HIDD REPORT TYPE PAGE
+- SMS HTML/HIDD SETTINGS PRINTING
+- SMS HTML/HIDD SUMMARY DESIGN
+- SMS HTML/HIDD SUMMARY LAYOUT PG
+- SMS HTML/How to print a chart
+- SMS HTML/How to print a report
+- SMS HTML/How to print the Summary Window Information
+- SMS HTML/How to print the query results information
+- SMS HTML/Jump to a Another Help Page
+- SMS HTML/Printing Problems
+- SMS HTML/Resource Usage Report
+- SMS HTML/Summary Window
+- Select Images to Print
+- Select Print Layout File
+- Select Report Content Settings
+- Select Report Formatting Settings
+- Select a Report to Create from the List Below
+- Text Print Designer
+
+## AgFiniti / cloud  (6)
+
+- AgFiniti Settings
+- AgFiniti Sync
+- File Format Options (AgFiniti Sync)
+- SMS HTML/Syncing Back to SMS Mobile has Failed
+- Syncing With SMS Mobile
+- Upload to AgFiniti
+
+## Setup / preferences  (54)
+
+- Average Data by Polygon Settings
+- Backup Restore Project Options
+- Buffer Settings
+- Copy Dataset to Background List Settings
+- Create As-Applied Data Settings
+- Crop Type Settings
+- Data Merging Options
+- Divide by Pivot Area Settings
+- Drawn Path Settings
+- File Processing Options
+- File Selection Search Options
+- Group Settings
+- Image Clipping Options
+- Label Settings
+- Language Settings
+- Management Setup File Options
+- Mobile Project Processing Settings
+- NDVI Settings
+- Path Settings
+- Pivot Placement Settings
+- Project Check-In Options
+- Restore Project Options
+- Rotate Scale Tool Options
+- SMS HTML/AFX HIDP default
+- SMS HTML/Attribute Property Options
+- SMS HTML/HIDD APP RATE SETTINGS
+- SMS HTML/HIDD ARCHIVING OPTIONS
+- SMS HTML/HIDD BACKGROUND SETTINGS DLG
+- SMS HTML/HIDD BDY SETTINGS
+- SMS HTML/HIDD COPY SETTINGS
+- SMS HTML/HIDD COTTON SETTINGS
+- SMS HTML/HIDD ENS SETTINGS DLG
+- SMS HTML/HIDD EPOCH SETTINGS
+- SMS HTML/HIDD GPS SETTINGS PG
+- SMS HTML/HIDD HARVEST SETTINGS
+- SMS HTML/HIDD PROJECTIONS PG
+- SMS HTML/HIDD SEL COL SETTINGS
+- SMS HTML/HIDD SETTINGS GENERAL
+- SMS HTML/HIDD SETTINGS UNITS
+- SMS HTML/HIDD SPATIAL OPTIONS
+- SMS HTML/Processing Settings
+- SMS Mobile Data Folder Search Options
+- Select File Reading Option
+- Select Operation and Logged Units
+- Sentinel Imagery Clipping Options
+- Straight Line Settings
+- TIGER Data Options
+- Tile Planning Preferences
+- Tile Run Creation Options
+- Transfer Settings and Setup Files
+- Vector Overlay Settings
+- Voyager 2 Processing Options
+- Voyager 2 Setup Options
+- Watershed Main Settings
+
+## File / database / backup  (18)
+
+- Results of File Search Selection
+- SMS HTML/Database Maintenance
+- SMS HTML/File Menu
+- SMS HTML/HID FILE CLOSE
+- SMS HTML/HID FILE MRU FILE1
+- SMS HTML/HID FILE NEW
+- SMS HTML/HID FILE SAVE
+- SMS HTML/HID FILE SAVE AS
+- SMS HTML/HID FILE SEND MAIL
+- SMS HTML/HID SC RESTORE
+- SMS HTML/HIDD BKUP RESTORELIST
+- SMS HTML/HIDD FILE STATS
+- SMS HTML/How to create a backup of your SMS data
+- SMS HTML/How to restore an SMS data backup file
+- SMS HTML/Restore Problems
+- SMS HTML/menu file
+- Select Backup Type
+- Select Image File
+
+## Wizards & dialogs (misc)  (20)
+
+- Logic Wizard
+- Projects dialog
+- Range Wizard
+- SMS HTML/About Menu Selections
+- SMS HTML/HID SC NEXTWINDOW
+- SMS HTML/HID SC PREVWINDOW
+- SMS HTML/HID WINDOW ALL
+- SMS HTML/HID WINDOW ARRANGE
+- SMS HTML/HID WINDOW CASCADE
+- SMS HTML/HID WINDOW NEW
+- SMS HTML/HID WINDOW TILE
+- SMS HTML/HID WINDOW TILE HORZ
+- SMS HTML/HID WINDOW TILE VERT
+- SMS HTML/Services Menu
+- SMS HTML/Using the Preview Window
+- SMS HTML/Window
+- SMS HTML/menu help
+- SMS HTML/menu record
+- SMS HTML/menu view
+- SMS HTML/menu window
+
+## Other / uncategorized  (223)
+
+- Assign Tile Section Run
+- Booklet Item Name
+- Booklet Item Selection
+- Booklet Title Page layout
+- Booklet Type Selection
+- CLAAS CEBIS Setup
+- Check Out Project(s)
+- Choose a Single SMS Mobile Data Folder
+- Commodity Sales Entries
+- Create New Project
+- Curve Radius Calculator
+- Data Entry Tool
+- Data Playback
+- Dataset Playback
+- Define Attribute Value Ranges
+- Define Crop Plan
+- Define Output Attribute
+- Define Plot Rates Trips
+- Define Polygons Along Object Edge
+- Define Temporary Results
+- Define Value Range
+- Divide by Custom Line
+- Elevation Profile View
+- Enter Activation Code
+- Forgot Password
+- How to Make a Booklet.
+- How to add Buffer Regions to an object.
+- How to create a crop plan
+- How to create a new attribute.
+- How to create a tile plan.
+- How to generate a slope dataset.
+- How to generate an NDVI dataset.
+- How to generate correlation results.
+- How to search for spatial data using the Spatial Data Finder.
+- How to use the Average Data by Polygon Tool.
+- How to use the Vector Overlay Tool.
+- Imagery Indexes Overview
+- Interpolation Overview
+- Item Selection
+- License Manager
+- Linked Images
+- Linked Items
+- Lookup Table Pairing
+- Lookup Tables
+- Manually Clip Image
+- Missing Item Properties
+- Modify Address
+- Modify Block
+- Name Description
+- Operation Definition
+- Optimize Trim Run
+- Precipitation Types Usage Overview
+- Project Groups
+- Project History
+- Projects
+- Quick Start
+- RDS Application Rate Operation Selection
+- Reference Data Manager
+- Registration Login
+- SMS HTML/AFX HIDD FILEOPEN
+- SMS HTML/AFX HIDD FILESAVE
+- SMS HTML/AFX HIDD FIND
+- SMS HTML/AFX HIDD FONT
+- SMS HTML/AFX HIDD NEWTYPEDLG
+- SMS HTML/AFX HIDD REPLACE
+- SMS HTML/AFX HIDW PREVIEW BAR
+- SMS HTML/AFX HIDW STATUS BAR
+- SMS HTML/About SMS Layout
+- SMS HTML/Ag Leader Basic and Advanced format
+- SMS HTML/Backing up and Restoring Data in SMS
+- SMS HTML/Create Polygons from Image
+- SMS HTML/Creating Data
+- SMS HTML/Custom Layout
+- SMS HTML/Data Management in SMS
+- SMS HTML/Dataset Info Tab
+- SMS HTML/East Coast
+- SMS HTML/Europe Africa Asia Australia
+- SMS HTML/GPS Coordintes Conversions
+- SMS HTML/Getting Started
+- SMS HTML/Glossary
+- SMS HTML/Great Lakes
+- SMS HTML/Great Plains
+- SMS HTML/HID APP EXIT
+- SMS HTML/HID CONTEXT HELP
+- SMS HTML/HID HELP USING
+- SMS HTML/HID HT CAPTION
+- SMS HTML/HID HT NOWHERE
+- SMS HTML/HID MAINTABWND
+- SMS HTML/HID OLE INSERT NEW
+- SMS HTML/HID SC CLOSE
+- SMS HTML/HID SC MAXIMIZE
+- SMS HTML/HID SC MINIMIZE
+- SMS HTML/HID SC SIZE
+- SMS HTML/HID TOOLS GENERAL
+- SMS HTML/HID VIEW RULER
+- SMS HTML/HIDD ADDITIONAL PROPERTIES
+- SMS HTML/HIDD APPLYMGMTCHANGE DLG
+- SMS HTML/HIDD ASSOC DATA VIEW
+- SMS HTML/HIDD ASSOC LIST DLG
+- SMS HTML/HIDD ASSOC SAVE
+- SMS HTML/HIDD ASSOC TYPE SELECT
+- SMS HTML/HIDD ATTR STAT PG
+- SMS HTML/HIDD ATTRIB MSELECTION PG
+- SMS HTML/HIDD ATTRIBOPT SAVE
+- SMS HTML/HIDD ATTRIBPROP MSELECTION PG
+- SMS HTML/HIDD ATTRIBPROP SELECTION PG
+- SMS HTML/HIDD ATTRIBUTE PROMPT PG
+- SMS HTML/HIDD ATTRIBUTE SELECT
+- SMS HTML/HIDD ATTRIBUTES PROMPT PG
+- SMS HTML/HIDD BKUP MOREINFO
+- SMS HTML/HIDD BULK COMMAND DLG
+- SMS HTML/HIDD CONSTANT PROMPT PG
+- SMS HTML/HIDD CONTAINER INFO PG
+- SMS HTML/HIDD CREATE BUFFER RINGS
+- SMS HTML/HIDD CUSTOMGEN
+- SMS HTML/HIDD DATASET INFO PG
+- SMS HTML/HIDD DATE SELECT DLG
+- SMS HTML/HIDD FINISH PG
+- SMS HTML/HIDD GEOREFERENCE DLG
+- SMS HTML/HIDD HARVESTMASTER PG
+- SMS HTML/HIDD HISTOGRAM LAYOUT PG
+- SMS HTML/HIDD IMAGE LAYOUT PG
+- SMS HTML/HIDD IMAGE MODE
+- SMS HTML/HIDD ITEM PROPERTIES PG
+- SMS HTML/HIDD KRIGING DLG
+- SMS HTML/HIDD MESSAGE NOSHOW
+- SMS HTML/HIDD MGMT PREVIEW DLG
+- SMS HTML/HIDD OPER ATTRIB PG
+- SMS HTML/HIDD OPERATION INFO
+- SMS HTML/HIDD OPERATIONAL INST INFO
+- SMS HTML/HIDD PROPERTYSEL PG
+- SMS HTML/HIDD RATE ASSIGN DLG
+- SMS HTML/HIDD SECONDARY MGMT PG
+- SMS HTML/HIDD SEL COLUMNS PG
+- SMS HTML/HIDD SEL MGMT PG
+- SMS HTML/HIDD SEL MODE DLG
+- SMS HTML/HIDD SEL SECOND MGMT PG
+- SMS HTML/HIDD SELECT BACKGROUND
+- SMS HTML/HIDD SELECT FILES
+- SMS HTML/HIDD SELECT MANAGEMENT
+- SMS HTML/HIDD SELECT OPERATION
+- SMS HTML/HIDD SELECT REPROCESS DLG
+- SMS HTML/HIDD SETUPINFO FIELDS PG
+- SMS HTML/HIDD SETUPINFO NAME PG
+- SMS HTML/HIDD SETUPINFOSELECT DLG
+- SMS HTML/HIDD SPATIALSTAT PG
+- SMS HTML/HIDD TAG DEFINE DLG
+- SMS HTML/HIDD TEXT LAYOUT PG
+- SMS HTML/HIDD TEXTFORMAT DLG
+- SMS HTML/HIDD UNUSED PROPERTIES PG
+- SMS HTML/HIDD YEAR INFO
+- SMS HTML/HX STATUSBAR
+- SMS HTML/Help
+- SMS HTML/How to Use SMS Help
+- SMS HTML/How to create a generic dataset
+- SMS HTML/How to create a new property
+- SMS HTML/How to create associated data
+- SMS HTML/How to create navigation points
+- SMS HTML/How to georeference an Image
+- SMS HTML/How to open a workspace
+- SMS HTML/How to read a YLD PFL BDY TGT or PFN into SMS
+- SMS HTML/How to reprocess data
+- SMS HTML/How to save a workspace
+- SMS HTML/How to spatially sort Loads into Fields
+- SMS HTML/How to straighten a pass on a point dataset
+- SMS HTML/Introduction
+- SMS HTML/Midwest
+- SMS HTML/No Help Available
+- SMS HTML/North and South America
+- SMS HTML/Northeast
+- SMS HTML/Northern Rockies
+- SMS HTML/Pacific Northwest
+- SMS HTML/Processing Data in SMS
+- SMS HTML/Reassign Attribute Values
+- SMS HTML/Registering SMS Basic
+- SMS HTML/Select Directory
+- SMS HTML/Select a Data Creation Method
+- SMS HTML/Southeast
+- SMS HTML/Southern Rockies
+- SMS HTML/Spatial Management System
+- SMS HTML/Spatial Sorter 1
+- SMS HTML/Standard Deviation Scale
+- SMS HTML/System Info
+- SMS HTML/System Requirements
+- SMS HTML/Things You Need to Know to Run SMS Basic
+- SMS HTML/This is a popup
+- SMS HTML/Tools
+- SMS HTML/Tutorial Problems
+- SMS HTML/Upper Midwest
+- SMS HTML/View
+- SMS HTML/West Coast
+- SMS HTML/Western Texas and Hawaii
+- SMS HTML/Workspaces in SMS
+- SMS HTML/main index
+- SMS HTML/scrollbars
+- Select Actual Datasets
+- Select Cluster Attributes Properties
+- Select Correlation Attributes
+- Select Fixed Value
+- Select Generic Operation
+- Select Mobile Projects
+- Select Multiple Items
+- Select Normalization Type
+- Select Operational Pair
+- Select Planned Dataset
+- Select Ranking Attribute
+- Select Reference Dataset
+- Select Result Attribute(s) to Output
+- Select Result Grouping
+- Select SMS Mobile Data Storage Location
+- Select Type of Operation
+- Select an Image Source
+- Selected Files to Read
+- Selection List Groups
+- Spatial Data Finder
+- Spatial Sort Results
+- Stats Detail
+- Tile Sizing
+- Transfer Licensing
+- Transfer Utilities
+- Validate Curves
+- Vault Utility
+- View Event

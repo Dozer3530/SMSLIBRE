@@ -87,6 +87,46 @@ often means "wire open libs + the reusable managed layer together," not
 (their particular yield-cleaning, analysis math) which must be re-created from
 the decompiled reference where it's readable.
 
+## "Isn't a lot of it just copy-paste?" — measured answer
+
+Fair challenge, checked with hard data (`tools/decompiler bodies`, `tools/salvage_ledger.py`,
+and direct reading), not opinion. The answer is **both — and it splits cleanly**:
+
+**Yes, a large amount is readable, portable C# you can reuse/port** — the pure-IL
+layer has **~45,000 methods with real IL bodies and ZERO `[NativeCppClass]`
+blobs**:
+- ADAPT ecosystem (36 libs) — reuse as compiled DLLs (already proven running).
+- `AgLeader.Shared*` (~19k methods), `AgLeaderCompress` (3k), `AgLVersatileComponent` (9.8k).
+- **`ALMS_*Desktop`** — the layer SMS *Mobile* shares: `DBAccess` (779),
+  `Datasets` (802), `Spatial` (785), `Units` (350), `Coordinates` (314),
+  `Utility` (533). Readable data/spatial/units/coordinate logic — portable.
+- `ALN_NetClasses` (2,180). So the data model, DB access, units, coordinates,
+  datasets, compression, and all import — genuinely portable.
+
+**No, the compute engine is native machine code you must reimplement** — the
+core assemblies are almost entirely `[NativeCppClass]` opaque blobs the
+decompiler cannot see into:
+
+| Core assembly | native-blob types / total |
+|---|---|
+| ALP_PreprocessorDll (yield cleaning) | 799 / 814 |
+| ALMappingLib (app + map engine) | 571 / 589 |
+| ALI_NETAgInterface (import glue) | 1490 / 1557 |
+| ALA_Analysis (analysis math) | 237 / 244 |
+| ALM_Common / ALM_SpatialObject | 211/219, 60/65 |
+| ALV_MapVisDll / UI (rendering) | 47/52, 61/66 |
+
+Direct proof: `ALA_FilterOperation` (the yield-filter "math") decompiles to
+nothing but `[NativeCppClass] struct { Size = 560 }` — an opaque native blob.
+The "100% IL methods" a naive count reports are the *thin managed wrappers*
+around these native structs, not the algorithms.
+
+**Net:** the plumbing, data model, and import (the bulk by method count) are
+copy-paste/port. The *special sauce* — SMS's exact yield-cleaning, analysis math,
+and native map rendering — is not; those are reimplementations (helped by GDAL/
+GEOS, which do much of the same work, and by the readable `ALMS_*Desktop` spatial
+code). This is why parity is real work, but far less than "rewrite 734 MB."
+
 ## Architectural implication (important)
 
 Because the reusable engine (ADAPT + `AgLeader.Shared.*`) is **.NET**, the

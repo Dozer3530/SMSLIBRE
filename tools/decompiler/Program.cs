@@ -37,6 +37,7 @@ return args[0] switch
     "classify" => Classify(args[1], args[2]),
     "decompile" => Decompile(args[1], args[2], GetOpt(args, "--filter")),
     "deps" => Deps(args[1], args[2]),
+    "bodies" => Bodies(args[1], args[2]),
     _ => Fail()
 };
 
@@ -280,6 +281,62 @@ static int Decompile(string input, string outRoot, string? filter)
 
     File.WriteAllText(Path.Combine(outRoot, "decompile-report.csv"), report.ToString());
     Console.WriteLine($"\nReport: {Path.Combine(outRoot, "decompile-report.csv")}");
+    return 0;
+}
+
+// Measures how much of each assembly is readable IL (portable / "copy-paste")
+// versus native machine code (must be reimplemented). For C++/CLI mixed-mode
+// assemblies the managed metadata lists the types, but the method *bodies* may
+// be native — that is the difference between "port it" and "rewrite it".
+static int Bodies(string root, string outCsv)
+{
+    var files = Directory.GetFiles(root, "*.dll", SearchOption.AllDirectories)
+        .Concat(Directory.GetFiles(root, "*.exe", SearchOption.AllDirectories))
+        .OrderBy(f => f).ToArray();
+
+    var sb = new StringBuilder("Assembly,TotalMethods,IL,Native,PInvoke,Abstract,Other,PctIL\n");
+
+    foreach (var path in files)
+    {
+        string name = Path.GetFileNameWithoutExtension(path);
+        try
+        {
+            using var fs = File.OpenRead(path);
+            using var pe = new PEReader(fs, PEStreamOptions.PrefetchEntireImage);
+            if (!pe.HasMetadata) continue;
+            var md = pe.GetMetadataReader();
+
+            int total = 0, il = 0, native = 0, pinvoke = 0, abstr = 0, other = 0;
+            foreach (var h in md.MethodDefinitions)
+            {
+                var m = md.GetMethodDefinition(h);
+                total++;
+                var impl = m.ImplAttributes;
+                var attr = m.Attributes;
+
+                if ((attr & MethodAttributes.PinvokeImpl) != 0) { pinvoke++; continue; }
+                if ((attr & MethodAttributes.Abstract) != 0) { abstr++; continue; }
+
+                var codeType = impl & MethodImplAttributes.CodeTypeMask;   // IL / Native / Runtime
+                bool unmanaged = (impl & MethodImplAttributes.Unmanaged) != 0;
+
+                if (unmanaged || codeType == MethodImplAttributes.Native)
+                    native++;
+                else if (codeType == MethodImplAttributes.IL && m.RelativeVirtualAddress != 0)
+                    il++;
+                else
+                    other++;   // runtime-provided, no body, etc.
+            }
+
+            int denom = il + native;
+            double pctIl = denom > 0 ? 100.0 * il / denom : 0;
+            sb.Append($"{Csv(name)},{total},{il},{native},{pinvoke},{abstr},{other},{pctIl:0.0}\n");
+        }
+        catch (Exception ex) { Console.Error.WriteLine($"[{name}] {ex.Message}"); }
+    }
+
+    File.WriteAllText(outCsv, sb.ToString());
+    Console.WriteLine($"Wrote {outCsv}");
     return 0;
 }
 

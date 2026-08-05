@@ -9,9 +9,11 @@ portable (ADAPT import, `AgLeader.Shared`), **reimplement** what's locked in the
 native C++ core (cleaning, analysis, rendering). Legend below marks which is which:
 🔁 = reuses SMS code · 🔧 = clean-room reimplementation.
 
-> This list is seeded from SMS's major functional areas and should be expanded
-> to the exact menu/dialog level from `ALMapping.chm` (the 38 MB help file) and
-> the decompiled UI command tables. That extraction is a tracked next step.
+> **The exhaustive feature list now exists:** `SMS_FEATURE_INVENTORY.md` — all
+> **835 help topics** extracted from `ALMapping.chm`, grouped by area (89 mapping,
+> 117 editing/cleaning, 56 analysis, 46 reports, 54 setup, 37 import, 36 export,
+> …). That is the real scope of "every feature." The status list below is the
+> high-level rollup; the inventory is the itemized checklist.
 
 ## 1. Data management & import
 - ✅ 🔁 ISO 11783 (ISOXML) import — via SMS's `AgGateway.ADAPT.ISOv4Plugin`
