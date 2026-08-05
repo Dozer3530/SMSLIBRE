@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2721D95E-7FDB-4FE0-BF88-7985D612F097}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmsLibre.Core", "src\SmsLibre.Core\SmsLibre.Core.csproj", "{0286CD54-19A7-4952-839F-EA8E58E51C57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmsLibre.Import", "src\SmsLibre.Import\SmsLibre.Import.csproj", "{CA88E758-2FCD-45C2-95E2-3D64F8E8D783}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmsLibre.App", "src\SmsLibre.App\SmsLibre.App.csproj", "{EDE7B1B3-2FCD-4C59-AEFB-D3E633DEE4D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmsLibre.Cli", "src\SmsLibre.Cli\SmsLibre.Cli.csproj", "{EBC2FA67-1231-44A2-A355-B0010C945DA1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0286CD54-19A7-4952-839F-EA8E58E51C57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0286CD54-19A7-4952-839F-EA8E58E51C57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0286CD54-19A7-4952-839F-EA8E58E51C57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0286CD54-19A7-4952-839F-EA8E58E51C57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA88E758-2FCD-45C2-95E2-3D64F8E8D783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA88E758-2FCD-45C2-95E2-3D64F8E8D783}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA88E758-2FCD-45C2-95E2-3D64F8E8D783}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA88E758-2FCD-45C2-95E2-3D64F8E8D783}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDE7B1B3-2FCD-4C59-AEFB-D3E633DEE4D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDE7B1B3-2FCD-4C59-AEFB-D3E633DEE4D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDE7B1B3-2FCD-4C59-AEFB-D3E633DEE4D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDE7B1B3-2FCD-4C59-AEFB-D3E633DEE4D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBC2FA67-1231-44A2-A355-B0010C945DA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBC2FA67-1231-44A2-A355-B0010C945DA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBC2FA67-1231-44A2-A355-B0010C945DA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBC2FA67-1231-44A2-A355-B0010C945DA1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0286CD54-19A7-4952-839F-EA8E58E51C57} = {2721D95E-7FDB-4FE0-BF88-7985D612F097}
+		{CA88E758-2FCD-45C2-95E2-3D64F8E8D783} = {2721D95E-7FDB-4FE0-BF88-7985D612F097}
+		{EDE7B1B3-2FCD-4C59-AEFB-D3E633DEE4D6} = {2721D95E-7FDB-4FE0-BF88-7985D612F097}
+		{EBC2FA67-1231-44A2-A355-B0010C945DA1} = {2721D95E-7FDB-4FE0-BF88-7985D612F097}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Reuses SMS's OWN import engine: the AgGateway ADAPT assemblies shipped with
+    SMS (netstandard2.0, so they run on native .NET / Linux). Point SmsNetCoreDir
+    at your SMS install's NetCoreDependencies folder. On Linux, override it, e.g.
+    -p:SmsNetCoreDir=/opt/sms/NetCoreDependencies
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <SmsNetCoreDir Condition="'$(SmsNetCoreDir)' == ''">C:\Program Files\Ag Leader Technology\SMS\NetCoreDependencies</SmsNetCoreDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SmsLibre.Core\SmsLibre.Core.csproj" />
+  </ItemGroup>
+
+  <!-- Reference for compile only (Private=false); the actual DLLs are copied as
+       Content below so they flow transitively to consumer projects (App, Cli) —
+       including Representation.dll, which is only a runtime dependency of the
+       plugin and otherwise would not propagate. -->
+  <ItemGroup>
+    <Reference Include="AgGateway.ADAPT.ApplicationDataModel">
+      <HintPath>$(SmsNetCoreDir)\AgGateway.ADAPT.ApplicationDataModel.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="AgGateway.ADAPT.ISOv4Plugin">
+      <HintPath>$(SmsNetCoreDir)\AgGateway.ADAPT.ISOv4Plugin.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="AgGateway.ADAPT.Representation">
+      <HintPath>$(SmsNetCoreDir)\AgGateway.ADAPT.Representation.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="$(SmsNetCoreDir)\AgGateway.ADAPT.ApplicationDataModel.dll">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(SmsNetCoreDir)\AgGateway.ADAPT.ISOv4Plugin.dll">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(SmsNetCoreDir)\AgGateway.ADAPT.Representation.dll">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- The ISOv4 plugin reads the ISO DDI + unit tables from Resources/ beside
+         the exe; copy SMS's copies so a clean build runs with no manual steps. -->
+    <Content Include="$(SmsNetCoreDir)\Resources\**\*">
+      <Link>Resources\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

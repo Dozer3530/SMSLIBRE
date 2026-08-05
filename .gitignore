@@ -16,8 +16,12 @@ analysis/schema/*.csv
 
 # Brute-force log ends with the recovered DB password; keep it local only.
 analysis/schema/*.log
-# Throwaway render smoke-tests
+# Throwaway render smoke-tests / intermediates
 analysis/poc_viewer_smoketest.png
+analysis/csharp_yieldmap.png
+# .NET / Visual Studio
+.vs/
+*.user
 # Large extracted point data (regenerable via tools/adapt-proof extract)
 analysis/*.geojson
 
