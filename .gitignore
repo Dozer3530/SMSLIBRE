@@ -1,0 +1,39 @@
+# SMSLIBRE — reverse engineering / porting workspace
+#
+# Nothing derived from the Ag Leader install is committed: it is large, it is
+# regenerable from tools/, and it is not ours to redistribute. Only our own
+# analysis notes, scripts, and port source live in git.
+
+# Decompiler output (regenerate with tools/decompiler)
+analysis/decompiled/
+
+# Copies of the user's real agronomic data and the vendor's binaries
+samples/
+
+# Schema dumps can be large; the derived notes/ write-ups are what we keep
+analysis/inventory/*.csv
+analysis/schema/*.csv
+
+# Brute-force log ends with the recovered DB password; keep it local only.
+analysis/schema/*.log
+# Throwaway render smoke-tests
+analysis/poc_viewer_smoketest.png
+
+# .NET build output
+[Bb]in/
+[Oo]bj/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Editors / OS
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+.DS_Store
+desktop.ini

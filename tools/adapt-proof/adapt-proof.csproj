@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Proof that SMS's *actual* import engine runs on plain .NET, outside SMS and
+    without Wine. We reference the ADAPT assemblies straight out of the SMS
+    install and call them. They target netstandard2.0, so the same DLLs run on
+    .NET on Linux exactly as they do here — this executes on native .NET, not a
+    Windows emulation layer.
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>adapt_proof</AssemblyName>
+    <SmsDir>C:\Program Files\Ag Leader Technology\SMS\NetCoreDependencies</SmsDir>
+  </PropertyGroup>
+
+  <!-- Copy the ADAPT DLLs next to our exe so the runtime binds them normally.
+       We copy (rather than load-from) only for convenience; these are the exact
+       DLLs SMS ships and they are unmodified. -->
+  <ItemGroup>
+    <Reference Include="AgGateway.ADAPT.ApplicationDataModel">
+      <HintPath>$(SmsDir)\AgGateway.ADAPT.ApplicationDataModel.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="AgGateway.ADAPT.ISOv4Plugin">
+      <HintPath>$(SmsDir)\AgGateway.ADAPT.ISOv4Plugin.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="AgGateway.ADAPT.Representation">
+      <HintPath>$(SmsDir)\AgGateway.ADAPT.Representation.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- The ISOv4 plugin reads the ISO DDI dictionary + unit/representation tables
+       from a Resources/ folder next to the exe. Copy SMS's copies so a clean
+       build runs with no manual steps. -->
+  <ItemGroup>
+    <Content Include="$(SmsDir)\Resources\**\*">
+      <Link>Resources\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
