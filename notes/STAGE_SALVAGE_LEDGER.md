@@ -127,3 +127,24 @@ where the analysis box is). Clean `dotnet build` + `dotnet run`, no manual steps
 
 This is the concrete validation of the whole "native rebuild" bet: the hardest,
 most valuable part of SMS — reading everyone's field data — is reusable as-is.
+
+### Full native data pipeline, end to end
+
+`tools/adapt-proof extract` goes further: it walks the ADAPT
+`LoggedData → OperationData → SpatialRecords`, auto-selects the yield meter
+(`vrAvgYieldMassPerArea` — "Average Dry Yield Mass Per Area"), and exports every
+point to GeoJSON. On the real AGCO dataset it produced **545,510 raw yield
+points** with full combine telemetry available (moisture, mass flow, rotor
+speed, header state, …). After basic cleaning (drop zeros/GPS outliers, clip
+percentiles, convert ISO `mg/m²` → t/ha) the Python renderer
+(`smslibre/poc`, now boundary-optional + cleaning) drew a dense **438k-point
+yield map** of field "1516" — the *same field* as the shapefile PoC, but sourced
+directly from raw Vault ISOXML through SMS's engine, ~14× denser than SMS's own
+downsampled shapefile export. Output: `analysis/vault_yieldmap.png`.
+
+Pipeline proven: **raw Vault data → SMS's real import engine (native .NET) →
+our reprojection/cleaning/render → yield map.** No pre-exported shapefile, no
+WPF, no native C++ core, no Wine. The one thing still approximate is *yield
+cleaning*: SMS's real cleaner lives in the native `ALP_PreprocessorDll` (see
+CORE-REIMPLEMENT); ours is a first approximation to be refined against the
+decompiled reference where readable.

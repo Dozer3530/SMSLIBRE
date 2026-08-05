@@ -18,6 +18,8 @@ analysis/schema/*.csv
 analysis/schema/*.log
 # Throwaway render smoke-tests
 analysis/poc_viewer_smoketest.png
+# Large extracted point data (regenerable via tools/adapt-proof extract)
+analysis/*.geojson
 
 # .NET build output
 [Bb]in/

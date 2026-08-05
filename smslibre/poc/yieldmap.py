@@ -72,35 +72,66 @@ def _detect_yield_column(gdf: gpd.GeoDataFrame) -> str:
 
 
 def load_field(
-    boundary_path: str | Path,
+    boundary_path: str | Path | None,
     yield_path: str | Path,
     *,
     yield_col: str | None = None,
     name: str | None = None,
+    clean: bool = False,
+    clip_pct: tuple[float, float] = (1.0, 99.0),
 ) -> FieldData:
-    """Read the two shapefiles and reproject both to a local UTM (metric) CRS.
+    """Read a yield layer (+ optional boundary) and reproject to a metric CRS.
 
-    Working in metres (not lat/lon degrees) is what makes area, point density,
-    and the map aspect ratio correct.
+    Accepts any format GDAL/pyogrio reads (Shapefile, GeoJSON, ...). Working in
+    metres (not lat/lon degrees) is what makes area, density, and aspect correct.
+
+    ``boundary_path`` may be None (e.g. ISOXML yield with no boundary polygon) —
+    a convex hull of the points stands in for the field outline.
+
+    ``clean`` applies the basic filtering raw combine data needs before it is
+    legible: drop non-positive values and clip to the ``clip_pct`` percentiles.
+    (SMS's own yield cleaner does much more; this is a first approximation.)
     """
-    boundary = gpd.read_file(boundary_path)
     ypts = gpd.read_file(yield_path)
-
-    if boundary.crs is None:
-        boundary.set_crs("EPSG:4326", inplace=True)
     if ypts.crs is None:
         ypts.set_crs("EPSG:4326", inplace=True)
 
-    # Pick a metric CRS from the yield points' own extent, so this is not
-    # hard-coded to one region.
+    # Drop empty/null-island geometries; raw combine logs carry stray GPS fixes.
+    ypts = ypts[~ypts.geometry.is_empty & ypts.geometry.notna()]
+    if clean:
+        x, y = ypts.geometry.x, ypts.geometry.y
+        ypts = ypts[(x.abs() > 1e-6) | (y.abs() > 1e-6)]           # not (0, 0)
+        # Robust spatial clip: keep the bulk of points, discard far outliers that
+        # would otherwise stretch the extent and confuse UTM-zone selection.
+        qx = ypts.geometry.x.quantile([0.005, 0.995])
+        qy = ypts.geometry.y.quantile([0.005, 0.995])
+        ypts = ypts[ypts.geometry.x.between(qx.iloc[0], qx.iloc[1]) &
+                    ypts.geometry.y.between(qy.iloc[0], qy.iloc[1])]
+
     metric_crs = ypts.estimate_utm_crs()
-    boundary = boundary.to_crs(metric_crs)
     ypts = ypts.to_crs(metric_crs)
 
     ycol = yield_col or _detect_yield_column(ypts)
     ypts = ypts.copy()
     ypts[ycol] = gpd.pd.to_numeric(ypts[ycol], errors="coerce")
     ypts = ypts[ypts[ycol].notna()]
+
+    if clean:
+        v = ypts[ycol]
+        ypts = ypts[v > 0]
+        lo, hi = ypts[ycol].quantile([clip_pct[0] / 100, clip_pct[1] / 100])
+        ypts = ypts[(ypts[ycol] >= lo) & (ypts[ycol] <= hi)]
+
+    if boundary_path is not None:
+        boundary = gpd.read_file(boundary_path)
+        if boundary.crs is None:
+            boundary.set_crs("EPSG:4326", inplace=True)
+        boundary = boundary.to_crs(metric_crs)
+    else:
+        # No boundary polygon supplied — approximate the field outline with the
+        # convex hull of the (cleaned) points so area and outline still render.
+        hull = ypts.geometry.union_all().convex_hull
+        boundary = gpd.GeoDataFrame(geometry=[hull], crs=metric_crs)
 
     attrs = {}
     if len(boundary):
@@ -110,7 +141,8 @@ def load_field(
                 attrs[key] = row[key]
 
     if name is None:
-        name = attrs.get("FIELDNAME") or Path(boundary_path).stem
+        stem = Path(boundary_path).stem if boundary_path is not None else Path(yield_path).stem
+        name = attrs.get("FIELDNAME") or stem
 
     return FieldData(
         name=str(name),
