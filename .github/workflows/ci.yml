@@ -1,0 +1,28 @@
+name: CI
+
+# Builds the parts that do not need an SMS install. SmsLibre.Core is
+# self-contained, so it and its tests run on any GitHub runner. The Import
+# project (and its integration tests) reference SMS's ADAPT DLLs, which only
+# exist on a machine with SMS installed, so they are excluded from CI here.
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build SmsLibre.Core
+        run: dotnet build app/src/SmsLibre.Core -c Release
+
+      - name: Run Core tests
+        run: dotnet test app/tests/SmsLibre.Core.Tests -c Release

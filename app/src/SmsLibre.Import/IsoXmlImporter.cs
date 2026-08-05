@@ -19,27 +19,40 @@ using AdaptField = AgGateway.ADAPT.ApplicationDataModel.Logistics.Field;
 
 namespace SmsLibre.Import;
 
-public sealed class AdaptImporter
+/// <summary>
+/// Imports ISO 11783 (ISOXML) task datasets by reusing SMS's own
+/// AgGateway.ADAPT.ISOv4Plugin on native .NET. This is the first concrete
+/// <see cref="IFieldImporter"/>; JD / CNH / Precision Planting / Shapefile
+/// importers plug in the same way.
+/// </summary>
+public sealed class IsoXmlImporter : IFieldImporter
 {
-    private readonly string _pluginDir;
+    private static bool _resolverInstalled;
+    private static readonly object _lock = new();
+
+    public string FormatName => "ISOXML (ISO 11783)";
 
     /// <param name="pluginDir">Folder holding the ADAPT DLLs + Resources
     /// (copied next to the app at build time). Defaults to the app base dir.</param>
-    public AdaptImporter(string? pluginDir = null)
+    public IsoXmlImporter(string? pluginDir = null)
     {
-        _pluginDir = pluginDir ?? AppContext.BaseDirectory;
-        AppDomain.CurrentDomain.AssemblyResolve += (_, e) =>
+        string dir = pluginDir ?? AppContext.BaseDirectory;
+        lock (_lock)
         {
-            string path = Path.Combine(_pluginDir, new AssemblyName(e.Name).Name + ".dll");
-            return File.Exists(path) ? Assembly.LoadFrom(path) : null;
-        };
+            if (_resolverInstalled) return;
+            AppDomain.CurrentDomain.AssemblyResolve += (_, e) =>
+            {
+                string path = Path.Combine(dir, new AssemblyName(e.Name).Name + ".dll");
+                return File.Exists(path) ? Assembly.LoadFrom(path) : null;
+            };
+            _resolverInstalled = true;
+        }
     }
 
-    public bool CanImport(string taskDataDir) =>
-        File.Exists(Path.Combine(taskDataDir, "TASKDATA.XML"));
+    public bool CanImport(string path) =>
+        Directory.Exists(path) && File.Exists(Path.Combine(path, "TASKDATA.XML"));
 
-    /// <summary>Import an ISO 11783 (ISOXML) task dataset directory into growers.</summary>
-    public IReadOnlyList<Grower> ImportIsoXml(string taskDataDir)
+    public IReadOnlyList<Grower> Import(string taskDataDir)
     {
         var plugin = new Plugin();
         var models = plugin.Import(taskDataDir);

@@ -42,13 +42,14 @@ public partial class MainWindow : Window
         try
         {
             StatusText.Text = $"Importing via SMS ADAPT engine: {taskDataDir} …";
-            var importer = new AdaptImporter();
-            if (!importer.CanImport(taskDataDir))
+            var registry = Importers.CreateDefault();
+            var imp = registry.FindFor(taskDataDir);
+            if (imp is null)
             {
-                StatusText.Text = "No TASKDATA.XML in that folder.";
+                StatusText.Text = "No importer recognises that folder (need e.g. a TASKDATA.XML).";
                 return;
             }
-            var growers = importer.ImportIsoXml(taskDataDir);
+            var growers = imp.Import(taskDataDir);
             var roots = BuildTree(growers);
             FieldTree.ItemsSource = roots;
             int fields = growers.SelectMany(g => g.Farms).SelectMany(f => f.Fields).Count();

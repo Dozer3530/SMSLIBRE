@@ -14,10 +14,11 @@ string dataDir = args.Length > 0 ? args[0]
 string outPng = args.Length > 1 ? args[1] : "yieldmap.png";
 
 Console.WriteLine($"Importing via SMS ADAPT engine: {dataDir}");
-var importer = new AdaptImporter();
-if (!importer.CanImport(dataDir)) { Console.Error.WriteLine("No TASKDATA.XML."); return 1; }
-
-var growers = importer.ImportIsoXml(dataDir);
+var registry = Importers.CreateDefault();
+var imp = registry.FindFor(dataDir);
+if (imp is null) { Console.Error.WriteLine("No importer recognises that path."); return 1; }
+Console.WriteLine($"Format: {imp.FormatName}");
+var growers = imp.Import(dataDir);
 
 Console.WriteLine("\nGrower / Farm / Field tree:");
 Dataset? firstYield = null;

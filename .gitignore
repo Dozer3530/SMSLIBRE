@@ -19,6 +19,8 @@ analysis/schema/*.log
 # Throwaway render smoke-tests / intermediates
 analysis/poc_viewer_smoketest.png
 analysis/csharp_yieldmap.png
+analysis/nh_yieldmap.png
+analysis/chm/
 # .NET / Visual Studio
 .vs/
 *.user
