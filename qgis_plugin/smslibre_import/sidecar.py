@@ -48,9 +48,14 @@ def default_sms_dir() -> str:
 
 
 class Sidecar:
-    def __init__(self, exe_path: str, sms_dir: str = ""):
+    def __init__(self, exe_path: str, sms_dir: str = "",
+                 plugin_dir: str = "", app_id: str = ""):
         self.exe_path = exe_path
         self.sms_dir = sms_dir
+        # Licensed vendor plugin folder (e.g. John Deere's SDK release) and the
+        # application id issued with it. Never bundled — supplied per machine.
+        self.plugin_dir = plugin_dir
+        self.app_id = app_id
 
     # -- internals ---------------------------------------------------------
 
@@ -63,6 +68,10 @@ class Sidecar:
         cmd = [self.exe_path] + args
         if self.sms_dir:
             cmd += ["--sms", self.sms_dir]
+        if self.plugin_dir:
+            cmd += ["--plugins", self.plugin_dir]
+        if self.app_id:
+            cmd += ["--app-id", self.app_id]
 
         # Keep the console window hidden on Windows.
         creation = 0

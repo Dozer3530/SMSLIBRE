@@ -92,12 +92,26 @@ class ImportDialog(QDialog):
         exe_btn = QPushButton("…")
         exe_btn.setFixedWidth(30)
         exe_btn.clicked.connect(self._browse_exe)
+        self.jd_edit = QLineEdit(s.value(f"{SETTINGS_PREFIX}/plugin_dir", ""))
+        self.jd_edit.setPlaceholderText(
+            "Licensed vendor plugin folder, e.g. John Deere ADAPT SDK release (optional)")
+        jd_btn = QPushButton("…")
+        jd_btn.setFixedWidth(30)
+        jd_btn.clicked.connect(self._browse_jd)
+        self.appid_edit = QLineEdit(s.value(f"{SETTINGS_PREFIX}/app_id", ""))
+        self.appid_edit.setPlaceholderText("Vendor application id (optional)")
+
         cg.addWidget(QLabel("SMS install:"), 0, 0)
         cg.addWidget(self.sms_edit, 0, 1)
         cg.addWidget(sms_btn, 0, 2)
         cg.addWidget(QLabel("Sidecar:"), 1, 0)
         cg.addWidget(self.exe_edit, 1, 1)
         cg.addWidget(exe_btn, 1, 2)
+        cg.addWidget(QLabel("Vendor plugins:"), 2, 0)
+        cg.addWidget(self.jd_edit, 2, 1)
+        cg.addWidget(jd_btn, 2, 2)
+        cg.addWidget(QLabel("Application id:"), 3, 0)
+        cg.addWidget(self.appid_edit, 3, 1)
         layout.addWidget(cfg)
 
         # --- results -------------------------------------------------------
@@ -148,12 +162,15 @@ class ImportDialog(QDialog):
     # -- helpers -----------------------------------------------------------
 
     def _sidecar(self) -> Sidecar:
-        return Sidecar(self.exe_edit.text().strip(), self.sms_edit.text().strip())
+        return Sidecar(self.exe_edit.text().strip(), self.sms_edit.text().strip(),
+                       self.jd_edit.text().strip(), self.appid_edit.text().strip())
 
     def _save_settings(self):
         s = QgsSettings()
         s.setValue(f"{SETTINGS_PREFIX}/sms_dir", self.sms_edit.text().strip())
         s.setValue(f"{SETTINGS_PREFIX}/sidecar", self.exe_edit.text().strip())
+        s.setValue(f"{SETTINGS_PREFIX}/plugin_dir", self.jd_edit.text().strip())
+        s.setValue(f"{SETTINGS_PREFIX}/app_id", self.appid_edit.text().strip())
 
     def _browse_card(self):
         d = QFileDialog.getExistingDirectory(self, "Select the data card folder",
@@ -167,6 +184,12 @@ class ImportDialog(QDialog):
                                              self.sms_edit.text())
         if d:
             self.sms_edit.setText(d)
+
+    def _browse_jd(self):
+        d = QFileDialog.getExistingDirectory(self, "Select the licensed vendor plugin folder",
+                                             self.jd_edit.text())
+        if d:
+            self.jd_edit.setText(d)
 
     def _browse_exe(self):
         f, _ = QFileDialog.getOpenFileName(self, "Select the smsimport executable",
