@@ -105,7 +105,10 @@ internal static class Program
             {
                 if (args.Length < 2) { Usage(); return 2; }
                 string path = args[1];
-                var hits = host.Detect(path);
+                var hits = host.Detect(path).ToList();
+                // Formats we read ourselves, with no ADAPT plugin behind them.
+                if (hits.Count == 0 && RavenReader.CanRead(path))
+                    hits.Add(new PluginInfo(RavenReader.FormatName, "built-in", "SMSLIBRE"));
                 Emit(new { ok = true, path, supported = hits.Count > 0, count = hits.Count, plugins = hits });
                 return 0;
             }
@@ -144,7 +147,17 @@ internal static class Program
                 string? pluginName = Opt(args, "--plugin");
 
                 Console.Error.WriteLine($"Importing {path} …");
-                var (layers, boundaries) = host.ImportAll(path, pluginName);
+                List<OperationLayer> layers;
+                List<BoundaryFeature> boundaries;
+                if (pluginName is null && !host.Detect(path).Any() && RavenReader.CanRead(path))
+                {
+                    layers = RavenReader.Import(path);
+                    boundaries = new List<BoundaryFeature>();
+                }
+                else
+                {
+                    (layers, boundaries) = host.ImportAll(path, pluginName);
+                }
                 if (layers.Count == 0 && boundaries.Count == 0)
                 {
                     Emit(new { ok = true, path, layers = Array.Empty<object>(),
