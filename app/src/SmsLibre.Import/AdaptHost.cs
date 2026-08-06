@@ -74,10 +74,22 @@ public sealed class AdaptHost
             {
                 AppDomain.CurrentDomain.AssemblyResolve += (_, e) =>
                 {
-                    string file = new AssemblyName(e.Name).Name + ".dll";
+                    var wanted = new AssemblyName(e.Name).Name;
+                    if (wanted is null) return null;
+
+                    // Critical: hand back an already-loaded assembly when the
+                    // simple name matches. Vendor plugins are loaded from the
+                    // user's SMS folder while we may also ship copies of the
+                    // ADAPT assemblies; letting both load would create two
+                    // identities for the same type and every IPlugin cast would
+                    // fail (symptom: most plugins silently disappear).
+                    foreach (var a in AppDomain.CurrentDomain.GetAssemblies())
+                        if (string.Equals(a.GetName().Name, wanted, StringComparison.OrdinalIgnoreCase))
+                            return a;
+
                     foreach (var d in probeDirs)
                     {
-                        string p = Path.Combine(d, file);
+                        string p = Path.Combine(d, wanted + ".dll");
                         if (File.Exists(p))
                         {
                             try { return Assembly.LoadFrom(p); } catch { }
@@ -89,23 +101,50 @@ public sealed class AdaptHost
             }
         }
 
-        foreach (var dir in probeDirs.Distinct(StringComparer.OrdinalIgnoreCase))
+        // Scan for plugins in SMS's folders only. The app's own directory is a
+        // dependency probe path, not a plugin source — treating our bundled
+        // ADAPT copies as plugins is what duplicates assembly identities.
+        foreach (var dir in probeDirs.Take(1 + supportDirs.Length)
+                                     .Distinct(StringComparer.OrdinalIgnoreCase))
         {
             if (!Directory.Exists(dir)) continue;
             try { _factories.Add(new PluginFactory(dir)); } catch { }
         }
     }
 
-    /// <summary>Every (factory, plugin-name) pair that loads successfully.</summary>
-    private IEnumerable<(PluginFactory Factory, string Name)> AllPlugins()
+    /// <summary>
+    /// Plugins we reference directly rather than discover. ISOv4Plugin is
+    /// open-source and compiled against, so binding it explicitly guarantees it
+    /// is present and sidesteps the assembly-identity pitfalls of loading the
+    /// same DLL twice through PluginFactory.
+    /// </summary>
+    private static IEnumerable<AgGateway.ADAPT.ApplicationDataModel.ADM.IPlugin> BuiltIns()
+    {
+        yield return new AgGateway.ADAPT.ISOv4Plugin.Plugin();
+    }
+
+    /// <summary>Every plugin instance available, built-in or discovered.</summary>
+    private IEnumerable<(string Name, AgGateway.ADAPT.ApplicationDataModel.ADM.IPlugin Plugin)> AllPlugins()
     {
         var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var p in BuiltIns())
+        {
+            string name = p.Name ?? p.GetType().Name;
+            if (seen.Add(name)) yield return (name, p);
+        }
+
         foreach (var f in _factories)
         {
             List<string> names;
             try { names = f.AvailablePlugins; } catch { continue; }
             foreach (var n in names)
-                if (seen.Add(n)) yield return (f, n);
+            {
+                if (!seen.Add(n)) continue;
+                AgGateway.ADAPT.ApplicationDataModel.ADM.IPlugin? inst = null;
+                try { inst = f.GetPlugin(n); } catch { }
+                if (inst != null) yield return (n, inst);
+            }
         }
     }
 
@@ -113,14 +152,10 @@ public sealed class AdaptHost
     public IReadOnlyList<PluginInfo> ListPlugins()
     {
         var list = new List<PluginInfo>();
-        foreach (var (f, name) in AllPlugins())
+        foreach (var (name, p) in AllPlugins())
         {
-            try
-            {
-                var p = f.GetPlugin(name);
-                list.Add(new PluginInfo(name, p.Version ?? "", p.Owner ?? ""));
-            }
-            catch { /* a plugin that will not instantiate is simply unavailable */ }
+            try { list.Add(new PluginInfo(name, p.Version ?? "", p.Owner ?? "")); }
+            catch { /* a plugin that will not report itself is unusable */ }
         }
         return list;
     }
@@ -129,11 +164,10 @@ public sealed class AdaptHost
     public IReadOnlyList<PluginInfo> Detect(string path)
     {
         var hits = new List<PluginInfo>();
-        foreach (var (f, name) in AllPlugins())
+        foreach (var (name, p) in AllPlugins())
         {
             try
             {
-                var p = f.GetPlugin(name);
                 if (p.IsDataCardSupported(path))
                     hits.Add(new PluginInfo(name, p.Version ?? "", p.Owner ?? ""));
             }
@@ -148,12 +182,10 @@ public sealed class AdaptHost
         var chosen = pluginName ?? Detect(path).FirstOrDefault()?.Name
             ?? throw new NotSupportedException("No installed ADAPT plugin can read: " + path);
 
-        var entry = AllPlugins().FirstOrDefault(x =>
-            string.Equals(x.Name, chosen, StringComparison.OrdinalIgnoreCase));
-        if (entry.Factory is null)
-            throw new NotSupportedException("Plugin not available: " + chosen);
+        var plugin = AllPlugins()
+            .FirstOrDefault(x => string.Equals(x.Name, chosen, StringComparison.OrdinalIgnoreCase))
+            .Plugin ?? throw new NotSupportedException("Plugin not available: " + chosen);
 
-        var plugin = entry.Factory.GetPlugin(entry.Name);
         var models = plugin.Import(path);
         var layers = new List<OperationLayer>();
         if (models == null) return layers;

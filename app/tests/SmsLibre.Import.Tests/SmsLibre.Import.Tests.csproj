@@ -7,6 +7,7 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+      <AdaptCopyLocal>true</AdaptCopyLocal>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,5 +25,7 @@
     <ProjectReference Include="..\..\src\SmsLibre.Core\SmsLibre.Core.csproj" />
     <ProjectReference Include="..\..\src\SmsLibre.Import\SmsLibre.Import.csproj" />
   </ItemGroup>
+
+  <Import Project="..\..\Adapt.props" />
 
 </Project>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <!-- Field rows in yield colours, with an import arrow. -->
+  <rect x="1" y="3" width="22" height="18" rx="2" fill="#f7f7f2" stroke="#5b5b52" stroke-width="1.2"/>
+  <g stroke-width="2" stroke-linecap="round">
+    <line x1="4"  y1="6" x2="4"  y2="18" stroke="#a50026"/>
+    <line x1="7"  y1="6" x2="7"  y2="18" stroke="#f46d43"/>
+    <line x1="10" y1="6" x2="10" y2="18" stroke="#fee08b"/>
+    <line x1="13" y1="6" x2="13" y2="18" stroke="#d9ef8b"/>
+    <line x1="16" y1="6" x2="16" y2="18" stroke="#66bd63"/>
+    <line x1="19" y1="6" x2="19" y2="18" stroke="#006837"/>
+  </g>
+  <path d="M12 8.5v5.5m0 0l-2.5-2.5M12 14l2.5-2.5" fill="none" stroke="#1a1a1a"
+        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

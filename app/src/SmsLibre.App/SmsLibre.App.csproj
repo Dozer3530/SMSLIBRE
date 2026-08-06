@@ -6,6 +6,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaVersion>11.2.1</AvaloniaVersion>
+      <AdaptCopyLocal>true</AdaptCopyLocal>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,4 +20,6 @@
     <ProjectReference Include="..\SmsLibre.Core\SmsLibre.Core.csproj" />
     <ProjectReference Include="..\SmsLibre.Import\SmsLibre.Import.csproj" />
   </ItemGroup>
+  <Import Project="..\..\Adapt.props" />
+
 </Project>

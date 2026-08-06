@@ -1,0 +1,52 @@
+<Project>
+
+  <!--
+    Shared references to the AgGateway ADAPT assemblies that ship with Ag Leader
+    SMS. Imported by every project that compiles or runs against them.
+
+    Set SmsNetCoreDir to your SMS install's NetCoreDependencies folder, e.g.
+      dotnet build -p:SmsNetCoreDir=/opt/sms/NetCoreDependencies
+
+    AdaptCopyLocal controls whether the DLLs land in the output folder:
+      false — libraries that only compile against them (avoids duplicate copies)
+      true  — executables, which must actually ship/run them
+
+    Only these open-source AgGateway assemblies are referenced. The proprietary
+    vendor plugins (John Deere, Precision Planting, Trimble, Climate, CNH) are
+    discovered at run time from the user's own SMS install and never copied here.
+  -->
+
+  <PropertyGroup>
+    <SmsNetCoreDir Condition="'$(SmsNetCoreDir)' == ''">C:\Program Files\Ag Leader Technology\SMS\NetCoreDependencies</SmsNetCoreDir>
+    <AdaptCopyLocal Condition="'$(AdaptCopyLocal)' == ''">false</AdaptCopyLocal>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="AgGateway.ADAPT.ApplicationDataModel">
+      <HintPath>$(SmsNetCoreDir)\AgGateway.ADAPT.ApplicationDataModel.dll</HintPath>
+      <Private>$(AdaptCopyLocal)</Private>
+    </Reference>
+    <Reference Include="AgGateway.ADAPT.ISOv4Plugin">
+      <HintPath>$(SmsNetCoreDir)\AgGateway.ADAPT.ISOv4Plugin.dll</HintPath>
+      <Private>$(AdaptCopyLocal)</Private>
+    </Reference>
+    <Reference Include="AgGateway.ADAPT.Representation">
+      <HintPath>$(SmsNetCoreDir)\AgGateway.ADAPT.Representation.dll</HintPath>
+      <Private>$(AdaptCopyLocal)</Private>
+    </Reference>
+    <Reference Include="AgGateway.ADAPT.PluginManager">
+      <HintPath>$(SmsNetCoreDir)\AgGateway.ADAPT.PluginManager.dll</HintPath>
+      <Private>$(AdaptCopyLocal)</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- The ISOv4 plugin reads the ISO DDI + unit tables from Resources/ beside
+       the executable, so only executables need them staged. -->
+  <ItemGroup Condition="'$(AdaptCopyLocal)' == 'true'">
+    <Content Include="$(SmsNetCoreDir)\Resources\**\*">
+      <Link>Resources\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
