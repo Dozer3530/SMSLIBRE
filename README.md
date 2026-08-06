@@ -1,67 +1,139 @@
-# SMSLIBRE
+<h1 align="center">SMSLIBRE</h1>
 
-A native **Linux** application aiming at full feature parity with **Ag Leader SMS
-Advanced** (a Windows-only precision-agriculture desktop app), built by **reusing
-SMS's own portable .NET code** where possible and reimplementing only the parts
-locked in its native C++ engine.
+<p align="center">
+  <strong>Import agricultural machine data straight into QGIS.</strong><br>
+  Yield, as-applied, as-planted and field boundaries — from the card, into a map.
+</p>
 
-Personal, non-commercial reverse-engineering & porting project. Nothing
-proprietary is redistributed here — decompiled sources, vendor DLLs, sample field
-data, and the DB schema are git-ignored and regenerable from an SMS install.
+<p align="center">
+  <a href="https://github.com/Dozer3530/SMSLIBRE/releases/latest"><img alt="latest release" src="https://img.shields.io/github/v/release/Dozer3530/SMSLIBRE?label=download&color=2c7fb8"></a>
+  <img alt="QGIS 3.22+" src="https://img.shields.io/badge/QGIS-3.22%2B-589632">
+  <img alt="status" src="https://img.shields.io/badge/status-experimental-orange">
+</p>
 
-## Why this is feasible
+---
 
-- SMS is **.NET + C++/CLI + WPF**, not native C++ as first assumed; storage is
-  **Access/JET**, not SQL Server. → [`notes/STAGE1-3_FINDINGS.md`](notes/STAGE1-3_FINDINGS.md)
-- Its multi-vendor **import engine is the open-source AgGateway ADAPT** library,
-  which runs on native Linux .NET — **proven** by running SMS's actual
-  `ISOv4Plugin.dll` outside SMS. → [`notes/STAGE_SALVAGE_LEDGER.md`](notes/STAGE_SALVAGE_LEDGER.md)
-- ~45k methods of SMS's code are readable/portable C#; the compute engine
-  (cleaning/analysis/rendering) is native machine code that gets reimplemented.
-- Full scope: **835 SMS features** catalogued. → [`notes/SMS_FEATURE_INVENTORY.md`](notes/SMS_FEATURE_INVENTORY.md)
+A QGIS plugin that reads the data cards your machinery writes — the kind of
+import Ag Leader **SMS** does — and turns them into styled QGIS layers, with
+**every logged sensor channel kept as an attribute**.
 
-## Status
+It uses the **AgGateway ADAPT** plugin suite, the same import engine SMS itself
+uses, so one plugin covers many manufacturers.
 
-Vertical slice working (Phase 1): import an ISOXML dataset with **SMS's own ADAPT
-engine**, browse a Grower/Farm/Field tree, render a classified yield map with a
-native renderer, export PNG — in an Avalonia UI. Roadmap:
-[`notes/PROJECT_PLAN.md`](notes/PROJECT_PLAN.md) · parity tracker:
-[`notes/FEATURE_PARITY.md`](notes/FEATURE_PARITY.md)
+> **Status: experimental.** ISOXML import and field boundaries work on real data.
+> John Deere and Trimble are blocked by vendor licensing — see
+> [Format support](#format-support).
 
-![SMSLIBRE showing a yield map](analysis/app_shot.png)
+## Why
+
+QGIS is already excellent at maps, styling, analysis and layout. The one thing
+it cannot do is read proprietary agricultural machine formats. SMSLIBRE fills
+exactly that gap and gets out of the way — no separate desktop app, no
+re-implementation of GIS features that QGIS already does better.
+
+## Install
+
+Download `smslibre_import.zip` from the
+[latest release](https://github.com/Dozer3530/SMSLIBRE/releases/latest), then in
+QGIS:
+
+**Plugins ▸ Manage and Install Plugins… ▸ Install from ZIP** → select the file →
+enable **SMSLIBRE Machine Data Import**.
+
+The build bundles a self-contained .NET sidecar, so there is nothing else to
+install. Windows x64 today; Linux builds from source with
+`python qgis_plugin/build_plugin.py --runtime linux-x64`.
+
+## Use
+
+1. Toolbar ▸ **Import machine data…**
+2. Choose the **card folder** — a USB/SD card as written by the display, or an
+   ISOXML `TASKDATA` folder.
+3. **Detect format** — confirms which reader applies.
+4. **Import**, tick the layers you want, **Add selected to map**.
+
+Layers arrive styled: the meaningful channel (yield volume, yield mass,
+moisture, applied rate…) rendered with a quantile red→green ramp, classified on
+non-zero readings so headland zeros don't flatten the map. Boundaries come in as
+labelled outlines.
+
+> Point at the **original card or export**, not at SMS's internal Vault — SMS
+> reorganises data into a private store the vendor readers don't recognise.
+
+## Format support
+
+| Format | Status |
+|---|---|
+| **ISO 11783 / ISOXML** (`TASKDATA`) | ✅ **Working** — verified on real cards |
+| **Field boundaries** (any ADAPT source) | ✅ **Working** — verified on real cards |
+| AgGateway ADM | ⚪ loads; untested on data |
+| Climate FieldView | ⚪ loads; untested on data |
+| Precision Planting (2020) | ⚪ loads; untested on data |
+| John Deere GS2 / GS3 / GS4 | 🔒 **vendor licence required** |
+| Trimble AgData | 🔒 **vendor licence required** |
+
+**About the licence wall.** The John Deere and Trimble ADAPT plugins refuse to
+initialise without a vendor-issued *application id* (`"plugin requires a
+license"`). SMS works because Ag Leader is a licensed ADAPT partner. SMSLIBRE
+will not ship someone else's key. Two honest ways round it:
+
+1. **Export ISOXML from the display** — John Deere and Trimble equipment can,
+   and that path works today.
+2. **Obtain a developer application id** from the vendor; wiring it in is a
+   one-line change the code is already structured for.
+
+Work is also underway to read John Deere's on-card format directly, which needs
+no licence — see [`notes/JOHNDEERE_FORMAT.md`](notes/JOHNDEERE_FORMAT.md).
+
+## What you get in QGIS
+
+Real numbers from one AGCO harvest card:
+
+- **45 layers**, **550,219 points**
+- **46 channels per point** — yield mass & volume, harvest moisture, feeder
+  throughput, rotor speed, header height & engaged state, working width,
+  processor loss, crop type, timestamps…
+
+Everything lands in a **GeoPackage** (EPSG:4326), so it is ordinary QGIS data:
+filter it, join it, run it through Processing, style it however you like.
+
+## How it works
+
+```
+QGIS plugin (Python)   ──subprocess──►   smsimport (.NET sidecar)
+  dialog · layer load · styling            ADAPT plugins → GeoPackage
+```
+
+The vendor importers are .NET assemblies. Loading a CLR *inside* QGIS's bundled
+Python is fragile and a crash would take QGIS with it, so the import runs in a
+separate process that speaks JSON. It is also how the plugin stays
+cross-platform.
 
 ## Repository layout
 
-```
-app/        native .NET + Avalonia application  (see app/README.md)
-  src/SmsLibre.Core     domain model, native yield renderer, cleaning, PNG writer
-  src/SmsLibre.Import   reuses SMS's AgGateway.ADAPT.* DLLs to import field data
-  src/SmsLibre.App      Avalonia UI (tree | map | legend)
-  src/SmsLibre.Cli      headless import + render
-  tests/                Core unit tests (CI) + Import integration tests (local)
-notes/      analysis write-ups, feature inventory, salvage ledger, project plan
-tools/      RE + analysis scripts (PE inventory, decompiler, schema export, …)
-smslibre/   earlier Python + Qt proof of concept
-analysis/   generated artifacts (mostly git-ignored)
-```
+| Path | Contents |
+|---|---|
+| `qgis_plugin/` | the QGIS plugin (Python) + `build_plugin.py` packager |
+| `sidecar/` | the .NET sidecar: domain model, ADAPT host, GeoPackage writer, tests |
+| `notes/` | current analysis: feasibility, real-card testing, John Deere format |
+| `notes/archive/` | earlier phase, when the goal was porting all of SMS |
+| `tools/` | reverse-engineering utilities used to get here |
 
-## Build
-
-Requires the .NET SDK (8+). The app's importer needs the AgGateway ADAPT DLLs
-from an SMS install (`SmsNetCoreDir`); Core builds with no such dependency.
+## Build from source
 
 ```bash
-# Core + its tests (no SMS install needed)
-dotnet test app/tests/SmsLibre.Core.Tests -c Release
+# Core + tests (no SMS install needed)
+dotnet test sidecar/tests/SmsLibre.Core.Tests -c Release
 
-# Full app (needs SMS's ADAPT DLLs; on Linux point at your install)
-dotnet build app/SmsLibre.sln -c Release -p:SmsNetCoreDir=/path/to/SMS/NetCoreDependencies
-dotnet run --project app/src/SmsLibre.App -c Release
+# Full plugin zip (needs an SMS install for the vendor ADAPT assemblies)
+python qgis_plugin/build_plugin.py --runtime win-x64          # or linux-x64
+python qgis_plugin/build_plugin.py --skip-sidecar --install   # into your QGIS profile
 ```
 
-## License / provenance
+## Provenance & licensing
 
-The SMSLIBRE code here is the author's own. "SMS", "Ag Leader", ADAPT, and the
-various manufacturer formats belong to their respective owners; this project
-interoperates with data the user already owns and does not redistribute vendor
-software.
+A personal, non-commercial interoperability project: it reads data files the
+user already owns. "SMS" and "Ag Leader" are trademarks of Ag Leader Technology;
+ADAPT is an AgGateway project; the manufacturer formats belong to their
+respective owners. **No vendor software or licence key is redistributed here** —
+the proprietary ADAPT plugins are loaded from the user's own SMS installation.

@@ -24,7 +24,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN_DIR = Path(__file__).resolve().parent / "smslibre_import"
-SIDECAR_PROJ = ROOT / "app" / "src" / "SmsImport" / "SmsImport.csproj"
+SIDECAR_PROJ = ROOT / "sidecar" / "src" / "SmsImport" / "SmsImport.csproj"
 
 
 def publish_sidecar(runtime: str) -> Path:

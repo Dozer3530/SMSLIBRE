@@ -22,7 +22,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Build SmsLibre.Core
-        run: dotnet build app/src/SmsLibre.Core -c Release
+        run: dotnet build sidecar/src/SmsLibre.Core -c Release
 
       - name: Run Core tests
-        run: dotnet test app/tests/SmsLibre.Core.Tests -c Release
+        run: dotnet test sidecar/tests/SmsLibre.Core.Tests -c Release

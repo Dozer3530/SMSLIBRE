@@ -60,7 +60,7 @@ QGIS plugin (Python)  ──subprocess──►  smsimport (.NET sidecar)
 
 The importers are .NET; embedding a CLR inside QGIS's Python would be fragile
 and could crash QGIS, so the sidecar runs as a separate process and communicates
-via JSON. Source: [`../app/src/SmsImport`](../app/src/SmsImport).
+via JSON. Source: [`../sidecar/src/SmsImport`](../sidecar/src/SmsImport).
 
 ## Files
 
