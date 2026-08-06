@@ -1,5 +1,14 @@
 # John Deere GS3 card format — reverse-engineering groundwork
 
+> **⚠ Historical record — this path is CLOSED. Do not continue this work.**
+>
+> This investigation existed only as a way around the John Deere licence wall.
+> Olds College is signing John Deere's *SDK License for Display Plugins for
+> ADAPT*, which is the supported route and makes this unnecessary. That licence
+> also prohibits reverse-engineering the licensed components, so this line of
+> work must not be resumed. Kept solely as a record of what was examined and why
+> it was abandoned.
+
 Goal: read John Deere machine data **without** the licence-gated ADAPT plugin
 (see [`REAL_DATA_TESTING.md`](REAL_DATA_TESTING.md)). Reading a data file the
 user owns is ordinary interoperability work and needs no vendor licence.

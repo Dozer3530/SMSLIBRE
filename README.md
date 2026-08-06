@@ -20,8 +20,9 @@ import Ag Leader **SMS** does — and turns them into styled QGIS layers, with
 It uses the **AgGateway ADAPT** plugin suite, the same import engine SMS itself
 uses, so one plugin covers many manufacturers.
 
-> **Status: experimental.** ISOXML import and field boundaries work on real data.
-> John Deere and Trimble are blocked by vendor licensing — see
+> **Status: experimental. Internal tool — not for public distribution.**
+> Built for Olds College Center For Innovation, Smart Farm. ISOXML import and
+> field boundaries work on real data; John Deere is pending an SDK licence — see
 > [Format support](#format-support).
 
 ## Why
@@ -33,9 +34,9 @@ re-implementation of GIS features that QGIS already does better.
 
 ## Install
 
-Download `smslibre_import.zip` from the
-[latest release](https://github.com/Dozer3530/SMSLIBRE/releases/latest), then in
-QGIS:
+Internal distribution only. Get `smslibre_import.zip` from the
+[latest release](https://github.com/Dozer3530/SMSLIBRE/releases/latest) (private
+repo), then in QGIS:
 
 **Plugins ▸ Manage and Install Plugins… ▸ Install from ZIP** → select the file →
 enable **SMSLIBRE Machine Data Import**.
@@ -74,16 +75,23 @@ labelled outlines.
 
 **About the licence wall.** The John Deere and Trimble ADAPT plugins refuse to
 initialise without a vendor-issued *application id* (`"plugin requires a
-license"`). SMS works because Ag Leader is a licensed ADAPT partner. SMSLIBRE
-will not ship someone else's key. Two honest ways round it:
+license"`). SMS works because Ag Leader is a licensed ADAPT partner.
 
-1. **Export ISOXML from the display** — John Deere and Trimble equipment can,
-   and that path works today.
-2. **Obtain a developer application id** from the vendor; wiring it in is a
-   one-line change the code is already structured for.
+John Deere's **SDK License for Display Plugins for ADAPT** is the route, and one
+is in progress for Olds College Center For Innovation. Once signed, enabling it
+is a one-line change (`Initialize(appId)`) the code is already structured for.
 
-Work is also underway to read John Deere's on-card format directly, which needs
-no licence — see [`notes/JOHNDEERE_FORMAT.md`](notes/JOHNDEERE_FORMAT.md).
+Note the licence shapes the design: it forbids contributing the licensed
+materials into an open-source project and requires end users to use them for
+internal purposes only. Hence **internal distribution, and the plugins are
+loaded from each user's own licensed installation rather than redistributed** —
+which is what this repo already does. It also prohibits reverse-engineering the
+licensed components, so the exploratory work in
+[`notes/JOHNDEERE_FORMAT.md`](notes/JOHNDEERE_FORMAT.md) is retained only as a
+record of a path **not** taken.
+
+Until the licence is in place, **export ISOXML from the display** — John Deere
+and Trimble equipment can, and that path works today.
 
 ## What you get in QGIS
 
@@ -132,8 +140,11 @@ python qgis_plugin/build_plugin.py --skip-sidecar --install   # into your QGIS p
 
 ## Provenance & licensing
 
-A personal, non-commercial interoperability project: it reads data files the
-user already owns. "SMS" and "Ag Leader" are trademarks of Ag Leader Technology;
-ADAPT is an AgGateway project; the manufacturer formats belong to their
-respective owners. **No vendor software or licence key is redistributed here** —
-the proprietary ADAPT plugins are loaded from the user's own SMS installation.
+**Internal tool for Olds College Center For Innovation, Smart Farm — not for
+public distribution.** It reads data files the institution already owns.
+
+"SMS" and "Ag Leader" are trademarks of Ag Leader Technology; ADAPT is an
+AgGateway project; the manufacturer formats belong to their respective owners.
+**No vendor software or licence key is redistributed here** — the proprietary
+ADAPT plugins are loaded from each user's own licensed installation, as the
+vendor SDK licence requires.
