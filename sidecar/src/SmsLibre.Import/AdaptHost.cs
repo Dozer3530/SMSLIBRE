@@ -68,17 +68,25 @@ public sealed class AdaptHost
     // …\SMS\ADAPT while ISOv4Plugin and CNHVoyager2 sit in NetCoreDependencies.
     // A PluginFactory scans a single directory, so we aggregate one per folder.
     private readonly List<PluginFactory> _factories = new();
+    private readonly int _pluginSourceCount;
+    private readonly List<string> _sources = new();
+    /// <summary>Per-directory scan results, for diagnostics.</summary>
+    public IReadOnlyList<string> PluginSources => _sources;
     private static bool _resolverInstalled;
     private static readonly object _lock = new();
 
     /// <param name="pluginDir">SMS's ADAPT plugin folder (…\SMS\ADAPT).</param>
     /// <param name="supportDirs">Extra folders that hold both ADAPT core
     /// assemblies and further plugins (…\SMS\NetCoreDependencies).</param>
-    public AdaptHost(string pluginDir, params string[] supportDirs)
+    /// <param name="priorityDirs">Folders searched <em>before</em> SMS's, so a
+    /// vendor's own plugin release (e.g. John Deere's, licensed to us) wins over
+    /// the older copies redistributed inside SMS.</param>
+    public AdaptHost(string pluginDir, string[] supportDirs, params string[] priorityDirs)
     {
-        var probeDirs = new List<string> { pluginDir };
+        var probeDirs = new List<string>(priorityDirs) { pluginDir };
         probeDirs.AddRange(supportDirs);
         probeDirs.Add(AppContext.BaseDirectory);
+        _pluginSourceCount = priorityDirs.Length + 1 + supportDirs.Length;
 
         lock (_lock)
         {
@@ -116,11 +124,18 @@ public sealed class AdaptHost
         // Scan for plugins in SMS's folders only. The app's own directory is a
         // dependency probe path, not a plugin source — treating our bundled
         // ADAPT copies as plugins is what duplicates assembly identities.
-        foreach (var dir in probeDirs.Take(1 + supportDirs.Length)
+        foreach (var dir in probeDirs.Take(_pluginSourceCount)
                                      .Distinct(StringComparer.OrdinalIgnoreCase))
         {
             if (!Directory.Exists(dir)) continue;
-            try { _factories.Add(new PluginFactory(dir)); } catch { }
+            try
+            {
+                var f = new PluginFactory(dir);
+                var names = f.AvailablePlugins;      // forces a scan
+                _factories.Add(f);
+                _sources.Add($"{dir} -> {names.Count} plugin(s): {string.Join(", ", names)}");
+            }
+            catch (Exception ex) { _sources.Add($"{dir} -> ERROR {ex.Message}"); }
         }
     }
 

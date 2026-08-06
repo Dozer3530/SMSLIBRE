@@ -58,3 +58,5 @@ analysis/*.log
 **/johndeere.adaptplugins.lic
 **/johndeere.appid
 **/ApplicationId.txt
+# Vendor SDK packages (licensed materials - never commit)
+vendor/

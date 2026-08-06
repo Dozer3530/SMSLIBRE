@@ -17,6 +17,12 @@
   -->
 
   <PropertyGroup>
+    <!--
+      Compile against SMS's copies: they also carry ISOv4Plugin, which John
+      Deere's package does not include. Both ship ADAPT 3.1.0.0, so the framework
+      identity matches either way - John Deere's own plugin build is loaded at
+      run time from vendor/jd-plugins/plugins.
+    -->
     <SmsNetCoreDir Condition="'$(SmsNetCoreDir)' == ''">C:\Program Files\Ag Leader Technology\SMS\NetCoreDependencies</SmsNetCoreDir>
     <AdaptCopyLocal Condition="'$(AdaptCopyLocal)' == ''">false</AdaptCopyLocal>
   </PropertyGroup>

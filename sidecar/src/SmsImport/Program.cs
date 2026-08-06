@@ -30,6 +30,12 @@ internal static class Program
 
     private static int Main(string[] args)
     {
+        // Vendor plugins (John Deere's in particular) write progress chatter
+        // straight to stdout, which would corrupt the single-JSON-object
+        // contract the QGIS plugin parses. Route stdout to stderr for the whole
+        // run; Emit() restores the real stdout just long enough to print JSON.
+        _stdout = Console.Out;
+        Console.SetOut(Console.Error);
         try { return Run(args); }
         catch (Exception ex)
         {
@@ -66,15 +72,18 @@ internal static class Program
         // those are Ag Leader's licensed build, whereas our licence and
         // application id were issued for Deere's distribution.
         var extraDirs = new List<string> { coreDir };
+        var priorityDirs = new List<string>();
         if (Opt(args, "--plugins") is string extra)
-            extraDirs.AddRange(extra.Split(';', StringSplitOptions.RemoveEmptyEntries));
+            // PluginFactory rejects relative paths, so normalise up front.
+            priorityDirs.AddRange(extra.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                                       .Select(Path.GetFullPath));
         foreach (var d in CredentialPaths("AdaptPlugins"))
-            if (Directory.Exists(d)) { extraDirs.Add(d); break; }
+            if (Directory.Exists(d)) { priorityDirs.Add(d); break; }
 
         AdaptHost.ApplicationId = ResolveApplicationId(args);
         EnsureLicenceFile(args);
 
-        var host = new AdaptHost(pluginDir, extraDirs.ToArray());
+        var host = new AdaptHost(pluginDir, extraDirs.ToArray(), priorityDirs.ToArray());
 
         switch (cmd)
         {
@@ -87,6 +96,7 @@ internal static class Program
                     // Non-fatal Initialize() failures, kept visible so a plugin
                     // that loads but cannot run is diagnosable.
                     initErrors = SmsLibre.Import.AdaptHost.InitErrors,
+                    pluginSources = host.PluginSources,
                 });
                 return 0;
             }
@@ -385,7 +395,16 @@ internal static class Program
         return null;
     }
 
-    private static void Emit(object o) => Console.WriteLine(JsonSerializer.Serialize(o, Json));
+    private static TextWriter? _stdout;
+
+    /// <summary>Write the single JSON result to the real stdout.</summary>
+    private static void Emit(object o)
+    {
+        var json = JsonSerializer.Serialize(o, Json);
+        var w = _stdout ?? Console.Out;
+        w.WriteLine(json);
+        w.Flush();
+    }
 
     private static void Usage()
     {
