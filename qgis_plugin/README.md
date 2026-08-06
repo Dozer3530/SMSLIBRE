@@ -22,17 +22,40 @@ them from your own Ag Leader SMS installation. ISOXML works without SMS.
 
 ## Install
 
-**From the built zip** (QGIS ▸ Plugins ▸ Manage and Install ▸ Install from ZIP):
+Install in QGIS via **Plugins ▸ Manage and Install ▸ Install from ZIP**. The
+build bundles a self-contained .NET 10 sidecar, so nothing else is needed.
+
+### Internal build (recommended for Olds College)
+
+Bundles the licensed John Deere plugins and credentials so the plugin works
+**with no configuration** — John Deere cards are recognised out of the box:
+
+```bash
+python qgis_plugin/build_plugin.py --runtime win-x64 --internal
+# → build/smslibre_import_INTERNAL.zip
+```
+
+Requires `secrets/johndeere.appid`, `secrets/johndeere.adaptplugins.lic` and
+`vendor/jd-plugins/plugins/` to be present locally (all git-ignored).
+
+> **⚠ Never publish the INTERNAL zip.** It contains licensed vendor binaries and
+> a licence key. Distribute it inside the College only — network share or USB,
+> not GitHub.
+
+### Public build
+
+Excludes all licensed material; John Deere then requires each user to point the
+dialog's *Vendor plugins* / *Application id* settings at their own licensed copy.
 
 ```bash
 python qgis_plugin/build_plugin.py --runtime win-x64     # or linux-x64
 # → build/smslibre_import.zip
 ```
 
-Add `--install` to copy straight into your QGIS profile instead.
+The packager refuses to include licensed files in a public zip even when they
+are staged in `bin/`, so the two builds cannot be confused.
 
-The build bundles a self-contained .NET sidecar (~80 MB), so no .NET runtime
-install is needed.
+Add `--install` to either to copy straight into your QGIS profile.
 
 ## Use
 

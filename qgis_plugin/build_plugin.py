@@ -59,17 +59,64 @@ def stage_sidecar(published: Path) -> None:
     print(f"  staged {n} files ({size / 1e6:.0f} MB) into {bin_dir}")
 
 
-def make_zip() -> Path:
+def stage_licensed(secrets: Path, vendor: Path) -> None:
+    """Stage licensed vendor material for an INTERNAL build.
+
+    Places John Deere's plugin release and our credentials where the sidecar
+    auto-discovers them (an AdaptPlugins folder and johndeere.* files beside the
+    executable), so an internal install needs no configuration at all.
+
+    Never call this for a build that will be published — see build_zip().
+    """
+    bin_dir = PLUGIN_DIR / "bin"
+    plugins_src = vendor / "jd-plugins" / "plugins"
+    if plugins_src.is_dir():
+        dst = bin_dir / "AdaptPlugins"
+        shutil.rmtree(dst, ignore_errors=True)
+        shutil.copytree(plugins_src, dst)
+        n = sum(1 for _ in dst.rglob("*.dll"))
+        print(f"  staged vendor plugins: {n} dlls")
+    else:
+        print(f"  WARNING: no vendor plugins at {plugins_src}")
+
+    for name in ("johndeere.appid", "johndeere.adaptplugins.lic"):
+        src = secrets / name
+        if src.exists():
+            shutil.copy2(src, bin_dir / name)
+            print(f"  staged {name}")
+        else:
+            print(f"  WARNING: missing {src}")
+
+
+def build_zip(internal: bool) -> Path:
     dist = ROOT / "build"
     dist.mkdir(exist_ok=True)
-    zip_path = dist / "smslibre_import.zip"
+    name = "smslibre_import_INTERNAL.zip" if internal else "smslibre_import.zip"
+    zip_path = dist / name
     skip = {"__pycache__", ".pytest_cache"}
+
+    licensed_markers = ("adaptplugins", "johndeere", "adaptplugins.lic")
+    included_licensed = []
+
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
         for path in PLUGIN_DIR.rglob("*"):
             if path.is_dir() or any(s in path.parts for s in skip):
                 continue
-            z.write(path, Path("smslibre_import") / path.relative_to(PLUGIN_DIR))
+            rel = path.relative_to(PLUGIN_DIR)
+            low = str(rel).lower()
+            if any(m in low for m in licensed_markers):
+                if not internal:
+                    # Safety net: a public zip must never carry vendor material.
+                    continue
+                included_licensed.append(str(rel))
+            z.write(path, Path("smslibre_import") / rel)
+
     print(f"\nWrote {zip_path}")
+    if internal:
+        print(f"  contains {len(included_licensed)} licensed file(s) — "
+              "INTERNAL DISTRIBUTION ONLY, do not publish this zip")
+    else:
+        print("  public build: licensed vendor material excluded")
     return zip_path
 
 
@@ -96,11 +143,21 @@ def main() -> int:
                     help="package the Python only (sidecar already staged)")
     ap.add_argument("--install", action="store_true",
                     help="also copy into the local QGIS plugins folder")
+    ap.add_argument("--internal", action="store_true",
+                    help="INTERNAL build: bundle the licensed vendor plugins and "
+                         "credentials so the plugin works with no configuration. "
+                         "Never publish the resulting zip.")
+    ap.add_argument("--secrets", type=Path, default=ROOT / "secrets",
+                    help="folder holding johndeere.appid / johndeere.adaptplugins.lic")
+    ap.add_argument("--vendor", type=Path, default=ROOT / "vendor",
+                    help="folder holding jd-plugins/plugins")
     args = ap.parse_args()
 
     if not args.skip_sidecar:
         stage_sidecar(publish_sidecar(args.runtime))
-    make_zip()
+    if args.internal:
+        stage_licensed(args.secrets, args.vendor)
+    build_zip(args.internal)
     if args.install:
         install_locally()
     return 0
