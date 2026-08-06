@@ -39,6 +39,11 @@ internal static class Program
         };
 
         string mode = args.Length > 0 ? args[0].ToLowerInvariant() : "info";
+
+        // Feasibility probe for the QGIS-plugin direction: enumerate ALL vendor
+        // plugins via ADAPT's own PluginFactory and auto-detect formats.
+        if (mode == "probe") return Probe.Run(args);
+
         string dataPath = args.Length > 1 ? args[1] : DefaultData;
 
         Console.WriteLine("SMSLIBRE — SMS's ADAPT engine on native .NET " + Environment.Version);

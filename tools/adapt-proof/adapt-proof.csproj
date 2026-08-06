@@ -21,6 +21,10 @@
        We copy (rather than load-from) only for convenience; these are the exact
        DLLs SMS ships and they are unmodified. -->
   <ItemGroup>
+    <Reference Include="AgGateway.ADAPT.PluginManager">
+      <HintPath>$(SmsDir)\AgGateway.ADAPT.PluginManager.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
     <Reference Include="AgGateway.ADAPT.ApplicationDataModel">
       <HintPath>$(SmsDir)\AgGateway.ADAPT.ApplicationDataModel.dll</HintPath>
       <Private>true</Private>
