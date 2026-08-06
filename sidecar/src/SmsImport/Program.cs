@@ -61,7 +61,20 @@ internal static class Program
         // The ISOv4 plugin reads its DDI tables from Resources/ beside the exe.
         EnsureResources(coreDir);
 
-        var host = new AdaptHost(pluginDir, coreDir);
+        // Extra plugin folders, e.g. John Deere's own plugin release downloaded
+        // from developer.deere.com. Preferred over the copies bundled inside SMS:
+        // those are Ag Leader's licensed build, whereas our licence and
+        // application id were issued for Deere's distribution.
+        var extraDirs = new List<string> { coreDir };
+        if (Opt(args, "--plugins") is string extra)
+            extraDirs.AddRange(extra.Split(';', StringSplitOptions.RemoveEmptyEntries));
+        foreach (var d in CredentialPaths("AdaptPlugins"))
+            if (Directory.Exists(d)) { extraDirs.Add(d); break; }
+
+        AdaptHost.ApplicationId = ResolveApplicationId(args);
+        EnsureLicenceFile(args);
+
+        var host = new AdaptHost(pluginDir, extraDirs.ToArray());
 
         switch (cmd)
         {
@@ -237,6 +250,70 @@ internal static class Program
             default:
                 Usage();
                 return 2;
+        }
+    }
+
+    /// <summary>
+    /// Find the vendor application id, in order of precedence:
+    /// <c>--app-id</c>, the <c>SMSLIBRE_APP_ID</c> environment variable, or a
+    /// <c>johndeere.appid</c> file beside the executable or in <c>secrets/</c>.
+    /// Returns null when unlicensed — licence-free plugins still work.
+    /// </summary>
+    private static string? ResolveApplicationId(string[] args)
+    {
+        string? id = Opt(args, "--app-id")
+                     ?? Environment.GetEnvironmentVariable("SMSLIBRE_APP_ID");
+        if (!string.IsNullOrWhiteSpace(id)) return id.Trim();
+
+        foreach (var p in CredentialPaths("johndeere.appid"))
+            if (File.Exists(p))
+            {
+                string s = File.ReadAllText(p).Trim();
+                if (!string.IsNullOrWhiteSpace(s)) return Normalise(s);
+            }
+        return null;
+    }
+
+    /// <summary>The John Deere guide passes the id in braces —
+    /// <c>Initialize("{00000000-0000-0000-0000-000000000000}")</c> — so accept a
+    /// bare GUID and brace it.</summary>
+    private static string Normalise(string id)
+        => Guid.TryParse(id, out var g) ? g.ToString("B") : id;
+
+    /// <summary>
+    /// The John Deere plugins load their licence from the executable's own
+    /// directory, so copy it there if it lives elsewhere.
+    /// </summary>
+    private static void EnsureLicenceFile(string[] args)
+    {
+        const string name = "johndeere.adaptplugins.lic";
+        string dest = Path.Combine(AppContext.BaseDirectory, name);
+        if (File.Exists(dest)) return;
+
+        var candidates = new List<string>();
+        if (Opt(args, "--licence") is string explicitPath) candidates.Add(explicitPath);
+        candidates.AddRange(CredentialPaths(name));
+
+        foreach (var src in candidates)
+        {
+            if (!File.Exists(src)) continue;
+            try { File.Copy(src, dest, overwrite: true); return; }
+            catch { /* read-only install dir: the plugin will report the licence error */ }
+        }
+    }
+
+    /// <summary>Places a credential may live, nearest first.</summary>
+    private static IEnumerable<string> CredentialPaths(string fileName)
+    {
+        string base_ = AppContext.BaseDirectory;
+        yield return Path.Combine(base_, fileName);
+        // walk up to find a repo-level secrets/ folder in dev use; the exe sits
+        // ~6 levels below the repo root under bin/Release/<tfm>/
+        var dir = new DirectoryInfo(base_);
+        for (int i = 0; i < 10 && dir is not null; i++, dir = dir.Parent)
+        {
+            yield return Path.Combine(dir.FullName, "secrets", fileName);
+            yield return Path.Combine(dir.FullName, fileName);
         }
     }
 

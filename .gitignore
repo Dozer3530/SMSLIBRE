@@ -54,3 +54,7 @@ analysis/scan_*.json
 analysis/scan_*.log
 analysis/*.json
 analysis/*.log
+# John Deere SDK credentials — licensed materials, never commit
+**/johndeere.adaptplugins.lic
+**/johndeere.appid
+**/ApplicationId.txt

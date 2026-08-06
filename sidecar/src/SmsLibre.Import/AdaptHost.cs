@@ -171,12 +171,26 @@ public sealed class AdaptHost
     public static IReadOnlyDictionary<string, string> InitErrors => _initErrors;
     private static readonly Dictionary<string, string> _initErrors = new();
 
+    /// <summary>
+    /// Vendor application id passed to <c>IPlugin.Initialize</c>. The John Deere
+    /// plugins additionally require their <c>johndeere.adaptplugins.lic</c> file
+    /// to sit beside the executable (per the John Deere ADAPT Plugins Developer
+    /// Guide). Licensed material — supplied at runtime, never committed.
+    /// </summary>
+    public static string? ApplicationId { get; set; }
+
     private static bool TryInitialize(AgGateway.ADAPT.ApplicationDataModel.ADM.IPlugin p)
     {
         lock (_initialized)
         {
             if (!_initialized.Add(p)) return true;
-            try { p.Initialize(); }
+            try
+            {
+                // Plugins that need no licence accept a null argument; licensed
+                // ones require the GUID application id.
+                if (string.IsNullOrWhiteSpace(ApplicationId)) p.Initialize();
+                else p.Initialize(ApplicationId);
+            }
             catch (Exception ex)
             {
                 string name = SafeName(p);
