@@ -20,6 +20,21 @@ from .styling import apply_yield_style
 
 SETTINGS_PREFIX = "smslibre_import"
 
+# QgsCollapsibleGroupBox gives a native, state-remembering collapse header.
+# Fall back to a plain QGroupBox if the QGIS gui module is unavailable.
+try:
+    from qgis.gui import QgsCollapsibleGroupBox
+
+    def _make_group(title: str, collapsed: bool = True):
+        box = QgsCollapsibleGroupBox(title)
+        box.setSaveCollapsedState(True)
+        box.setCollapsed(collapsed)
+        return box
+
+except ImportError:                                   # pragma: no cover
+    def _make_group(title: str, collapsed: bool = True):
+        return QGroupBox(title)
+
 
 class _ImportWorker(QThread):
     """Runs the sidecar off the UI thread; a big card can take minutes."""
@@ -80,7 +95,9 @@ class ImportDialog(QDialog):
         layout.addWidget(src)
 
         # --- settings ------------------------------------------------------
-        cfg = QGroupBox("Settings")
+        # Collapsible, and collapsed by default: an internal build ships with the
+        # licensed plugins already in place, so most users never open this.
+        cfg = _make_group("Settings")
         cg = QGridLayout(cfg)
         self.sms_edit = QLineEdit(sms)
         self.sms_edit.setPlaceholderText("Ag Leader SMS install folder (supplies the vendor plugins)")

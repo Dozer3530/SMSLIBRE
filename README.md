@@ -20,10 +20,9 @@ import Ag Leader **SMS** does — and turns them into styled QGIS layers, with
 It uses the **AgGateway ADAPT** plugin suite, the same import engine SMS itself
 uses, so one plugin covers many manufacturers.
 
-> **Status: experimental. Internal tool — not for public distribution.**
-> Built for Olds College Center For Innovation, Smart Farm. ISOXML import and
-> field boundaries work on real data; John Deere is pending an SDK licence — see
-> [Format support](#format-support).
+> **Internal tool — not for public distribution.** Built for Olds College Center
+> For Innovation, Smart Farm. John Deere, ISOXML and field boundaries all import
+> real data today, confirmed in QGIS — see [Format support](#format-support).
 
 ## Why
 
@@ -65,42 +64,42 @@ labelled outlines.
 
 | Format | Status |
 |---|---|
+| **John Deere** GS2 / GS3 / GS4 | ✅ **Working** — licensed SDK, verified in QGIS on real cards |
 | **ISO 11783 / ISOXML** (`TASKDATA`) | ✅ **Working** — verified on real cards |
 | **Field boundaries** (any ADAPT source) | ✅ **Working** — verified on real cards |
 | AgGateway ADM | ⚪ loads; untested on data |
 | Climate FieldView | ⚪ loads; untested on data |
 | Precision Planting (2020) | ⚪ loads; untested on data |
-| John Deere GS2 / GS3 / GS4 | 🔒 **vendor licence required** |
 | Trimble AgData | 🔒 **vendor licence required** |
 
-**About the licence wall.** The John Deere and Trimble ADAPT plugins refuse to
-initialise without a vendor-issued *application id* (`"plugin requires a
-license"`). SMS works because Ag Leader is a licensed ADAPT partner.
+**About vendor licensing.** The John Deere and Trimble ADAPT plugins refuse to
+initialise without a vendor-issued *application id*. Olds College holds John
+Deere's **SDK License for Display Plugins for ADAPT**, so John Deere import works
+here. Trimble still needs its own licence.
 
-John Deere's **SDK License for Display Plugins for ADAPT** is the route, and one
-is in progress for Olds College Center For Innovation. Once signed, enabling it
-is a one-line change (`Initialize(appId)`) the code is already structured for.
+Two consequences of that licence, both already reflected in the design:
 
-Note the licence shapes the design: it forbids contributing the licensed
-materials into an open-source project and requires end users to use them for
-internal purposes only. Hence **internal distribution, and the plugins are
-loaded from each user's own licensed installation rather than redistributed** —
-which is what this repo already does. It also prohibits reverse-engineering the
-licensed components, so the exploratory work in
-[`notes/JOHNDEERE_FORMAT.md`](notes/JOHNDEERE_FORMAT.md) is retained only as a
-record of a path **not** taken.
+- It forbids contributing the licensed materials into an open-source project and
+  restricts end users to internal purposes — hence **internal distribution**, and
+  vendor plugins loaded from a licensed folder rather than redistributed.
+- It prohibits reverse-engineering the licensed components, so the exploratory
+  work in [`notes/JOHNDEERE_FORMAT.md`](notes/JOHNDEERE_FORMAT.md) is retained
+  only as a record of a path **not** taken.
 
-Until the licence is in place, **export ISOXML from the display** — John Deere
-and Trimble equipment can, and that path works today.
+Note John Deere's current plugins target **.NET 10** and must come from Deere's
+own release — the older copies bundled inside SMS are Ag Leader's build and this
+licence does not cover them.
 
 ## What you get in QGIS
 
-Real numbers from one AGCO harvest card:
+Real numbers from real cards:
 
-- **45 layers**, **550,219 points**
-- **46 channels per point** — yield mass & volume, harvest moisture, feeder
-  throughput, rotor speed, header height & engaged state, working width,
-  processor loss, crop type, timestamps…
+- **AGCO ISOXML harvest card** — 45 layers, **550,219 points**, 46 channels:
+  yield mass & volume, harvest moisture, feeder throughput, rotor speed, header
+  height & engaged state, working width, processor loss, crop type, timestamps…
+- **John Deere GS3 2630 card** — 34 layers, **157,583 points**, 41 channels:
+  wet yield mass, harvest moisture, vehicle speed, fuel rate, heading, distance
+  travelled, plus recorded weather (humidity, air/soil temperature, wind).
 
 Everything lands in a **GeoPackage** (EPSG:4326), so it is ordinary QGIS data:
 filter it, join it, run it through Processing, style it however you like.
@@ -133,9 +132,11 @@ cross-platform.
 # Core + tests (no SMS install needed)
 dotnet test sidecar/tests/SmsLibre.Core.Tests -c Release
 
-# Full plugin zip (needs an SMS install for the vendor ADAPT assemblies)
+# Internal build: bundles the licensed vendor SDK, works with no configuration
+python qgis_plugin/build_plugin.py --runtime win-x64 --internal --install
+
+# Public build: excludes all licensed material
 python qgis_plugin/build_plugin.py --runtime win-x64          # or linux-x64
-python qgis_plugin/build_plugin.py --skip-sidecar --install   # into your QGIS profile
 ```
 
 ## Provenance & licensing
