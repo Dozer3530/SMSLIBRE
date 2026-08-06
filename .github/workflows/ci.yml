@@ -5,10 +5,12 @@ name: CI
 # project (and its integration tests) reference SMS's ADAPT DLLs, which only
 # exist on a machine with SMS installed, so they are excluded from CI here.
 
+# Manual trigger only. Hosted runners were not being allocated to this private
+# repo ("job was not acquired by Runner of type hosted"), so every push produced
+# a red X for a job that never actually ran. The build and tests are verified
+# locally before each push; run this from the Actions tab when a clean-room
+# Linux check is actually wanted.
 on:
-  push:
-    branches: [ master, main ]
-  pull_request:
   workflow_dispatch:
 
 jobs:
