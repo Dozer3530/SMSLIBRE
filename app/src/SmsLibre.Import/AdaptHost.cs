@@ -131,7 +131,7 @@ public sealed class AdaptHost
         foreach (var p in BuiltIns())
         {
             string name = p.Name ?? p.GetType().Name;
-            if (seen.Add(name)) yield return (name, p);
+            if (seen.Add(name) && TryInitialize(p)) yield return (name, p);
         }
 
         foreach (var f in _factories)
@@ -143,9 +143,41 @@ public sealed class AdaptHost
                 if (!seen.Add(n)) continue;
                 AgGateway.ADAPT.ApplicationDataModel.ADM.IPlugin? inst = null;
                 try { inst = f.GetPlugin(n); } catch { }
-                if (inst != null) yield return (n, inst);
+                if (inst != null && TryInitialize(inst)) yield return (n, inst);
             }
         }
+    }
+
+    // Plugins must be initialised before IsDataCardSupported/Import; several
+    // vendors otherwise throw "Plugin is not initialized". Initialise once per
+    // instance, best-effort: a plugin whose Initialize throws is still offered,
+    // because the failure may be benign — but the reason is kept for diagnostics.
+    private static readonly HashSet<object> _initialized =
+        new(ReferenceEqualityComparer.Instance);
+
+    /// <summary>Plugin name → why Initialize() failed, when it did.</summary>
+    public static IReadOnlyDictionary<string, string> InitErrors => _initErrors;
+    private static readonly Dictionary<string, string> _initErrors = new();
+
+    private static bool TryInitialize(AgGateway.ADAPT.ApplicationDataModel.ADM.IPlugin p)
+    {
+        lock (_initialized)
+        {
+            if (!_initialized.Add(p)) return true;
+            try { p.Initialize(); }
+            catch (Exception ex)
+            {
+                string name = SafeName(p);
+                _initErrors[name] = ex.Message;
+            }
+            return true;
+        }
+    }
+
+    private static string SafeName(AgGateway.ADAPT.ApplicationDataModel.ADM.IPlugin p)
+    {
+        try { return p.Name ?? p.GetType().Name; }
+        catch { return p.GetType().Name; }
     }
 
     /// <summary>Every plugin that loads successfully.</summary>

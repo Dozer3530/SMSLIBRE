@@ -68,7 +68,13 @@ internal static class Program
             case "plugins":
             {
                 var plugins = host.ListPlugins();
-                Emit(new { ok = true, smsDir, pluginDir, count = plugins.Count, plugins });
+                Emit(new
+                {
+                    ok = true, smsDir, pluginDir, count = plugins.Count, plugins,
+                    // Non-fatal Initialize() failures, kept visible so a plugin
+                    // that loads but cannot run is diagnosable.
+                    initErrors = SmsLibre.Import.AdaptHost.InitErrors,
+                });
                 return 0;
             }
 
@@ -78,6 +84,32 @@ internal static class Program
                 string path = args[1];
                 var hits = host.Detect(path);
                 Emit(new { ok = true, path, supported = hits.Count > 0, count = hits.Count, plugins = hits });
+                return 0;
+            }
+
+            case "scan":
+            {
+                // Users keep cards in deep, messy folder trees. Walk one and
+                // report every directory an installed plugin can read.
+                if (args.Length < 2) { Usage(); return 2; }
+                string root = args[1];
+                int depth = int.TryParse(Opt(args, "--depth"), out var d) ? d : 4;
+                int maxDirs = int.TryParse(Opt(args, "--max"), out var m) ? m : 3000;
+
+                var dirs = new List<string> { root };
+                dirs.AddRange(Walk(root, depth, maxDirs));
+
+                var found = new List<object>();
+                foreach (var dir in dirs)
+                {
+                    var hits = host.Detect(dir);
+                    if (hits.Count > 0)
+                    {
+                        Console.Error.WriteLine($"  {hits[0].Name}: {dir}");
+                        found.Add(new { path = dir, plugins = hits });
+                    }
+                }
+                Emit(new { ok = true, root, scanned = dirs.Count, found });
                 return 0;
             }
 
@@ -164,6 +196,33 @@ internal static class Program
                 Usage();
                 return 2;
         }
+    }
+
+    /// <summary>Breadth-first directory walk, depth- and count-limited.</summary>
+    private static IEnumerable<string> Walk(string root, int maxDepth, int maxDirs)
+    {
+        var result = new List<string>();
+        var level = new List<string> { root };
+        for (int d = 0; d < maxDepth && result.Count < maxDirs; d++)
+        {
+            var next = new List<string>();
+            foreach (var dir in level)
+            {
+                IEnumerable<string> kids;
+                try { kids = Directory.EnumerateDirectories(dir); }
+                catch { continue; }
+                foreach (var k in kids)
+                {
+                    result.Add(k);
+                    next.Add(k);
+                    if (result.Count >= maxDirs) break;
+                }
+                if (result.Count >= maxDirs) break;
+            }
+            level = next;
+            if (level.Count == 0) break;
+        }
+        return result;
     }
 
     /// <summary>The ISOv4 plugin loads ddiExport.txt etc. from ./Resources.</summary>

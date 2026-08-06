@@ -50,3 +50,7 @@ analysis/*.gpkg
 # Bundled .NET sidecar + packaged plugin (regenerate: python qgis_plugin/build_plugin.py)
 qgis_plugin/smslibre_import/bin/
 build/
+analysis/scan_*.json
+analysis/scan_*.log
+analysis/*.json
+analysis/*.log
