@@ -1,0 +1,77 @@
+{
+  "ok": true,
+  "root": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2025",
+  "scanned": 231,
+  "found": [
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2025\\2025_Raw_Harvest_Data\\JohnDeere_680",
+      "plugins": [
+        {
+          "Name": "RCDPlugins",
+          "Version": "2026.7.24.1631",
+          "Owner": "Deere \u0026 Company"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2025\\2025_Raw_Harvest_Data\\johndeere",
+      "plugins": [
+        {
+          "Name": "RCDPlugins",
+          "Version": "2026.7.24.1631",
+          "Owner": "Deere \u0026 Company"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2025\\2025_Raw_Seeding_Data\\Brandt_Seeding_JD\\Steckler_2025_OFPE_JD_Data\\1RW9540DHRA086175_05132025",
+      "plugins": [
+        {
+          "Name": "ProtobufPlugins",
+          "Version": "2026.7.24.1550",
+          "Owner": "Deere \u0026 Company"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2025\\2025_Raw_Seeding_Data\\Brandt_Seeding_JD\\Steckler_2025_OFPE_JD_Data\\1RW9540DHRA086175_05152025",
+      "plugins": [
+        {
+          "Name": "ProtobufPlugins",
+          "Version": "2026.7.24.1550",
+          "Owner": "Deere \u0026 Company"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2025\\2025_Raw_Seeding_Data\\Brandt_Seeding_JD\\Steckler_2025_OFPE_JD_Data\\1RW9540DHRA086175_05162025",
+      "plugins": [
+        {
+          "Name": "ProtobufPlugins",
+          "Version": "2026.7.24.1550",
+          "Owner": "Deere \u0026 Company"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2025\\2025_Raw_Seeding_Data\\Brandt_Seeding_JD\\Steckler_2025_OFPE_JD_Data\\1RW9540DHRA086175_05202025",
+      "plugins": [
+        {
+          "Name": "ProtobufPlugins",
+          "Version": "2026.7.24.1550",
+          "Owner": "Deere \u0026 Company"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2025\\2025_Raw_Seeding_Data\\Brandt_Seeding_JD\\Steckler_2025_OFPE_JD_Data\\1RW9540DHRA086175_05142025",
+      "plugins": [
+        {
+          "Name": "ProtobufPlugins",
+          "Version": "2026.7.24.1550",
+          "Owner": "Deere \u0026 Company"
+        }
+      ]
+    }
+  ]
+}

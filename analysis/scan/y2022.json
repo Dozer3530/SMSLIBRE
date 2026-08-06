@@ -1,0 +1,272 @@
+{
+  "ok": true,
+  "root": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022",
+  "scanned": 895,
+  "found": [
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        },
+        {
+          "Name": "PrecisionPlanting.ADAPT.2020",
+          "Version": "0.1",
+          "Owner": "Precision Planting"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\Dallas Farms-20221006T132743Z-001",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\Chopper 2022",
+      "plugins": [
+        {
+          "Name": "ProtobufPlugins",
+          "Version": "2026.7.24.1550",
+          "Owner": "Deere \u0026 Company"
+        },
+        {
+          "Name": "RCDPlugins",
+          "Version": "2026.7.24.1631",
+          "Owner": "Deere \u0026 Company"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\2022 Harvest Data",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        },
+        {
+          "Name": "RCDPlugins",
+          "Version": "2026.7.24.1631",
+          "Owner": "Deere \u0026 Company"
+        },
+        {
+          "Name": "PrecisionPlanting.ADAPT.2020",
+          "Version": "0.1",
+          "Owner": "Precision Planting"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\Dallas Farms-20221006T132743Z-001\\Dallas Farms",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\2022 Harvest Data\\DATA",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        },
+        {
+          "Name": "PrecisionPlanting.ADAPT.2020",
+          "Version": "0.1",
+          "Owner": "Precision Planting"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\Dallas Farms-20221006T132743Z-001\\Dallas Farms\\SF 2022",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\2022 Harvest Data\\DATA\\ISOXML-20220912",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\2022 Harvest Data\\DATA\\ISOXML-20210919",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\2022 Harvest Data\\DATA\\ISOXML-20220914",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\2022 Harvest Data\\DATA\\ISOXML-20210921",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\2022 Harvest Data\\DATA\\ISOXML-20210918",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\2022 Harvest Data\\DATA\\ISOXML-20220921",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\2022 Harvest Data\\DATA\\ISOXML-20220922",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\2022 Harvest Data\\DATA\\ISOXML-20210928",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\2022 Harvest Data\\DATA\\ISOXML-20220910",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\2022 Harvest Data\\DATA\\ISOXML-20220916",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\2022 Harvest Data\\DATA\\ISOXML-20220913",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\2022 Harvest Data\\DATA\\ISOXML-20210929",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\2022 Harvest Data\\DATA\\ISOXML-20220915",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\Dallas Farms-20221006T132743Z-001\\Dallas Farms\\SF 2022\\SF 2022",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\Dallas Farms-20221006T132743Z-001\\Dallas Farms\\SF 2022\\SF 2022\\TASKDATA",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\Dallas Farms-20221006T132743Z-001\\Dallas Farms\\SF 2022\\SF 2022\\220517I0.cn1",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    },
+    {
+      "path": "G:/Shared drives/Olds College Smart Farm Vault/1. Smart Farm/Raw Equipment Data/2022\\Dallas Farms-20221006T132743Z-001\\Dallas Farms\\SF 2022\\SF 2022\\220517I0.cn1\\xml",
+      "plugins": [
+        {
+          "Name": "ISO v4 Plugin",
+          "Version": "2.0.0.0",
+          "Owner": "AgGateway"
+        }
+      ]
+    }
+  ]
+}

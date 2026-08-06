@@ -369,12 +369,26 @@ internal static class Program
         catch { /* best effort — import will report a clearer error if it matters */ }
     }
 
-    private static string UniqueName(HashSet<string> used, string name)
+    /// <summary>
+    /// A name unique within <paramref name="used"/> that also survives the
+    /// writer's own length cap. Machines can log hundreds of similarly-named
+    /// channels (a Gen4 seeding file had 537), and naively appending "_2" after
+    /// truncation loses the suffix and collides again.
+    /// </summary>
+    private static string UniqueName(HashSet<string> used, string name, int maxLen = 60)
     {
-        string candidate = name;
-        int i = 2;
-        while (!used.Add(candidate)) candidate = $"{name}_{i++}";
-        return candidate;
+        if (name.Length > maxLen) name = name.Substring(0, maxLen);
+        if (used.Add(name)) return name;
+
+        for (int i = 2; ; i++)
+        {
+            string suffix = "_" + i;
+            string stem = name.Length + suffix.Length > maxLen
+                ? name.Substring(0, maxLen - suffix.Length)
+                : name;
+            string candidate = stem + suffix;
+            if (used.Add(candidate)) return candidate;
+        }
     }
 
     private static string DefaultSmsDir()
