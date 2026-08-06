@@ -42,6 +42,18 @@ public sealed class OperationLayer
             .Where(s => !string.IsNullOrWhiteSpace(s)));
 }
 
+/// <summary>A field boundary: outer ring plus any interior exclusions.</summary>
+public sealed class BoundaryFeature
+{
+    public string Grower { get; set; } = "";
+    public string Farm { get; set; } = "";
+    public string Field { get; set; } = "";
+    public string Description { get; set; } = "";
+    public double AreaHa { get; set; }
+    /// <summary>Polygons; each is [exterior, interior…] rings of (lon, lat).</summary>
+    public List<List<List<(double Lon, double Lat)>>> Polygons { get; } = new();
+}
+
 public sealed class LayerPoint
 {
     public double Lon { get; init; }
@@ -206,6 +218,76 @@ public sealed class AdaptHost
             catch { }
         }
         return hits;
+    }
+
+    /// <summary>Import a card, returning both logged operations and boundaries.
+    /// Setup/prescription cards often carry boundaries and no logs at all.</summary>
+    public (List<OperationLayer> Layers, List<BoundaryFeature> Boundaries) ImportAll(
+        string path, string? pluginName = null)
+    {
+        var chosen = pluginName ?? Detect(path).FirstOrDefault()?.Name
+            ?? throw new NotSupportedException("No installed ADAPT plugin can read: " + path);
+
+        var plugin = AllPlugins()
+            .FirstOrDefault(x => string.Equals(x.Name, chosen, StringComparison.OrdinalIgnoreCase))
+            .Plugin ?? throw new NotSupportedException("Plugin not available: " + chosen);
+
+        var models = plugin.Import(path);
+        var layers = new List<OperationLayer>();
+        var bounds = new List<BoundaryFeature>();
+        if (models == null) return (layers, bounds);
+
+        foreach (var adm in models)
+        {
+            layers.AddRange(Flatten(adm));
+            bounds.AddRange(FlattenBoundaries(adm));
+        }
+        return (layers, bounds);
+    }
+
+    /// <summary>Field boundaries from the catalogue, as lon/lat rings.</summary>
+    private static IEnumerable<BoundaryFeature> FlattenBoundaries(ApplicationDataModel adm)
+    {
+        var cat = adm.Catalog;
+        if (cat?.FieldBoundaries == null) yield break;
+
+        var growerById = (cat.Growers ?? new()).ToDictionary(g => g.Id.ReferenceId, g => g.Name ?? "");
+        var farmById = (cat.Farms ?? new()).ToDictionary(f => f.Id.ReferenceId, f => f.Description ?? "");
+        var fields = (cat.Fields ?? new()).ToDictionary(f => f.Id.ReferenceId, f => f);
+
+        foreach (var fb in cat.FieldBoundaries)
+        {
+            if (fb.SpatialData?.Polygons == null) continue;
+
+            var feature = new BoundaryFeature { Description = fb.Description ?? "" };
+            if (fields.TryGetValue(fb.FieldId, out var fld))
+            {
+                feature.Field = fld.Description ?? "";
+                feature.Grower = Lookup(growerById, fld.GrowerId);
+                feature.Farm = Lookup(farmById, fld.FarmId);
+                try
+                {
+                    if (fld.Area?.Value?.Value is double a)
+                        feature.AreaHa = fld.Area.Value.UnitOfMeasure?.Code == "ha" ? a : a;
+                }
+                catch { }
+            }
+
+            foreach (var poly in fb.SpatialData.Polygons)
+            {
+                var rings = new List<List<(double, double)>>();
+                if (poly.ExteriorRing?.Points is { Count: > 2 } ext)
+                    rings.Add(ext.Select(p => (p.X, p.Y)).ToList());
+                else
+                    continue;   // a polygon without a usable outer ring is unusable
+                foreach (var inner in poly.InteriorRings ?? new List<LinearRing>())
+                    if (inner?.Points is { Count: > 2 } ip)
+                        rings.Add(ip.Select(p => (p.X, p.Y)).ToList());
+                feature.Polygons.Add(rings);
+            }
+
+            if (feature.Polygons.Count > 0) yield return feature;
+        }
     }
 
     /// <summary>Import a card with a named plugin (or the first that supports it).</summary>

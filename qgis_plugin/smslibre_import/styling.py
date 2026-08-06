@@ -8,11 +8,17 @@ convention for yield maps.
 from __future__ import annotations
 
 from qgis.core import (
-    QgsGraduatedSymbolRenderer,
     QgsClassificationQuantile,
+    QgsFillSymbol,
+    QgsGraduatedSymbolRenderer,
+    QgsPalLayerSettings,
+    QgsSingleSymbolRenderer,
     QgsStyle,
     QgsSymbol,
+    QgsTextFormat,
     QgsVectorLayer,
+    QgsVectorLayerSimpleLabeling,
+    QgsWkbTypes,
 )
 
 # Preferred value channels, most meaningful first. Matched case-insensitively as
@@ -64,6 +70,34 @@ def pick_value_field(layer: QgsVectorLayer) -> str | None:
     return None
 
 
+def style_boundary(layer: QgsVectorLayer) -> str:
+    """Hollow outline + field-name labels, so boundaries sit over data layers."""
+    symbol = QgsFillSymbol.createSimple({
+        "style": "no",                 # transparent fill
+        "outline_color": "31,120,180,255",
+        "outline_width": "0.6",
+        "outline_style": "solid",
+    })
+    layer.setRenderer(QgsSingleSymbolRenderer(symbol))
+
+    label_field = next(
+        (n for n in ("field", "description", "farm")
+         if layer.fields().indexOf(n) >= 0), None)
+    if label_field:
+        settings = QgsPalLayerSettings()
+        settings.fieldName = label_field
+        fmt = QgsTextFormat()
+        fmt.setSize(9)
+        settings.setFormat(fmt)
+        settings.placement = QgsPalLayerSettings.Placement.Horizontal \
+            if hasattr(QgsPalLayerSettings, "Placement") else 1
+        layer.setLabeling(QgsVectorLayerSimpleLabeling(settings))
+        layer.setLabelsEnabled(True)
+
+    layer.triggerRepaint()
+    return label_field or "boundary"
+
+
 def _has_variation(layer: QgsVectorLayer, field: str) -> bool:
     """A constant or all-null column makes a useless map."""
     idx = layer.fields().indexOf(field)
@@ -90,6 +124,10 @@ def apply_yield_style(layer: QgsVectorLayer, classes: int = 7,
     layer is filtered to real readings before classifying, which is what a yield
     map should show.
     """
+    # Boundaries are outlines, not measurements: hollow fill + a name label.
+    if layer.geometryType() == QgsWkbTypes.PolygonGeometry:
+        return style_boundary(layer)
+
     field = pick_value_field(layer)
     if not field:
         return None

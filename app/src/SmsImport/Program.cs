@@ -121,16 +121,58 @@ internal static class Program
                 string? pluginName = Opt(args, "--plugin");
 
                 Console.Error.WriteLine($"Importing {path} …");
-                var layers = host.Import(path, pluginName);
-                if (layers.Count == 0)
+                var (layers, boundaries) = host.ImportAll(path, pluginName);
+                if (layers.Count == 0 && boundaries.Count == 0)
                 {
-                    Emit(new { ok = true, path, layers = Array.Empty<object>(), note = "No spatial operations found." });
+                    Emit(new { ok = true, path, layers = Array.Empty<object>(),
+                               note = "No spatial operations or boundaries found." });
                     return 0;
                 }
 
                 var written = new List<object>();
                 using (var gpkg = new GeoPackageWriter(outGpkg))
                 {
+                    // Field boundaries first: a setup card may carry only these.
+                    if (boundaries.Count > 0)
+                    {
+                        var bFields = new List<GpkgField>
+                        {
+                            new("field", GpkgType.Text),
+                            new("farm", GpkgType.Text),
+                            new("grower", GpkgType.Text),
+                            new("description", GpkgType.Text),
+                        };
+                        int nb = gpkg.WritePolygonLayer("field_boundaries", bFields,
+                            boundaries.Select(b => {
+                                var pf = new GpkgPolygonFeature
+                                {
+                                    Values = new object?[] { b.Field, b.Farm, b.Grower, b.Description },
+                                };
+                                foreach (var rings in b.Polygons)
+                                {
+                                    var poly = new GpkgPolygon();
+                                    for (int i = 0; i < rings.Count; i++)
+                                    {
+                                        var ring = new GpkgRing();
+                                        ring.Points.AddRange(rings[i]);
+                                        if (i == 0) poly.Exterior = ring; else poly.Interior.Add(ring);
+                                    }
+                                    pf.Polygons.Add(poly);
+                                }
+                                return pf;
+                            }),
+                            description: "Field boundaries");
+                        Console.Error.WriteLine($"  field_boundaries: {nb} boundaries");
+                        written.Add(new
+                        {
+                            table = "field_boundaries",
+                            geometry = "MultiPolygon",
+                            points = nb,
+                            channels = Array.Empty<object>(),
+                            field = "", operationType = "Boundary",
+                        });
+                    }
+
                     var used = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                     int opIndex = 0;
                     foreach (var layer in layers)

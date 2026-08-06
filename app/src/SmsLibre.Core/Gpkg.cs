@@ -29,6 +29,26 @@ public sealed class GpkgFeature
     public object?[] Values { get; init; } = Array.Empty<object?>();
 }
 
+/// <summary>A ring of (lon, lat) vertices.</summary>
+public sealed class GpkgRing
+{
+    public List<(double Lon, double Lat)> Points { get; } = new();
+}
+
+/// <summary>One polygon: an outer ring plus any holes.</summary>
+public sealed class GpkgPolygon
+{
+    public GpkgRing Exterior { get; set; } = new();
+    public List<GpkgRing> Interior { get; } = new();
+}
+
+/// <summary>A multipolygon feature (a field boundary and its exclusions).</summary>
+public sealed class GpkgPolygonFeature
+{
+    public List<GpkgPolygon> Polygons { get; } = new();
+    public object?[] Values { get; init; } = Array.Empty<object?>();
+}
+
 public sealed class GeoPackageWriter : IDisposable
 {
     private readonly SqliteConnection _db;
@@ -153,6 +173,104 @@ INSERT INTO gpkg_geometry_columns VALUES ($t,'geom','POINT',4326,0,0);";
         meta.ExecuteNonQuery();
 
         return count;
+    }
+
+    /// <summary>Write a MULTIPOLYGON layer (field boundaries, headlands).</summary>
+    public int WritePolygonLayer(string tableName, IReadOnlyList<GpkgField> fields,
+                                 IEnumerable<GpkgPolygonFeature> features,
+                                 string? description = null)
+    {
+        string t = Sanitize(tableName);
+        var cols = string.Join(",\n  ", fields.Select(f => $"\"{Sanitize(f.Name)}\" {SqlType(f.Type)}"));
+        Exec($@"
+CREATE TABLE ""{t}"" (
+  fid INTEGER PRIMARY KEY AUTOINCREMENT,
+  geom BLOB{(fields.Count > 0 ? ",\n  " + cols : "")}
+);");
+
+        using var tx = _db.BeginTransaction();
+        using var ins = _db.CreateCommand();
+        ins.Transaction = tx;
+        var names = string.Join(",", fields.Select(f => $"\"{Sanitize(f.Name)}\""));
+        var parms = string.Join(",", fields.Select((_, i) => $"$p{i}"));
+        ins.CommandText = fields.Count > 0
+            ? $"INSERT INTO \"{t}\" (geom,{names}) VALUES ($geom,{parms});"
+            : $"INSERT INTO \"{t}\" (geom) VALUES ($geom);";
+
+        var geomParam = ins.Parameters.Add("$geom", SqliteType.Blob);
+        var valueParams = new List<SqliteParameter>();
+        for (int i = 0; i < fields.Count; i++)
+            valueParams.Add(ins.Parameters.Add($"$p{i}", SqliteType.Text));
+
+        int count = 0;
+        double minX = double.MaxValue, minY = double.MaxValue,
+               maxX = double.MinValue, maxY = double.MinValue;
+
+        foreach (var f in features)
+        {
+            if (f.Polygons.Count == 0) continue;
+            geomParam.Value = MultiPolygonGeometry(f.Polygons);
+            for (int i = 0; i < fields.Count; i++)
+                valueParams[i].Value = (i < f.Values.Length ? f.Values[i] : null) ?? (object)DBNull.Value;
+            ins.ExecuteNonQuery();
+            count++;
+            foreach (var poly in f.Polygons)
+                foreach (var (lon, lat) in poly.Exterior.Points)
+                {
+                    if (lon < minX) minX = lon; if (lon > maxX) maxX = lon;
+                    if (lat < minY) minY = lat; if (lat > maxY) maxY = lat;
+                }
+        }
+        tx.Commit();
+        if (count == 0) { minX = minY = maxX = maxY = 0; }
+
+        using var meta = _db.CreateCommand();
+        meta.CommandText = @"
+INSERT INTO gpkg_contents (table_name,data_type,identifier,description,min_x,min_y,max_x,max_y,srs_id)
+VALUES ($t,'features',$t,$d,$minx,$miny,$maxx,$maxy,4326);
+INSERT INTO gpkg_geometry_columns VALUES ($t,'geom','MULTIPOLYGON',4326,0,0);";
+        meta.Parameters.AddWithValue("$t", t);
+        meta.Parameters.AddWithValue("$d", description ?? "");
+        meta.Parameters.AddWithValue("$minx", minX);
+        meta.Parameters.AddWithValue("$miny", minY);
+        meta.Parameters.AddWithValue("$maxx", maxX);
+        meta.Parameters.AddWithValue("$maxy", maxY);
+        meta.ExecuteNonQuery();
+        return count;
+    }
+
+    /// <summary>GeoPackage BLOB: "GP" header + little-endian WKB multipolygon.</summary>
+    public static byte[] MultiPolygonGeometry(IReadOnlyList<GpkgPolygon> polygons)
+    {
+        using var ms = new MemoryStream();
+        using var w = new BinaryWriter(ms);
+        w.Write((byte)'G'); w.Write((byte)'P');
+        w.Write((byte)0);            // version
+        w.Write((byte)0b0000_0001);  // little-endian, no envelope
+        w.Write(4326);
+
+        w.Write((byte)1);            // WKB little-endian
+        w.Write((uint)6);            // MultiPolygon
+        w.Write((uint)polygons.Count);
+        foreach (var poly in polygons)
+        {
+            w.Write((byte)1);
+            w.Write((uint)3);        // Polygon
+            var rings = new List<GpkgRing> { poly.Exterior };
+            rings.AddRange(poly.Interior);
+            w.Write((uint)rings.Count);
+            foreach (var ring in rings)
+            {
+                // WKB requires closed rings.
+                var pts = new List<(double Lon, double Lat)>(ring.Points);
+                if (pts.Count > 0 && (pts[0].Lon != pts[^1].Lon || pts[0].Lat != pts[^1].Lat))
+                    pts.Add(pts[0]);
+                w.Write((uint)pts.Count);
+                foreach (var (lon, lat) in pts) { w.Write(lon); w.Write(lat); }
+            }
+        }
+        w.Flush();
+        return ms.ToArray();
     }
 
     /// <summary>GeoPackage BLOB: "GP" header + little-endian WKB point.</summary>
