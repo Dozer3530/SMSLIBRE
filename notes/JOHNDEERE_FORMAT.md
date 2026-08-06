@@ -57,6 +57,50 @@ Opening bytes:
 Pattern: `uint16` length prefixes ahead of GUID strings — consistent with a
 tagged/length-delimited record format.
 
+## `.fdd` structure — what is now decoded
+
+Probing (`tools/fdd_probe.py` + manual analysis) established:
+
+**It is NOT compressed.** Entropy 3.71 bits/byte (8.0 would mean
+compressed/encrypted); only 10 incidental zlib-looking byte pairs, no gzip. So
+the records are plain structured binary — decodable without a codec.
+
+**It is a length-prefixed TLV stream.** Every string is preceded by a `uint16`
+length. Annotated header:
+
+```
+01 00                      version / record tag (uint16 = 1)
+9D 00                      block length (0x9D = 157)
+24 00  "9ED5F59C-7C09-…"   len 0x24 = 36, then the GUID
+01 00 00 00
+24 00  "68f1db54-…"        uuidSession   (matches the .fdl header)
+24 00  "fc3073ce-…"        TaskRef       (matches the .fdl)
+24 00  "68f1e18c-…"        FieldRef      (matches the .fdl)
+01 00 02 00 22 00 03 00 10 00
+0D 00  "MeasElement78"     len 0x0D = 13, then the COLUMN NAME
+…      "MeasElement82", "MeasElement86",
+       "dtiHeaderStatusOn", "dtiHeaderStatusOff",
+       "Section88_State", "dtiRecordingStatusOn", …
+```
+
+So the file **declares its own column schema up front**, using exactly the
+`columnID` values the `.fdl` defines (`MeasElement86` → `dtHeaderStatus`,
+`Section88_State` → `dtRecordingStatus`). Schema side: effectively solved.
+
+**Positions are not stored as plain absolute lat/lon.** Scans for float64,
+float32, int32×1e7, int32×1e6 and int32-semicircles found no dense coordinate
+track (23 scattered lat matches in 1.7 MB, no adjacent lat/lon pairing), and a
+scale-independent lat/lon-ratio scan produced only false positives. The most
+likely explanations, in order: positions are **delta-encoded** against a base
+fix (normal for track logs), or they live in a per-column block whose values are
+offsets from a base declared elsewhere in the TLV stream.
+
+### Remaining work
+1. Walk the TLV stream end-to-end to enumerate blocks and find where the schema
+   block ends and record blocks begin.
+2. Map each declared column to its value encoding and width.
+3. Identify the position column and its base/delta scheme.
+
 ## Assessment
 
 **Feasible, but a real project — not a quick win.**
