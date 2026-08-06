@@ -45,3 +45,5 @@ venv/
 Thumbs.db
 .DS_Store
 desktop.ini
+# Generated GeoPackages (regenerable via smsimport)
+analysis/*.gpkg

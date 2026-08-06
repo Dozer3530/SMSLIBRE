@@ -34,6 +34,10 @@
       <HintPath>$(SmsNetCoreDir)\AgGateway.ADAPT.Representation.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="AgGateway.ADAPT.PluginManager">
+      <HintPath>$(SmsNetCoreDir)\AgGateway.ADAPT.PluginManager.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +50,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="$(SmsNetCoreDir)\AgGateway.ADAPT.Representation.dll">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(SmsNetCoreDir)\AgGateway.ADAPT.PluginManager.dll">
       <Link>%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
