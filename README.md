@@ -17,12 +17,14 @@ A QGIS plugin that reads the data cards your machinery writes — the kind of
 import Ag Leader **SMS** does — and turns them into styled QGIS layers, with
 **every logged sensor channel kept as an attribute**.
 
-It uses the **AgGateway ADAPT** plugin suite, the same import engine SMS itself
-uses, so one plugin covers many manufacturers.
+It uses the **AgGateway ADAPT** plugin suite — the same import engine SMS itself
+uses — plus readers written here for formats ADAPT does not cover, so one plugin
+spans many manufacturers.
 
 > **Internal tool — not for public distribution.** Built for Olds College Center
-> For Innovation, Smart Farm. John Deere, ISOXML and field boundaries all import
-> real data today, confirmed in QGIS — see [Format support](#format-support).
+> For Innovation, Smart Farm. John Deere, ISOXML (incl. New Holland and AGCO),
+> Raven and field boundaries all import real data today, confirmed in QGIS —
+> see [Format support](#format-support).
 
 ## Why
 
@@ -67,6 +69,7 @@ labelled outlines.
 | **John Deere** GS2 / GS3 / GS4 | ✅ **Working** — licensed SDK, verified in QGIS on real cards |
 | **ISO 11783 / ISOXML** (`TASKDATA`) | ✅ **Working** — verified on real cards |
 | **Field boundaries** (any ADAPT source) | ✅ **Working** — verified on real cards |
+| **Raven Slingshot** (`.jdp`) | ✅ **Working** — own reader, no licence needed |
 | AgGateway ADM | ⚪ loads; untested on data |
 | Climate FieldView | ⚪ loads; untested on data |
 | Precision Planting (2020) | ⚪ loads; untested on data |
@@ -100,6 +103,14 @@ Real numbers from real cards:
 - **John Deere GS3 2630 card** — 34 layers, **157,583 points**, 41 channels:
   wet yield mass, harvest moisture, vehicle speed, fuel rate, heading, distance
   travelled, plus recorded weather (humidity, air/soil temperature, wind).
+- **John Deere Gen4 seeding card** — 127 layers, **143,567 points**, up to 598
+  channels; operation types beyond harvest (SowingAndPlanting, Fertilizing).
+- **New Holland ISOXML** — 59 layers, **544,167 points**.
+- **Raven Slingshot seeding/spraying** — 36 layers, **445,293 points**,
+  27 channels including per-section application rates.
+
+Imported GeoPackages land in `~/Documents/SMSLIBRE` (configurable), not a temp
+folder, so saved QGIS projects keep working.
 
 Everything lands in a **GeoPackage** (EPSG:4326), so it is ordinary QGIS data:
 filter it, join it, run it through Processing, style it however you like.
@@ -122,7 +133,7 @@ cross-platform.
 |---|---|
 | `qgis_plugin/` | the QGIS plugin (Python) + `build_plugin.py` packager |
 | `sidecar/` | the .NET sidecar: domain model, ADAPT host, GeoPackage writer, tests |
-| `notes/` | current analysis: feasibility, real-card testing, John Deere format |
+| `notes/` | current analysis: feasibility, real-card testing, format notes |
 | `notes/archive/` | earlier phase, when the goal was porting all of SMS |
 | `tools/` | reverse-engineering utilities used to get here |
 
