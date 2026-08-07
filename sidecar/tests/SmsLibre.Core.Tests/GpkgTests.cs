@@ -99,3 +99,53 @@ public class GpkgTests : IDisposable
     public void Sanitize_produces_safe_identifiers(string input, string expected)
         => Assert.Equal(expected, GeoPackageWriter.Sanitize(input));
 }
+
+/// <summary>
+/// Regression cover for channel-rich cards. A John Deere Gen4 seeding file
+/// carried 537 similarly-named channels; truncating a name after appending a
+/// uniqueness suffix cut the suffix off again and SQLite rejected the table.
+/// </summary>
+public class ManyChannelTests : IDisposable
+{
+    private readonly string _path = Path.Combine(
+        Path.GetTempPath(), "smslibre_many_" + Path.GetRandomFileName() + ".gpkg");
+
+    public void Dispose()
+    {
+        SqliteConnection.ClearAllPools();
+        if (File.Exists(_path)) File.Delete(_path);
+    }
+
+    [Fact]
+    public void Hundreds_of_long_similar_channel_names_all_survive()
+    {
+        // Names that are identical once truncated to the 60-character cap.
+        const string stem = "Average_target_application_rate_mass_per_area_as_harvested_";
+        var used = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var fields = new List<GpkgField>();
+        for (int i = 0; i < 300; i++)
+        {
+            string name = GeoPackageWriter.Sanitize(stem + i);
+            // mirror the sidecar's uniquing
+            if (name.Length > 60) name = name.Substring(0, 60);
+            string candidate = name;
+            for (int n = 2; !used.Add(candidate); n++)
+            {
+                string suffix = "_" + n;
+                string s = name.Length + suffix.Length > 60
+                    ? name.Substring(0, 60 - suffix.Length) : name;
+                candidate = s + suffix;
+            }
+            fields.Add(new GpkgField(candidate, GpkgType.Double));
+        }
+
+        Assert.Equal(300, fields.Select(f => f.Name).Distinct(StringComparer.OrdinalIgnoreCase).Count());
+
+        var feats = new[]
+        {
+            new GpkgFeature { Lon = -114.0, Lat = 51.7, Values = new object?[300] },
+        };
+        using var w = new GeoPackageWriter(_path);
+        Assert.Equal(1, w.WritePointLayer("many_channels", fields, feats));
+    }
+}

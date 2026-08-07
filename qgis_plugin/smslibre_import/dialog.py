@@ -20,6 +20,22 @@ from .styling import apply_yield_style
 
 SETTINGS_PREFIX = "smslibre_import"
 
+
+def _output_dir() -> str:
+    """Durable folder for imported GeoPackages.
+
+    Map layers reference these files, so they must outlive a temp sweep.
+    Honours the `output_dir` setting when set, else ~/Documents/SMSLIBRE.
+    """
+    configured = QgsSettings().value(f"{SETTINGS_PREFIX}/output_dir", "")
+    base = configured or os.path.join(
+        os.path.expanduser("~"), "Documents", "SMSLIBRE")
+    try:
+        os.makedirs(base, exist_ok=True)
+        return base
+    except OSError:
+        return tempfile.gettempdir()      # last resort
+
 # QgsCollapsibleGroupBox gives a native, state-remembering collapse header.
 # Fall back to a plain QGroupBox if the QGIS gui module is unavailable.
 try:
@@ -245,8 +261,12 @@ class ImportDialog(QDialog):
             return
         self._save_settings()
 
+        # Deliberately NOT the system temp folder: the layers added to the map
+        # reference this GeoPackage, so a cleaned temp directory would silently
+        # break saved projects. Keep it under the user's documents instead.
         stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        out = os.path.join(tempfile.gettempdir(), f"smslibre_{stamp}.gpkg")
+        out_dir = _output_dir()
+        out = os.path.join(out_dir, f"smslibre_{stamp}.gpkg")
 
         plugin = self._detected[0].name if self._detected else None
         self.progress.setVisible(True)

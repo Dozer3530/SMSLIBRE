@@ -149,7 +149,15 @@ internal static class Program
                 Console.Error.WriteLine($"Importing {path} …");
                 List<OperationLayer> layers;
                 List<BoundaryFeature> boundaries;
-                if (pluginName is null && !host.Detect(path).Any() && RavenReader.CanRead(path))
+
+                // Route to the native reader when it is named explicitly (the
+                // QGIS dialog passes back whatever detect reported, including
+                // our own format names), or when no ADAPT plugin claims the path.
+                bool useRaven =
+                    string.Equals(pluginName, RavenReader.FormatName, StringComparison.OrdinalIgnoreCase)
+                    || (pluginName is null && RavenReader.CanRead(path) && !host.Detect(path).Any());
+
+                if (useRaven)
                 {
                     layers = RavenReader.Import(path);
                     boundaries = new List<BoundaryFeature>();
