@@ -182,6 +182,9 @@ public sealed class AdaptHost
     private static readonly HashSet<object> _initialized =
         new(ReferenceEqualityComparer.Instance);
 
+    /// <summary>Geometry types dropped because they were not points, for diagnosis.</summary>
+    public static readonly Dictionary<string, int> SkippedGeometries = new();
+
     /// <summary>Plugin name → why Initialize() failed, when it did.</summary>
     public static IReadOnlyDictionary<string, string> InitErrors => _initErrors;
     private static readonly Dictionary<string, string> _initErrors = new();
@@ -389,7 +392,12 @@ public sealed class AdaptHost
 
                 foreach (var rec in records)
                 {
-                    if (rec.Geometry is not Point pt) continue;
+                    if (rec.Geometry is not Point pt)
+                    {
+                        SkippedGeometries[rec.Geometry?.GetType().Name ?? "null"] =
+                            SkippedGeometries.GetValueOrDefault(rec.Geometry?.GetType().Name ?? "null") + 1;
+                        continue;
+                    }
                     // Raw logs contain (0,0) fixes before GPS lock; they would
                     // otherwise stretch every layer's extent to null island.
                     if (Math.Abs(pt.X) < 1e-9 && Math.Abs(pt.Y) < 1e-9) continue;

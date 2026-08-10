@@ -274,7 +274,8 @@ internal static class Program
                     }
                 }
 
-                Emit(new { ok = true, path, geopackage = Path.GetFullPath(outGpkg), layers = written });
+                Emit(new { ok = true, path, geopackage = Path.GetFullPath(outGpkg), layers = written,
+                           skippedGeometries = AdaptHost.SkippedGeometries });
                 return 0;
             }
 

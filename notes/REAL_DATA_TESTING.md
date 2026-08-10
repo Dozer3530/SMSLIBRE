@@ -62,3 +62,40 @@ Over the 2025/2026 folders (182 directories): 4 hits — 3 ISOXML, 1 Trimble
 AgData. The 2025 harvest folders (John Deere, New Holland, Voyager2) yielded
 nothing detectable, consistent with the licence wall plus formats whose plugins
 aren't present.
+
+## John Deere Gen4 seeding: geometry investigated (not our bug)
+
+The 2025 Brandt/Steckler OFPE card
+(`1RW9540DHRA086175_05132025`, a Gen4 `JD-Data/log/*.jdl` machine log) imports
+127 layers / 143,567 points, but several layers looked suspicious — extents where
+min == max. Investigated:
+
+| Operation | Layers | Features | Spatially moving | Effectively parked |
+|---|--:|--:|--:|--:|
+| DataCollection | 51 | 142,431 | 0 | 51 |
+| Fertilizing | 38 | 568 | 2 | 36 |
+| SowingAndPlanting | 38 | 568 | 2 | 36 |
+
+Findings:
+
+- **Points are not duplicated.** Distinct coordinates ≈ feature count in every
+  layer (e.g. 15,179 distinct of 15,433), so nothing is being written twice.
+- **Nothing is being dropped.** Instrumented the import to record any record
+  whose geometry is not a `Point`: the count is **zero**, so every record the
+  plugin returned was imported.
+- The `DataCollection` layers hold 15k points spanning ~0.000001° (about 10 cm) —
+  consistent with stationary logging, not a track.
+- The agronomic operations carry only ~15 points per layer over ~50 m.
+
+**Conclusion: this is a faithful import of what the John Deere plugin returns for
+this card.** SMSLIBRE is not losing the coverage.
+
+**Open question for the farm:** is this card supposed to contain full seeding
+coverage? It is a machine *log* export (`JD-Data/log`) rather than field
+documentation, so it may legitimately hold diagnostics and summaries. The
+decisive test is to import the same card in SMS: if SMS also shows no coverage
+track, the data is not there; if SMS shows a full seeding map, the plugin is
+being invoked differently and we should match it.
+
+`skippedGeometries` is now reported by `smsimport import` so this class of
+question can be answered without re-instrumenting.
