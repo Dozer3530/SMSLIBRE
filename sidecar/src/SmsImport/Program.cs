@@ -107,8 +107,12 @@ internal static class Program
                 string path = args[1];
                 var hits = host.Detect(path).ToList();
                 // Formats we read ourselves, with no ADAPT plugin behind them.
+                // Only offered when no plugin claims the path, so a real ADAPT
+                // reader always wins.
                 if (hits.Count == 0 && RavenReader.CanRead(path))
                     hits.Add(new PluginInfo(RavenReader.FormatName, "built-in", "SMSLIBRE"));
+                if (hits.Count == 0 && ArchivedIsoxml.CanRead(path))
+                    hits.Add(new PluginInfo(ArchivedIsoxml.FormatName, "built-in", "SMSLIBRE"));
                 Emit(new { ok = true, path, supported = hits.Count > 0, count = hits.Count, plugins = hits });
                 return 0;
             }
@@ -153,14 +157,21 @@ internal static class Program
                 // Route to the native reader when it is named explicitly (the
                 // QGIS dialog passes back whatever detect reported, including
                 // our own format names), or when no ADAPT plugin claims the path.
-                bool useRaven =
-                    string.Equals(pluginName, RavenReader.FormatName, StringComparison.OrdinalIgnoreCase)
-                    || (pluginName is null && RavenReader.CanRead(path) && !host.Detect(path).Any());
+                bool named(string format) =>
+                    string.Equals(pluginName, format, StringComparison.OrdinalIgnoreCase);
+                // Detect() is only consulted when no plugin was named, and only
+                // once: it re-scans every plugin folder, which is not cheap.
+                bool unclaimed = pluginName is null && !host.Detect(path).Any();
 
-                if (useRaven)
+                if (named(RavenReader.FormatName) || (unclaimed && RavenReader.CanRead(path)))
                 {
                     layers = RavenReader.Import(path);
                     boundaries = new List<BoundaryFeature>();
+                }
+                else if (named(ArchivedIsoxml.FormatName)
+                         || (unclaimed && ArchivedIsoxml.CanRead(path)))
+                {
+                    (layers, boundaries) = ArchivedIsoxml.Import(path, d => host.ImportAll(d));
                 }
                 else
                 {
@@ -169,7 +180,13 @@ internal static class Program
                 if (layers.Count == 0 && boundaries.Count == 0)
                 {
                     Emit(new { ok = true, path, layers = Array.Empty<object>(),
-                               note = "No spatial operations or boundaries found." });
+                               archivesRead = ArchivedIsoxml.ArchivesRead,
+                               prescriptionOnly = ArchivedIsoxml.PrescriptionOnly,
+                               note = ArchivedIsoxml.PrescriptionOnly > 0
+                                   ? $"No logged work here: {ArchivedIsoxml.PrescriptionOnly} of "
+                                     + $"{ArchivedIsoxml.ArchivesRead} archive(s) hold a prescription "
+                                     + "(a planned rate map), which is not imported as machine data."
+                                   : "No spatial operations or boundaries found." });
                     return 0;
                 }
 
