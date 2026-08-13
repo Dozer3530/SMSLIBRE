@@ -421,12 +421,16 @@ def build_report(results: list[dict], root: str) -> str:
 
     if empty:
         L += ["", "## Detected but empty", "",
-              "A reader claimed the folder and returned no spatial data. Usually a "
-              "setup or prescription card with no logged work, or a parent folder "
-              "whose data sits in a subfolder that is listed above.", "",
-              "| Card | Reader |", "|---|---|"]
-        for r in sorted(empty, key=lambda r: r["path"]):
-            L.append(f"| `{Path(r['path']).name}` | {r['detected']} |")
+              "A reader claimed the folder and returned no spatial data. Some are "
+              "genuine setup or prescription cards with no logged work. The rest "
+              "are over-claims: several ADAPT plugins answer yes to almost any "
+              "folder, so a report or imagery directory gets picked up and then "
+              "yields nothing. The file types tell them apart — a folder of PDFs "
+              "and spreadsheets was never a card.", "",
+              "| Card | Reader | Contents |", "|---|---|---|"]
+        for r in sorted(empty, key=lambda r: (r["detected"], r["path"])):
+            exts = ", ".join(f"`{e}`" for e in (r.get("exts") or [])[:5]) or "no files"
+            L.append(f"| `{Path(r['path']).name}` | {r['detected']} | {exts} |")
 
     # Quality flags — these are the reasons to distrust a number above.
     flagged = [r for r in ok if r["invalid_geom"] or r["out_of_range"]]
