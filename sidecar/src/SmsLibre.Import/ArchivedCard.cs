@@ -1,15 +1,20 @@
-// SMSLIBRE — ISOXML delivered inside an archive.
+// SMSLIBRE — a machine data card that has been zipped up.
 //
-// Raven's Viper 4 writes each job as a `.jdp` file, and a vault-wide scan found
-// two different things wearing that extension:
+// People archive cards. On a shared drive the card is as likely to be a `.zip`
+// as a folder, and every reader here wants a folder, so the data becomes
+// invisible. Two shapes turned up in a vault-wide sweep:
 //
-//   * 95 `.jdp.zip` Slingshot job packages — jobdata.xml plus Product_N.tab.
-//     RavenReader handles those.
-//   * 499 plain `.jdp` files, of which 224 are an ordinary zip with a complete
-//     ISO 11783 TASKDATA inside.
+//   * Raven's Viper 4 writes each job as a `.jdp` file. 224 of the 499 in the
+//     vault are an ordinary zip holding a complete ISO 11783 TASKDATA.
+//   * Ordinary `.zip` files holding a John Deere card. `2. Saskler\...\Combine
+//     Data` contains nothing but `Case Combine.zip`, `JD 9770 #1.zip` and
+//     `JD 9770 #2.zip` — 129 MB of 2022 combine data with no unzipped copy
+//     anywhere in the vault.
 //
-// Nothing read that second group. The ISOv4 plugin can read them perfectly well
-// — it just needs a folder, not a zip. So unpack and hand it the folder.
+// So unpack to a temp folder and run the normal import over it. Only archives
+// that look like a card are claimed — TASKDATA, Gen4 `.jdl` logs, or an `RCD`
+// folder — because a vault also holds thousands of shapefile and document zips
+// that would otherwise be opened for nothing.
 //
 // The remaining 275 `.jdp` files hold Raven's native job layout (DDOP.XML plus
 // .jdf/.jhf/.sct/.ab) with no TASKDATA, and are genuinely unsupported; they are
@@ -24,9 +29,9 @@ using System.Linq;
 
 namespace SmsLibre.Import;
 
-public static class ArchivedIsoxml
+public static class ArchivedCard
 {
-    public const string FormatName = "ISOXML in archive (.jdp/.zip)";
+    public const string FormatName = "Card in an archive (.zip/.jdp)";
 
     /// <summary>Archives opened by the last Import call.</summary>
     public static int ArchivesRead;
@@ -50,7 +55,7 @@ public static class ArchivedIsoxml
     {
         if (File.Exists(path))
         {
-            if (IsCandidate(path) && HasTaskData(path)) yield return path;
+            if (IsCandidate(path) && HasCard(path)) yield return path;
             yield break;
         }
         if (!Directory.Exists(path)) yield break;
@@ -60,7 +65,7 @@ public static class ArchivedIsoxml
         catch { yield break; }
 
         foreach (var f in files.Where(IsCandidate).OrderBy(f => f, StringComparer.OrdinalIgnoreCase))
-            if (HasTaskData(f)) yield return f;
+            if (HasCard(f)) yield return f;
     }
 
     private static bool IsCandidate(string file)
@@ -68,13 +73,29 @@ public static class ArchivedIsoxml
         => !file.EndsWith(".jdp.zip", StringComparison.OrdinalIgnoreCase)
            && Extensions.Any(e => file.EndsWith(e, StringComparison.OrdinalIgnoreCase));
 
-    private static bool HasTaskData(string zipPath)
+    /// <summary>
+    /// True when the archive holds something a reader could import. Checked from
+    /// the entry list alone, so nothing is extracted just to find out.
+    /// </summary>
+    private static bool HasCard(string zipPath)
     {
         try
         {
             using var zip = ZipFile.OpenRead(zipPath);
-            return zip.Entries.Any(e =>
-                e.Name.Equals("TASKDATA.XML", StringComparison.OrdinalIgnoreCase));
+            foreach (var e in zip.Entries)
+            {
+                if (e.Name.Equals("TASKDATA.XML", StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if (e.Name.EndsWith(".jdl", StringComparison.OrdinalIgnoreCase))
+                    return true;
+                // An RCD folder is a John Deere GS3/GS4 card. Zip entries should
+                // use forward slashes but not every writer obeys that.
+                string full = e.FullName.Replace('\\', '/');
+                if (full.Contains("/RCD/", StringComparison.OrdinalIgnoreCase)
+                    || full.StartsWith("RCD/", StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+            return false;
         }
         catch { return false; }   // not a zip, or unreadable — not ours
     }
@@ -101,11 +122,23 @@ public static class ArchivedIsoxml
                 // so a hostile archive cannot write outside the temp folder.
                 ZipFile.ExtractToDirectory(archive, temp);
 
-                string? dir = TaskDataFolder(temp);
-                if (dir is null) continue;
-
                 ArchivesRead++;
-                var (l, b) = import(dir);
+                // Where the card sits inside the archive varies. ISOXML puts
+                // TASKDATA at the top; a John Deere export wraps the card in a
+                // folder named after the machine, so the level RCDPlugins claims
+                // is `<temp>/9770 #1`, not `<temp>` and not the RCD folder itself.
+                // Try the likely roots and keep the first that yields anything.
+                string dir = temp;
+                var (l, b) = (new List<OperationLayer>(), new List<BoundaryFeature>());
+                foreach (var root in CandidateRoots(temp))
+                {
+                    // Most candidates are not the card — the reader says so by
+                    // throwing. That is the search working, not a failure, so it
+                    // must not abandon the archive.
+                    try { (l, b) = import(root); }
+                    catch (NotSupportedException) { continue; }
+                    if (l.Count > 0 || b.Count > 0) { dir = root; break; }
+                }
                 if (l.Count == 0 && b.Count == 0 && IsPrescription(dir)) PrescriptionOnly++;
                 string job = Path.GetFileNameWithoutExtension(archive);
                 foreach (var layer in l)
@@ -145,6 +178,39 @@ public static class ArchivedIsoxml
                    && !xml.Contains("<TLG", StringComparison.OrdinalIgnoreCase);
         }
         catch { return false; }
+    }
+
+    /// <summary>
+    /// Folders inside an extracted archive worth offering to a reader, nearest
+    /// first: the TASKDATA folder if there is one, then the extraction root, then
+    /// a couple of levels down. Bounded deliberately — this runs detection on
+    /// each candidate, which is not cheap, and a card is never buried deeply.
+    /// </summary>
+    private static IEnumerable<string> CandidateRoots(string temp, int maxDepth = 2)
+    {
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        if (TaskDataFolder(temp) is string td && seen.Add(td)) yield return td;
+        if (seen.Add(temp)) yield return temp;
+
+        var level = new List<string> { temp };
+        for (int d = 0; d < maxDepth; d++)
+        {
+            var next = new List<string>();
+            foreach (var dir in level)
+            {
+                IEnumerable<string> kids;
+                try { kids = Directory.EnumerateDirectories(dir); }
+                catch { continue; }
+                foreach (var k in kids)
+                {
+                    next.Add(k);
+                    if (seen.Add(k)) yield return k;
+                }
+            }
+            level = next;
+            if (level.Count == 0) yield break;
+        }
     }
 
     /// <summary>The folder holding TASKDATA.XML, which is what ISOv4 expects.</summary>

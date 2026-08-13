@@ -167,43 +167,12 @@ internal static class Program
                 List<OperationLayer> layers;
                 List<BoundaryFeature> boundaries;
 
-                // Route to the native reader when it is named explicitly (the
-                // QGIS dialog passes back whatever detect reported, including
-                // our own format names), or when no ADAPT plugin claims the path.
-                bool named(string format) =>
-                    string.Equals(pluginName, format, StringComparison.OrdinalIgnoreCase);
-
-                // Resolve the ADAPT plugin once and carry it into ImportAll.
-                // Detect() re-runs IsDataCardSupported across every loaded plugin
-                // and is slow on a large card, so calling it here and again inside
-                // ImportAll would double that cost on every import.
-                string? adapt = pluginName ?? host.Detect(path).FirstOrDefault()?.Name;
-                bool unclaimed = adapt is null;
-
-                if (named(RavenReader.FormatName) || (unclaimed && RavenReader.CanRead(path)))
-                {
-                    layers = RavenReader.Import(path);
-                    boundaries = new List<BoundaryFeature>();
-                }
-                else if (named(ArchivedIsoxml.FormatName)
-                         || (unclaimed && ArchivedIsoxml.CanRead(path)))
-                {
-                    (layers, boundaries) = ArchivedIsoxml.Import(path, d => host.ImportAll(d));
-                }
-                else if (named(LooseGen4.FormatName)
-                         || (unclaimed && LooseGen4.CanRead(path)))
-                {
-                    (layers, boundaries) = LooseGen4.Import(path, d => host.ImportAll(d));
-                }
-                else
-                {
-                    (layers, boundaries) = host.ImportAll(path, adapt);
-                }
+                (layers, boundaries) = ImportPath(host, path, pluginName);
                 if (layers.Count == 0 && boundaries.Count == 0)
                 {
                     Emit(new { ok = true, path, layers = Array.Empty<object>(),
-                               archivesRead = ArchivedIsoxml.ArchivesRead,
-                               prescriptionOnly = ArchivedIsoxml.PrescriptionOnly,
+                               archivesRead = ArchivedCard.ArchivesRead,
+                               prescriptionOnly = ArchivedCard.PrescriptionOnly,
                                note = EmptyResultNote(path) });
                     return 0;
                 }
@@ -330,7 +299,7 @@ internal static class Program
                            skippedGeometries = AdaptHost.SkippedGeometries,
                            rejectedPoints = AdaptHost.RejectedPoints,
                            droppedChannels,
-                           archivesRead = ArchivedIsoxml.ArchivesRead });
+                           archivesRead = ArchivedCard.ArchivesRead });
                 return 0;
             }
 
@@ -513,8 +482,8 @@ internal static class Program
 
         if (RavenReader.CanRead(path))
             hits.Add(new PluginInfo(RavenReader.FormatName, "built-in", "SMSLIBRE"));
-        else if (ArchivedIsoxml.CanRead(path))
-            hits.Add(new PluginInfo(ArchivedIsoxml.FormatName, "built-in", "SMSLIBRE"));
+        else if (ArchivedCard.CanRead(path))
+            hits.Add(new PluginInfo(ArchivedCard.FormatName, "built-in", "SMSLIBRE"));
         else if (LooseGen4.CanRead(path))
             hits.Add(new PluginInfo(LooseGen4.FormatName, "built-in", "SMSLIBRE"));
         return hits;
@@ -562,9 +531,9 @@ internal static class Program
     /// </summary>
     private static string EmptyResultNote(string path)
     {
-        if (ArchivedIsoxml.PrescriptionOnly > 0)
-            return $"No logged work here: {ArchivedIsoxml.PrescriptionOnly} of " +
-                   $"{ArchivedIsoxml.ArchivesRead} archive(s) hold a prescription " +
+        if (ArchivedCard.PrescriptionOnly > 0)
+            return $"No logged work here: {ArchivedCard.PrescriptionOnly} of " +
+                   $"{ArchivedCard.ArchivesRead} archive(s) hold a prescription " +
                    "(a planned rate map), which is not imported as machine data.";
 
         if (Isoxml.PlaceholderTaskData(path) is string maker)
@@ -574,6 +543,40 @@ internal static class Program
                    "from the display produces a card that does import.";
 
         return "No spatial operations or boundaries found.";
+    }
+
+    /// <summary>
+    /// Import a path with whichever reader fits: an ADAPT plugin if one claims
+    /// it, otherwise one of ours. Archives call back into this, so a card zipped
+    /// inside a folder is imported exactly as it would be unzipped.
+    /// </summary>
+    /// <param name="pluginName">A reader named by the caller — the QGIS dialog
+    /// passes back whatever detect reported, including our own format names.</param>
+    /// <param name="depth">Guards against an archive that contains an archive.</param>
+    private static (List<OperationLayer> Layers, List<BoundaryFeature> Boundaries)
+        ImportPath(AdaptHost host, string path, string? pluginName = null, int depth = 0)
+    {
+        bool named(string format) =>
+            string.Equals(pluginName, format, StringComparison.OrdinalIgnoreCase);
+
+        // Resolve the ADAPT plugin once and carry it into ImportAll. Detect()
+        // re-runs IsDataCardSupported across every loaded plugin and is slow on a
+        // large card, so calling it here and again inside ImportAll would double
+        // that cost on every import.
+        string? adapt = pluginName ?? host.Detect(path).FirstOrDefault()?.Name;
+        bool unclaimed = adapt is null;
+
+        if (named(RavenReader.FormatName) || (unclaimed && RavenReader.CanRead(path)))
+            return (RavenReader.Import(path), new List<BoundaryFeature>());
+
+        if (depth < 2 && (named(ArchivedCard.FormatName)
+                          || (unclaimed && ArchivedCard.CanRead(path))))
+            return ArchivedCard.Import(path, d => ImportPath(host, d, null, depth + 1));
+
+        if (named(LooseGen4.FormatName) || (unclaimed && LooseGen4.CanRead(path)))
+            return LooseGen4.Import(path, d => ImportPath(host, d, null, depth + 1));
+
+        return host.ImportAll(path, adapt);
     }
 
     private static void Usage()
