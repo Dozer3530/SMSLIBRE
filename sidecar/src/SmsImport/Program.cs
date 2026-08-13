@@ -199,11 +199,7 @@ internal static class Program
                     Emit(new { ok = true, path, layers = Array.Empty<object>(),
                                archivesRead = ArchivedIsoxml.ArchivesRead,
                                prescriptionOnly = ArchivedIsoxml.PrescriptionOnly,
-                               note = ArchivedIsoxml.PrescriptionOnly > 0
-                                   ? $"No logged work here: {ArchivedIsoxml.PrescriptionOnly} of "
-                                     + $"{ArchivedIsoxml.ArchivesRead} archive(s) hold a prescription "
-                                     + "(a planned rate map), which is not imported as machine data."
-                                   : "No spatial operations or boundaries found." });
+                               note = EmptyResultNote(path) });
                     return 0;
                 }
 
@@ -552,6 +548,26 @@ internal static class Program
            || name.Contains("Training Videos", StringComparison.OrdinalIgnoreCase)
            || name.Contains("Inventory Documents", StringComparison.OrdinalIgnoreCase)
            || name.Contains("Vault Access", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Why an import produced nothing. "No data found" is the least useful thing
+    /// a tool can say when the reason is knowable, and here it usually is.
+    /// </summary>
+    private static string EmptyResultNote(string path)
+    {
+        if (ArchivedIsoxml.PrescriptionOnly > 0)
+            return $"No logged work here: {ArchivedIsoxml.PrescriptionOnly} of " +
+                   $"{ArchivedIsoxml.ArchivesRead} archive(s) hold a prescription " +
+                   "(a planned rate map), which is not imported as machine data.";
+
+        if (Isoxml.PlaceholderTaskData(path) is string maker)
+            return $"This card's TASKDATA is an empty placeholder written by " +
+                   $"{maker}; the logged data is in the manufacturer's own files " +
+                   "beside it, which no ADAPT plugin can read. Exporting ISOXML " +
+                   "from the display produces a card that does import.";
+
+        return "No spatial operations or boundaries found.";
+    }
 
     private static void Usage()
     {
