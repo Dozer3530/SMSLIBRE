@@ -8,10 +8,10 @@ nothing useful. So the sweep runs in two phases:
 
 Discovery is one process on purpose. Detection itself is cheap, but starting the
 sidecar loads every ADAPT plugin from the SMS install and costs seconds, so
-spawning it per directory put a full-vault sweep out of reach: 6,000+
-directories at ~4 s each. Paying that load once turns hours into minutes and
-leaves the time budget for the imports, which are the part that can actually
-fail.
+spawning it per directory put a full-vault sweep out of reach: 1,669 directories
+took two hours that way. In one process the same tree walks at about 17
+directories a second — 7,311 in 433 s — which leaves the time budget for the
+imports, the part that can actually fail.
 
 Every outcome is recorded, including the failures and the directories nothing
 claimed. The result is a coverage report (what imports, what does not, and why)
@@ -40,6 +40,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_EXE = (Path(os.environ.get("APPDATA", "")) /
                "QGIS/QGIS3/profiles/default/python/plugins/smslibre_import/bin/SmsImport.exe")
+
 
 @dataclass
 class Result:
@@ -222,18 +223,35 @@ def fingerprint(path: str, cap: int = 400) -> list[str]:
     return [e for e, _ in sorted(seen.items(), key=lambda kv: -kv[1])[:8]]
 
 
-def discover(exe: Path, root: str, depth: int, cap: int,
-             timeout: int) -> tuple[dict[str, str], list[dict]]:
+def discover(exe: Path, root: str, depth: int, cap: int, timeout: int,
+             out_dir: Path) -> tuple[dict[str, str], list[dict]]:
     """Every directory a reader claims, from a single sidecar process.
 
     Detection is cheap but starting the sidecar is not: it loads every ADAPT
     plugin from the SMS install, which costs seconds. Spawning it once per
     directory put a full-vault sweep out of reach — 6,000+ directories at ~4 s
     each. `smsimport scan` walks the tree inside one process, so the plugin load
-    is paid once and discovery drops from hours to minutes.
+    is paid once: measured at 7,311 directories in 433 s, about 17 a second.
+
+    Output goes to files rather than pipes. A vault-wide walk runs for the better
+    part of an hour, and when one timed out with everything buffered in memory
+    there was nothing left to show for it — no partial list, no idea how far it
+    had reached. On disk, the log is readable while it runs and survives a kill.
     """
-    res = run_sidecar(exe, ["scan", root, "--depth", str(depth), "--max", str(cap)],
-                      timeout=timeout)
+    scan_json = out_dir / "scan.json"
+    scan_log = out_dir / "scan.log"
+    creation = getattr(subprocess, "CREATE_NO_WINDOW", 0) if os.name == "nt" else 0
+    with open(scan_json, "w", encoding="utf-8") as so, \
+         open(scan_log, "w", encoding="utf-8") as se:
+        subprocess.run([str(exe), "scan", root, "--depth", str(depth),
+                        "--max", str(cap)],
+                       stdout=so, stderr=se, timeout=timeout, creationflags=creation)
+
+    text = scan_json.read_text(encoding="utf-8").strip()
+    if not text:
+        raise RuntimeError(f"scan produced no result; see {scan_log}")
+    res = json.loads(text)
+
     hits = {}
     for f in res.get("found") or []:
         plugins = f.get("plugins") or []
@@ -440,7 +458,11 @@ def main() -> int:
     ap.add_argument("--depth", type=int, default=6)
     ap.add_argument("--cap", type=int, default=4000)
     ap.add_argument("--workers", type=int, default=4)
-    ap.add_argument("--timeout", type=int, default=1800)
+    ap.add_argument("--timeout", type=int, default=1800,
+                    help="seconds allowed for importing one card")
+    ap.add_argument("--scan-timeout", type=int, default=14400,
+                    help="seconds allowed for the whole discovery walk; a vault "
+                         "on a network share can take the better part of an hour")
     ap.add_argument("--resume", action="store_true")
     ap.add_argument("--only-detected", action="store_true",
                     help="re-test just the directories a reader already claimed, "
@@ -480,7 +502,7 @@ def main() -> int:
     else:
         print(f"discovering readers under {args.root} …", flush=True)
         readers, unclaimed = discover(exe, args.root, args.depth, args.cap,
-                                      args.timeout)
+                                      args.scan_timeout, out_dir)
         print(f"  {len(readers)} directories claimed, {len(unclaimed):,} not "
               f"({time.time()-t0:.0f}s)", flush=True)
 

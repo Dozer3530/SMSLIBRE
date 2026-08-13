@@ -121,11 +121,19 @@ internal static class Program
 
                 var dirs = new List<string> { root };
                 dirs.AddRange(Walk(root, depth, maxDirs));
+                Console.Error.WriteLine($"walked {dirs.Count:N0} directories");
 
                 var found = new List<object>();
                 var unclaimed = new List<object>();
+                int done = 0;
                 foreach (var dir in dirs)
                 {
+                    // A vault-wide walk runs for many minutes and the JSON only
+                    // appears at the end, so say something on the way through:
+                    // otherwise a long scan is indistinguishable from a hung one.
+                    if (++done % 500 == 0)
+                        Console.Error.WriteLine($"  … {done:N0}/{dirs.Count:N0}, {found.Count} claimed");
+
                     // Same rules as `detect`, so a scan cannot report a different
                     // answer from the one the import will act on.
                     var hits = DetectAll(host, dir);
