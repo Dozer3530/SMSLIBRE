@@ -292,7 +292,11 @@ class ImportDialog(QDialog):
         self.table.setRowCount(0)
 
         if not layers:
-            self.status.setText("Imported, but no spatial operations were found on this card.")
+            # The sidecar knows why it found nothing — a folder of prescription
+            # maps, say — and saying so is the difference between a useful answer
+            # and one that reads like the plugin is broken.
+            self.status.setText(data.get("note")
+                                or "Imported, but no spatial operations were found on this card.")
             return
 
         threshold = 50 if self.skip_small_cb.isChecked() else 0
@@ -315,8 +319,16 @@ class ImportDialog(QDialog):
             self.table.setItem(row, 4, QTableWidgetItem(desc))
 
         total = sum(l.get("points", 0) for l in layers)
-        self.status.setText(
-            f"Imported {len(layers)} layer(s), {total:,} points → {data.get('geopackage','')}")
+        msg = f"Imported {len(layers)} layer(s), {total:,} points → {data.get('geopackage','')}"
+        # Anything the importer had to discard is said out loud rather than
+        # left to be discovered as a hole in the map.
+        rejected = data.get("rejectedPoints") or 0
+        dropped = data.get("droppedChannels") or 0
+        if rejected:
+            msg += f"  ({rejected:,} point(s) dropped: implausible GPS fix)"
+        if dropped:
+            msg += f"  ({dropped:,} channel(s) dropped: layer wider than GeoPackage allows)"
+        self.status.setText(msg)
         self.add_btn.setEnabled(True)
 
     def _add_layers(self):
