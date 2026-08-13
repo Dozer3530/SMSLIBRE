@@ -187,8 +187,7 @@ public static class RavenReader
             if (!double.TryParse(f[2], NumberStyles.Float, CultureInfo.InvariantCulture, out double lat) ||
                 !double.TryParse(f[3], NumberStyles.Float, CultureInfo.InvariantCulture, out double lon))
                 continue;
-            if (Math.Abs(lat) < 1e-9 && Math.Abs(lon) < 1e-9) continue;   // pre-GPS-lock
-            if (Math.Abs(lat) > 90 || Math.Abs(lon) > 180) continue;
+            if (!Coordinates.IsPlausible(lon, lat)) continue;
 
             DateTime.TryParse(f[1], CultureInfo.InvariantCulture, DateTimeStyles.None, out var ts);
 

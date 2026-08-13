@@ -182,6 +182,9 @@ public sealed class AdaptHost
     private static readonly HashSet<object> _initialized =
         new(ReferenceEqualityComparer.Instance);
 
+    /// <summary>Points rejected as implausible (bad GPS fixes), for diagnosis.</summary>
+    public static int RejectedPoints;
+
     /// <summary>Geometry types dropped because they were not points, for diagnosis.</summary>
     public static readonly Dictionary<string, int> SkippedGeometries = new();
 
@@ -309,12 +312,21 @@ public sealed class AdaptHost
             {
                 var rings = new List<List<(double, double)>>();
                 if (poly.ExteriorRing?.Points is { Count: > 2 } ext)
-                    rings.Add(ext.Select(p => (p.X, p.Y)).ToList());
+                {
+                    var ring = ext.Where(p => Coordinates.IsPlausible(p.X, p.Y))
+                                  .Select(p => (p.X, p.Y)).ToList();
+                    if (ring.Count < 3) continue;   // not a usable outer ring
+                    rings.Add(ring);
+                }
                 else
                     continue;   // a polygon without a usable outer ring is unusable
                 foreach (var inner in poly.InteriorRings ?? new List<LinearRing>())
                     if (inner?.Points is { Count: > 2 } ip)
-                        rings.Add(ip.Select(p => (p.X, p.Y)).ToList());
+                    {
+                        var hole = ip.Where(p => Coordinates.IsPlausible(p.X, p.Y))
+                                     .Select(p => (p.X, p.Y)).ToList();
+                        if (hole.Count >= 3) rings.Add(hole);
+                    }
                 feature.Polygons.Add(rings);
             }
 
@@ -400,7 +412,7 @@ public sealed class AdaptHost
                     }
                     // Raw logs contain (0,0) fixes before GPS lock; they would
                     // otherwise stretch every layer's extent to null island.
-                    if (Math.Abs(pt.X) < 1e-9 && Math.Abs(pt.Y) < 1e-9) continue;
+                    if (!Coordinates.IsPlausible(pt.X, pt.Y)) { RejectedPoints++; continue; }
                     var vals = new double?[numeric.Count];
                     for (int i = 0; i < numeric.Count; i++)
                         vals[i] = rec.GetMeterValue(numeric[i]) is NumericRepresentationValue v
