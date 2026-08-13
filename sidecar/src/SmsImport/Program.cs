@@ -159,9 +159,13 @@ internal static class Program
                 // our own format names), or when no ADAPT plugin claims the path.
                 bool named(string format) =>
                     string.Equals(pluginName, format, StringComparison.OrdinalIgnoreCase);
-                // Detect() is only consulted when no plugin was named, and only
-                // once: it re-scans every plugin folder, which is not cheap.
-                bool unclaimed = pluginName is null && !host.Detect(path).Any();
+
+                // Resolve the ADAPT plugin once and carry it into ImportAll.
+                // Detect() re-runs IsDataCardSupported across every loaded plugin
+                // and is slow on a large card, so calling it here and again inside
+                // ImportAll would double that cost on every import.
+                string? adapt = pluginName ?? host.Detect(path).FirstOrDefault()?.Name;
+                bool unclaimed = adapt is null;
 
                 if (named(RavenReader.FormatName) || (unclaimed && RavenReader.CanRead(path)))
                 {
@@ -175,7 +179,7 @@ internal static class Program
                 }
                 else
                 {
-                    (layers, boundaries) = host.ImportAll(path, pluginName);
+                    (layers, boundaries) = host.ImportAll(path, adapt);
                 }
                 if (layers.Count == 0 && boundaries.Count == 0)
                 {
