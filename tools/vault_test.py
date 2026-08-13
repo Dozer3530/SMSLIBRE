@@ -224,7 +224,7 @@ def fingerprint(path: str, cap: int = 400) -> list[str]:
 
 
 def discover(exe: Path, root: str, depth: int, cap: int, timeout: int,
-             out_dir: Path) -> tuple[dict[str, str], list[dict]]:
+             out_dir: Path, reuse: bool = False) -> tuple[dict[str, str], list[dict]]:
     """Every directory a reader claims, from a single sidecar process.
 
     Detection is cheap but starting the sidecar is not: it loads every ADAPT
@@ -240,12 +240,18 @@ def discover(exe: Path, root: str, depth: int, cap: int, timeout: int,
     """
     scan_json = out_dir / "scan.json"
     scan_log = out_dir / "scan.log"
-    creation = getattr(subprocess, "CREATE_NO_WINDOW", 0) if os.name == "nt" else 0
-    with open(scan_json, "w", encoding="utf-8") as so, \
-         open(scan_log, "w", encoding="utf-8") as se:
-        subprocess.run([str(exe), "scan", root, "--depth", str(depth),
-                        "--max", str(cap)],
-                       stdout=so, stderr=se, timeout=timeout, creationflags=creation)
+    if reuse and scan_json.is_file() and scan_json.stat().st_size:
+        # The walk is the expensive half and its answer does not change when the
+        # import code does, so a re-run after a sidecar fix can skip it.
+        print(f"  reusing {scan_json}", flush=True)
+    else:
+        creation = getattr(subprocess, "CREATE_NO_WINDOW", 0) if os.name == "nt" else 0
+        with open(scan_json, "w", encoding="utf-8") as so, \
+             open(scan_log, "w", encoding="utf-8") as se:
+            subprocess.run([str(exe), "scan", root, "--depth", str(depth),
+                            "--max", str(cap)],
+                           stdout=so, stderr=se, timeout=timeout,
+                           creationflags=creation)
 
     text = scan_json.read_text(encoding="utf-8").strip()
     if not text:
@@ -312,26 +318,35 @@ def test_candidate(exe: Path, path: str, out_dir: Path, timeout: int,
     return r
 
 
-def _distinct_cards(rows: list[dict]) -> list[dict]:
-    """Collapse nested hits to one row per card.
+def deepest_cards(paths: dict[str, str]) -> dict[str, str]:
+    """Drop a claimed directory when a descendant is claimed by the same reader.
 
-    A vault holds cards inside year folders inside crop folders, and a reader
-    claims every level of that nest — the same 5,200 points get counted three
-    times. Keep the shallowest path of each nested group: that is the folder a
-    user would actually point the plugin at.
+    Readers match recursively: ISOv4 claims any folder with a TASKDATA anywhere
+    beneath it, which means it claims the crop folder, the year folder, the card
+    — and the vault root. Taking the outermost hit would make the whole vault one
+    "card" and one enormous import; taking the innermost gives the folder that
+    actually holds the data, and per-card numbers in the report.
 
-    Only hits from the *same* reader collapse. A different reader claiming a
-    subfolder is a different card that the parent's import did not cover, and
-    dropping it hides real failures: the Trimble licence error sits inside a
-    folder the ISOXML reader imports happily.
+    Only same-reader nesting collapses. A different reader claiming a subfolder
+    is a different card the parent's import did not cover, and dropping it hides
+    real failures: the Trimble licence error sits inside a folder the ISOXML
+    reader imports happily.
     """
-    keep, by_path = [], sorted(rows, key=lambda r: len(r["path"]))
-    for r in by_path:
-        covered = any(r["path"].startswith(k["path"] + os.sep)
-                      and k["detected"] == r["detected"] for k in keep)
-        if not covered:
-            keep.append(r)
+    keep = {}
+    for path, reader in paths.items():
+        prefix = path + os.sep
+        if any(other.startswith(prefix) and r == reader
+               for other, r in paths.items()):
+            continue          # a descendant covers this one
+        keep[path] = reader
     return keep
+
+
+def _distinct_cards(rows: list[dict]) -> list[dict]:
+    """The report's view of `deepest_cards`, applied to result rows."""
+    readers = {r["path"]: r["detected"] for r in rows}
+    keep = deepest_cards(readers)
+    return [r for r in rows if r["path"] in keep]
 
 
 def build_report(results: list[dict], root: str) -> str:
@@ -469,6 +484,9 @@ def main() -> int:
                          "refreshing their numbers. Use after changing the sidecar: "
                          "the discovery walk is the slow part and its answer does "
                          "not change, but the import numbers do.")
+    ap.add_argument("--reuse-scan", action="store_true",
+                    help="reuse the scan.json from a previous discovery walk "
+                         "instead of walking the tree again")
     ap.add_argument("--report", default="COVERAGE.md",
                     help="markdown coverage report to write beside results.json")
     args = ap.parse_args()
@@ -502,8 +520,12 @@ def main() -> int:
     else:
         print(f"discovering readers under {args.root} …", flush=True)
         readers, unclaimed = discover(exe, args.root, args.depth, args.cap,
-                                      args.scan_timeout, out_dir)
-        print(f"  {len(readers)} directories claimed, {len(unclaimed):,} not "
+                                      args.scan_timeout, out_dir,
+                                      args.reuse_scan)
+        nested = len(readers)
+        readers = deepest_cards(readers)
+        print(f"  {len(readers)} cards claimed ({nested - len(readers)} outer "
+              f"folders dropped as duplicates), {len(unclaimed):,} not "
               f"({time.time()-t0:.0f}s)", flush=True)
 
     cands = [c for c in readers if c not in done]
