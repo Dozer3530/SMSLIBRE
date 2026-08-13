@@ -83,7 +83,67 @@ def run_sidecar(exe: Path, args: list[str], timeout: int) -> dict:
     return json.loads(out)
 
 
-def validate_gpkg(path: Path) -> tuple[int, int, int, int, int, list[str]]:
+def _wkb_coords(blob: bytes, off: int) -> list[tuple[float, float]]:
+    """Coordinates of one WKB geometry, following into rings and parts.
+
+    The writer emits little-endian WKB with no envelope, so the geometry starts
+    at byte 8 of the GeoPackage blob. Points were the only type checked before,
+    which meant field boundaries — the whole output of a setup card — went
+    through the validator untouched.
+    """
+    typ = struct.unpack_from("<I", blob, off + 1)[0]
+    off += 5
+    pts: list[tuple[float, float]] = []
+
+    if typ == 1:                                   # Point
+        pts.append(struct.unpack_from("<dd", blob, off))
+    elif typ == 2:                                 # LineString
+        (n,) = struct.unpack_from("<I", blob, off)
+        off += 4
+        for _ in range(n):
+            pts.append(struct.unpack_from("<dd", blob, off)); off += 16
+    elif typ == 3:                                 # Polygon
+        (rings,) = struct.unpack_from("<I", blob, off)
+        off += 4
+        for _ in range(rings):
+            (n,) = struct.unpack_from("<I", blob, off)
+            off += 4
+            for _ in range(n):
+                pts.append(struct.unpack_from("<dd", blob, off)); off += 16
+    elif typ in (4, 5, 6, 7):                      # Multi* / GeometryCollection
+        (parts,) = struct.unpack_from("<I", blob, off)
+        off += 4
+        for _ in range(parts):
+            sub = _wkb_coords(blob, off)
+            pts.extend(sub)
+            off = _wkb_end(blob, off)
+    return pts
+
+
+def _wkb_end(blob: bytes, off: int) -> int:
+    """Byte just past the geometry starting at off — needed to walk Multi* parts."""
+    typ = struct.unpack_from("<I", blob, off + 1)[0]
+    off += 5
+    if typ == 1:
+        return off + 16
+    if typ == 2:
+        (n,) = struct.unpack_from("<I", blob, off)
+        return off + 4 + n * 16
+    if typ == 3:
+        (rings,) = struct.unpack_from("<I", blob, off)
+        off += 4
+        for _ in range(rings):
+            (n,) = struct.unpack_from("<I", blob, off)
+            off += 4 + n * 16
+        return off
+    (parts,) = struct.unpack_from("<I", blob, off)
+    off += 4
+    for _ in range(parts):
+        off = _wkb_end(blob, off)
+    return off
+
+
+def validate_gpkg(path: Path) -> tuple[int, int, int, int, int, int]:
     """Open the GeoPackage and check what actually landed in it."""
     layers = features = invalid = out_of_range = static = 0
     max_ch = 0
@@ -96,20 +156,29 @@ def validate_gpkg(path: Path) -> tuple[int, int, int, int, int, list[str]]:
         layers = len(tables)
         for t in tables:
             cols = [d[1] for d in c.execute(f'PRAGMA table_info("{t}")')]
-            max_ch = max(max_ch, len(cols) - 2)          # minus fid + geom
+            # fid, geom and timestamp are structural; the rest are channels.
+            max_ch = max(max_ch, max(0, len(cols) - 3))
             n = c.execute(f'SELECT COUNT(*) FROM "{t}"').fetchone()[0]
             features += n
             lons, lats = [], []
             for (blob,) in c.execute(f'SELECT geom FROM "{t}"'):
-                if not blob or len(blob) < 21:
+                if not blob or len(blob) < 21 or blob[:2] != b"GP":
                     invalid += 1
                     continue
-                if blob[:2] != b"GP":
+                if blob[3] & 0b0000_1110:
+                    # An envelope would shift the WKB; the writer emits none, so
+                    # this means the blob did not come from us.
                     invalid += 1
                     continue
-                wkb_type = struct.unpack_from("<I", blob, 9)[0]
-                if wkb_type == 1:                        # point
-                    lon, lat = struct.unpack_from("<dd", blob, 13)
+                try:
+                    pts = _wkb_coords(blob, 8)
+                except (struct.error, IndexError):
+                    invalid += 1
+                    continue
+                if not pts:
+                    invalid += 1
+                    continue
+                for lon, lat in pts:
                     if not (math.isfinite(lon) and math.isfinite(lat)) \
                        or abs(lat) > 90 or abs(lon) > 180:
                         out_of_range += 1
