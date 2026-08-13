@@ -190,6 +190,11 @@ internal static class Program
                 {
                     (layers, boundaries) = ArchivedIsoxml.Import(path, d => host.ImportAll(d));
                 }
+                else if (named(LooseGen4.FormatName)
+                         || (unclaimed && LooseGen4.CanRead(path)))
+                {
+                    (layers, boundaries) = LooseGen4.Import(path, d => host.ImportAll(d));
+                }
                 else
                 {
                     (layers, boundaries) = host.ImportAll(path, adapt);
@@ -510,6 +515,8 @@ internal static class Program
             hits.Add(new PluginInfo(RavenReader.FormatName, "built-in", "SMSLIBRE"));
         else if (ArchivedIsoxml.CanRead(path))
             hits.Add(new PluginInfo(ArchivedIsoxml.FormatName, "built-in", "SMSLIBRE"));
+        else if (LooseGen4.CanRead(path))
+            hits.Add(new PluginInfo(LooseGen4.FormatName, "built-in", "SMSLIBRE"));
         return hits;
     }
 
