@@ -233,10 +233,17 @@ def _distinct_cards(rows: list[dict]) -> list[dict]:
     claims every level of that nest — the same 5,200 points get counted three
     times. Keep the shallowest path of each nested group: that is the folder a
     user would actually point the plugin at.
+
+    Only hits from the *same* reader collapse. A different reader claiming a
+    subfolder is a different card that the parent's import did not cover, and
+    dropping it hides real failures: the Trimble licence error sits inside a
+    folder the ISOXML reader imports happily.
     """
     keep, by_path = [], sorted(rows, key=lambda r: len(r["path"]))
     for r in by_path:
-        if not any(r["path"].startswith(k["path"] + os.sep) for k in keep):
+        covered = any(r["path"].startswith(k["path"] + os.sep)
+                      and k["detected"] == r["detected"] for k in keep)
+        if not covered:
             keep.append(r)
     return keep
 
@@ -308,9 +315,8 @@ def build_report(results: list[dict], root: str) -> str:
               "`format` is the only category that indicates a real gap."]
         retried = sum(1 for r in cards if r.get("retried"))
         if retried:
-            L.append(f"
-{retried} card(s) needed a retry after a transient read "
-                     "failure on the shared drive.")
+            L += ["", f"{retried} card(s) needed a retry after a transient read "
+                      "failure on the shared drive."]
 
     if empty:
         L += ["", "## Detected but empty", "",
