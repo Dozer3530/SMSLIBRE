@@ -40,6 +40,43 @@ public sealed class OperationLayer
     public string SuggestedName =>
         string.Join("_", new[] { Field, OperationType, Description }
             .Where(s => !string.IsNullOrWhiteSpace(s)));
+
+    /// <summary>
+    /// SQLite refuses to create a table with 2,000 or more columns (verified
+    /// against the bundled e_sqlite3: 1,999 is the last that works). A layer costs
+    /// three columns before any channel — feature id, geometry, timestamp.
+    /// </summary>
+    public const int MaxGpkgChannels = 1996;
+
+    /// <summary>
+    /// Channel indices to write, in the card's own order. Under
+    /// <paramref name="max"/> that is all of them.
+    ///
+    /// Over it, keep those carrying the most readings. A layer that wide is a
+    /// machine logging every section of every implement — a 2022 forage harvester
+    /// card reaches 1,535 — and the overflow is dominated by channels that are
+    /// null at every point. Dropping the emptiest loses least, and it beats the
+    /// alternative: SQLite rejects the table and the entire card is lost.
+    /// </summary>
+    public List<int> ChannelsToKeep(int max)
+    {
+        int total = Channels.Count;
+        if (total <= max) return Enumerable.Range(0, total).ToList();
+
+        var readings = new int[total];
+        foreach (var p in Points)
+        {
+            int n = Math.Min(total, p.Values.Length);
+            for (int i = 0; i < n; i++)
+                if (p.Values[i].HasValue) readings[i]++;
+        }
+
+        return Enumerable.Range(0, total)
+                         .OrderByDescending(i => readings[i])
+                         .Take(max)
+                         .OrderBy(i => i)
+                         .ToList();
+    }
 }
 
 /// <summary>A field boundary: outer ring plus any interior exclusions.</summary>

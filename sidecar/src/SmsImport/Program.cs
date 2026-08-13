@@ -248,16 +248,30 @@ internal static class Program
                         string table = UniqueName(used, GeoPackageWriter.Sanitize(
                             $"op{opIndex:D2}_{stem}"));
 
-                        // Columns: timestamp + every recorded channel.
+                        // Columns: timestamp + every recorded channel — but SQLite
+                        // refuses a table wider than 1,999 columns, and a 2022
+                        // forage harvester card already writes 1,535. Past that the
+                        // whole import would die on "too many columns", losing the
+                        // card; dropping the emptiest channels loses far less.
+                        var keep = layer.ChannelsToKeep(OperationLayer.MaxGpkgChannels);
                         var fields = new List<GpkgField> { new("timestamp", GpkgType.Text) };
                         var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                         var colNames = new List<string>();
-                        for (int i = 0; i < layer.Channels.Count; i++)
+                        foreach (int i in keep)
                         {
                             string baseName = GeoPackageWriter.Sanitize(layer.Channels[i]);
                             string name = UniqueName(seen, baseName);
                             colNames.Add(name);
                             fields.Add(new GpkgField(name, GpkgType.Double));
+                        }
+                        int dropped = layer.Channels.Count - keep.Count;
+                        if (dropped > 0)
+                        {
+                            droppedChannels += dropped;
+                            Console.Error.WriteLine(
+                                $"  {table}: {layer.Channels.Count} channels exceeds the " +
+                                $"{OperationLayer.MaxGpkgChannels}-column limit; kept the {keep.Count} with the " +
+                                "most readings");
                         }
 
                         int n = gpkg.WritePointLayer(table, fields,
@@ -266,13 +280,16 @@ internal static class Program
                                 var vals = new object?[fields.Count];
                                 vals[0] = p.Timestamp == default
                                     ? null : p.Timestamp.ToString("o");
-                                for (int i = 0; i < layer.Channels.Count; i++)
-                                    vals[i + 1] = i < p.Values.Length ? p.Values[i] : null;
+                                for (int c = 0; c < keep.Count; c++)
+                                {
+                                    int i = keep[c];
+                                    vals[c + 1] = i < p.Values.Length ? p.Values[i] : null;
+                                }
                                 return new GpkgFeature { Lon = p.Lon, Lat = p.Lat, Values = vals };
                             }),
                             description: $"{layer.Field} {layer.OperationType}".Trim());
 
-                        Console.Error.WriteLine($"  {table}: {n:N0} points, {layer.Channels.Count} channels");
+                        Console.Error.WriteLine($"  {table}: {n:N0} points, {colNames.Count} channels");
                         written.Add(new
                         {
                             table,
@@ -293,7 +310,9 @@ internal static class Program
 
                 Emit(new { ok = true, path, geopackage = Path.GetFullPath(outGpkg), layers = written,
                            skippedGeometries = AdaptHost.SkippedGeometries,
-                           rejectedPoints = AdaptHost.RejectedPoints });
+                           rejectedPoints = AdaptHost.RejectedPoints,
+                           droppedChannels,
+                           archivesRead = ArchivedIsoxml.ArchivesRead });
                 return 0;
             }
 
@@ -459,6 +478,9 @@ internal static class Program
         w.WriteLine(json);
         w.Flush();
     }
+
+    /// <summary>Channels dropped across the whole import, reported in the result.</summary>
+    private static int droppedChannels;
 
     private static void Usage()
     {
