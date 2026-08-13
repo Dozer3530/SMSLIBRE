@@ -158,7 +158,7 @@ public sealed class AdaptHost
         foreach (var p in BuiltIns())
         {
             string name = p.Name ?? p.GetType().Name;
-            if (seen.Add(name) && TryInitialize(p)) yield return (name, p);
+            if (seen.Add(name) && TryInitialize(p, name)) yield return (name, p);
         }
 
         foreach (var f in _factories)
@@ -170,7 +170,7 @@ public sealed class AdaptHost
                 if (!seen.Add(n)) continue;
                 AgGateway.ADAPT.ApplicationDataModel.ADM.IPlugin? inst = null;
                 try { inst = f.GetPlugin(n); } catch { }
-                if (inst != null && TryInitialize(inst)) yield return (n, inst);
+                if (inst != null && TryInitialize(inst, n)) yield return (n, inst);
             }
         }
     }
@@ -190,7 +190,8 @@ public sealed class AdaptHost
 
     /// <summary>Plugin name → why Initialize() failed, when it did.</summary>
     public static IReadOnlyDictionary<string, string> InitErrors => _initErrors;
-    private static readonly Dictionary<string, string> _initErrors = new();
+    private static readonly Dictionary<string, string> _initErrors =
+        new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     /// Vendor application id passed to <c>IPlugin.Initialize</c>. The John Deere
@@ -200,7 +201,12 @@ public sealed class AdaptHost
     /// </summary>
     public static string? ApplicationId { get; set; }
 
-    private static bool TryInitialize(AgGateway.ADAPT.ApplicationDataModel.ADM.IPlugin p)
+    /// <param name="discoveredAs">The name this plugin is offered under, which is
+    /// the factory's key and often differs from the plugin's own Name ("Trimble
+    /// AgData" vs "Trimble AgData Plugin"). The failure is recorded under both so
+    /// a later lookup by either name finds it.</param>
+    private static bool TryInitialize(
+        AgGateway.ADAPT.ApplicationDataModel.ADM.IPlugin p, string discoveredAs)
     {
         lock (_initialized)
         {
@@ -214,8 +220,8 @@ public sealed class AdaptHost
             }
             catch (Exception ex)
             {
-                string name = SafeName(p);
-                _initErrors[name] = ex.Message;
+                _initErrors[SafeName(p)] = ex.Message;
+                _initErrors[discoveredAs] = ex.Message;
             }
             return true;
         }
@@ -267,7 +273,19 @@ public sealed class AdaptHost
             .FirstOrDefault(x => string.Equals(x.Name, chosen, StringComparison.OrdinalIgnoreCase))
             .Plugin ?? throw new NotSupportedException("Plugin not available: " + chosen);
 
-        var models = plugin.Import(path);
+        IList<ApplicationDataModel>? models;
+        try { models = plugin.Import(path); }
+        catch (Exception ex) when (_initErrors.ContainsKey(chosen))
+        {
+            // A plugin that failed Initialize() is still offered for detection,
+            // because some vendors' failures are benign. When it then throws on
+            // import the raw message ("Plugin is not initialized.") hides the
+            // real cause, which is almost always a missing vendor licence.
+            throw new NotSupportedException(
+                $"{chosen} could not read this card: {ex.Message} " +
+                $"The plugin failed to initialise: {_initErrors[chosen]}", ex);
+        }
+
         var layers = new List<OperationLayer>();
         var bounds = new List<BoundaryFeature>();
         if (models == null) return (layers, bounds);
@@ -334,24 +352,10 @@ public sealed class AdaptHost
         }
     }
 
-    /// <summary>Import a card with a named plugin (or the first that supports it).</summary>
+    /// <summary>Import a card with a named plugin (or the first that supports it),
+    /// keeping only the logged operations.</summary>
     public List<OperationLayer> Import(string path, string? pluginName = null)
-    {
-        var chosen = pluginName ?? Detect(path).FirstOrDefault()?.Name
-            ?? throw new NotSupportedException("No installed ADAPT plugin can read: " + path);
-
-        var plugin = AllPlugins()
-            .FirstOrDefault(x => string.Equals(x.Name, chosen, StringComparison.OrdinalIgnoreCase))
-            .Plugin ?? throw new NotSupportedException("Plugin not available: " + chosen);
-
-        var models = plugin.Import(path);
-        var layers = new List<OperationLayer>();
-        if (models == null) return layers;
-
-        foreach (var adm in models)
-            layers.AddRange(Flatten(adm));
-        return layers;
-    }
+        => ImportAll(path, pluginName).Layers;
 
     /// <summary>Turn an ADAPT model into one layer per logged operation, keeping
     /// every numeric channel the machine recorded.</summary>

@@ -54,7 +54,22 @@ class Result:
     static_layers: int = 0        # layers whose points barely move
     seconds: float = 0.0
     error: str = ""
+    retried: bool = False         # a transient I/O failure forced a second attempt
     exts: list[str] = field(default_factory=list)   # file types present, for triage
+
+
+# Failures that say nothing about the data — a flaky network mount, a file the
+# sync client had not materialised yet, a lock held by another reader.
+TRANSIENT = (
+    "incorrect function", "the specified network name is no longer available",
+    "device is not ready", "being used by another process", "semaphore timeout",
+    "network path was not found", "i/o error", "unspecified error",
+)
+
+
+def is_transient(message: str) -> bool:
+    m = message.lower()
+    return any(t in m for t in TRANSIENT)
 
 
 def run_sidecar(exe: Path, args: list[str], timeout: int) -> dict:
@@ -154,6 +169,15 @@ def test_candidate(exe: Path, path: str, out_dir: Path, timeout: int) -> Result:
         gpkg.unlink(missing_ok=True)
 
         imp = run_sidecar(exe, ["import", path, str(gpkg)], timeout=timeout)
+        if not imp.get("ok") and is_transient(str(imp.get("error", ""))):
+            # The vault lives on a Google Drive shared drive, where a read can
+            # fail with "Incorrect function." while the file is perfectly fine.
+            # Retrying once separates a flaky mount from a format we cannot read;
+            # without it the report blames the importer for the network.
+            r.retried = True
+            gpkg.unlink(missing_ok=True)
+            time.sleep(5)
+            imp = run_sidecar(exe, ["import", path, str(gpkg)], timeout=timeout)
         if not imp.get("ok"):
             r.status, r.error = "error", str(imp.get("error", ""))[:200]
             r.seconds = time.time() - t0
@@ -268,10 +292,25 @@ def build_report(results: list[dict], root: str) -> str:
                  f"{r['features']:,} | {ops} | {r['seconds']:.0f} |")
 
     if err:
-        L += ["", "## Detected but failed", "", "| Card | Reader | Error |", "|---|---|---|"]
+        L += ["", "## Detected but failed", "",
+              "| Card | Reader | Cause | Error |", "|---|---|---|---|"]
         for r in sorted(err, key=lambda r: r["path"]):
-            L.append(f"| `{Path(r['path']).name}` | {r['detected']} | "
-                     f"{r['error'].replace('|', '/')[:160]} |")
+            e = r["error"]
+            cause = ("timeout" if "timed out" in e
+                     else "environment" if is_transient(e)
+                     else "licence" if "licen" in e.lower() or "not initialized" in e.lower()
+                     else "format")
+            L.append(f"| `{Path(r['path']).name}` | {r['detected']} | {cause} | "
+                     f"{e.replace('|', '/')[:150]} |")
+        L += ["", "`licence` means a vendor plugin loaded but refused our "
+              "application id — no code change fixes it. `environment` and "
+              "`timeout` are the network share, not the data: re-run those. "
+              "`format` is the only category that indicates a real gap."]
+        retried = sum(1 for r in cards if r.get("retried"))
+        if retried:
+            L.append(f"
+{retried} card(s) needed a retry after a transient read "
+                     "failure on the shared drive.")
 
     if empty:
         L += ["", "## Detected but empty", "",
