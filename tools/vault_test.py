@@ -1,16 +1,25 @@
 """Exercise SMSLIBRE against every candidate card in a data vault.
 
 Detection alone proves little — a reader can claim a folder and then produce
-nothing useful. So each candidate is taken all the way through:
+nothing useful. So the sweep runs in two phases:
 
-    detect -> import -> open the GeoPackage -> validate geometry and attributes
+    1. discovery   one `smsimport scan` process walks the whole tree
+    2. per card    import -> open the GeoPackage -> validate geometry and attributes
 
-and every outcome is recorded, including the failures. The result is a coverage
-report (what imports, what does not, and why) plus a machine-readable corpus that
-the regression suite consumes.
+Discovery is one process on purpose. Detection itself is cheap, but starting the
+sidecar loads every ADAPT plugin from the SMS install and costs seconds, so
+spawning it per directory put a full-vault sweep out of reach: 6,000+
+directories at ~4 s each. Paying that load once turns hours into minutes and
+leaves the time budget for the imports, which are the part that can actually
+fail.
+
+Every outcome is recorded, including the failures and the directories nothing
+claimed. The result is a coverage report (what imports, what does not, and why)
+plus a machine-readable corpus the regression suite consumes.
 
     python tools/vault_test.py --root "<vault path>" --out analysis/vault
-    python tools/vault_test.py --resume        # skip candidates already done
+    python tools/vault_test.py --resume           # skip candidates already done
+    python tools/vault_test.py --only-detected    # re-import after a sidecar change
 """
 
 from __future__ import annotations
@@ -31,14 +40,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_EXE = (Path(os.environ.get("APPDATA", "")) /
                "QGIS/QGIS3/profiles/default/python/plugins/smslibre_import/bin/SmsImport.exe")
-
-# Folders that never hold machine data — skipping them keeps the walk cheap on a
-# network drive where every stat() is a round trip.
-SKIP_DIR_NAMES = {
-    "$RECYCLE.BIN", "System Volume Information", "__pycache__",
-    ".git", "Training Videos   Documents", "6. Inventory Documents",
-}
-
 
 @dataclass
 class Result:
@@ -221,17 +222,38 @@ def fingerprint(path: str, cap: int = 400) -> list[str]:
     return [e for e, _ in sorted(seen.items(), key=lambda kv: -kv[1])[:8]]
 
 
-def test_candidate(exe: Path, path: str, out_dir: Path, timeout: int) -> Result:
+def discover(exe: Path, root: str, depth: int, cap: int,
+             timeout: int) -> tuple[dict[str, str], list[dict]]:
+    """Every directory a reader claims, from a single sidecar process.
+
+    Detection is cheap but starting the sidecar is not: it loads every ADAPT
+    plugin from the SMS install, which costs seconds. Spawning it once per
+    directory put a full-vault sweep out of reach — 6,000+ directories at ~4 s
+    each. `smsimport scan` walks the tree inside one process, so the plugin load
+    is paid once and discovery drops from hours to minutes.
+    """
+    res = run_sidecar(exe, ["scan", root, "--depth", str(depth), "--max", str(cap)],
+                      timeout=timeout)
+    hits = {}
+    for f in res.get("found") or []:
+        plugins = f.get("plugins") or []
+        if plugins:
+            hits[f["path"]] = plugins[0].get("Name", "?")
+    # The same walk reports what it rejected and what those folders hold, so the
+    # "what does not import" half of the report costs no extra traversal.
+    return hits, res.get("unclaimed") or []
+
+
+def test_candidate(exe: Path, path: str, out_dir: Path, timeout: int,
+                   detected: str = "") -> Result:
     r = Result(path=path)
     t0 = time.time()
     r.exts = fingerprint(path)
     try:
-        det = run_sidecar(exe, ["detect", path], timeout=300)
-        plugins = det.get("plugins") or []
-        if not plugins:
+        if not detected:
             r.seconds = time.time() - t0
             return r
-        r.detected = plugins[0].get("Name", "?")
+        r.detected = detected
 
         safe = "".join(ch if ch.isalnum() else "_" for ch in path)[-90:]
         gpkg = out_dir / f"{safe}.gpkg"
@@ -270,29 +292,6 @@ def test_candidate(exe: Path, path: str, out_dir: Path, timeout: int) -> Result:
         r.status, r.error = "error", f"{type(exc).__name__}: {exc}"[:200]
     r.seconds = time.time() - t0
     return r
-
-
-def walk_candidates(root: Path, max_depth: int, cap: int) -> list[str]:
-    """Breadth-first list of directories worth testing."""
-    out, level, depth = [], [root], 0
-    while level and depth < max_depth and len(out) < cap:
-        nxt = []
-        for d in level:
-            try:
-                kids = [k for k in d.iterdir() if k.is_dir()]
-            except OSError:
-                continue
-            for k in kids:
-                if k.name in SKIP_DIR_NAMES or k.name.startswith("."):
-                    continue
-                out.append(str(k))
-                nxt.append(k)
-                if len(out) >= cap:
-                    break
-            if len(out) >= cap:
-                break
-        level, depth = nxt, depth + 1
-    return out
 
 
 def _distinct_cards(rows: list[dict]) -> list[dict]:
@@ -466,37 +465,47 @@ def main() -> int:
         done = {d["path"]: d for d in json.loads(results_path.read_text())}
         print(f"resuming: {len(done)} already tested")
 
+    t0 = time.time()
     if args.only_detected:
         if not results_path.exists():
             print(f"no prior run to re-test: {results_path}", file=sys.stderr)
             return 2
         prior = json.loads(results_path.read_text())
-        cands = [d["path"] for d in prior if d.get("detected")]
+        readers = {d["path"]: d["detected"] for d in prior if d.get("detected")}
         # keep the untouched rows; the re-tested ones are replaced below
         done = {d["path"]: d for d in prior if not d.get("detected")}
-        print(f"re-testing {len(cands)} detected directories "
+        unclaimed = []          # carried over untouched in `done`
+        print(f"re-testing {len(readers)} detected directories "
               f"({len(done)} not-detected rows carried over)")
     else:
-        cands = [c for c in walk_candidates(Path(args.root), args.depth, args.cap)
-                 if c not in done]
-    print(f"{len(cands)} candidate directories to test "
-          f"(workers={args.workers})", flush=True)
+        print(f"discovering readers under {args.root} …", flush=True)
+        readers, unclaimed = discover(exe, args.root, args.depth, args.cap,
+                                      args.timeout)
+        print(f"  {len(readers)} directories claimed, {len(unclaimed):,} not "
+              f"({time.time()-t0:.0f}s)", flush=True)
+
+    cands = [c for c in readers if c not in done]
+    print(f"{len(cands)} directories to import (workers={args.workers})", flush=True)
 
     results = list(done.values())
-    t0 = time.time()
+    # Directories nothing claimed still belong in the report: they are the
+    # "what doesn't import" half of the question, and their file types say
+    # whether that is a real gap or just a folder of PDFs.
+    for u in unclaimed:
+        if u["path"] not in done:
+            results.append(asdict(Result(path=u["path"], exts=u.get("exts") or [])))
+
     with futures.ThreadPoolExecutor(max_workers=args.workers) as pool:
-        futs = {pool.submit(test_candidate, exe, c, out_dir, args.timeout): c
-                for c in cands}
+        futs = {pool.submit(test_candidate, exe, c, out_dir, args.timeout,
+                            readers[c]): c for c in cands}
         for i, f in enumerate(futures.as_completed(futs), 1):
             r = f.result()
             results.append(asdict(r))
-            if r.detected:
-                print(f"  [{i}/{len(cands)}] {r.status:11} {r.detected:26} "
-                      f"{r.layers:4}L {r.features:>9,}F  {Path(r.path).name[:44]}",
-                      flush=True)
-            if i % 100 == 0:
+            print(f"  [{i}/{len(cands)}] {r.status:11} {r.detected:26} "
+                  f"{r.layers:4}L {r.features:>9,}F  {Path(r.path).name[:44]}",
+                  flush=True)
+            if i % 10 == 0:
                 results_path.write_text(json.dumps(results, indent=1))
-                print(f"  … {i}/{len(cands)} ({time.time()-t0:.0f}s)", flush=True)
 
     results_path.write_text(json.dumps(results, indent=1))
     hits = [r for r in results if r["detected"]]

@@ -105,14 +105,7 @@ internal static class Program
             {
                 if (args.Length < 2) { Usage(); return 2; }
                 string path = args[1];
-                var hits = host.Detect(path).ToList();
-                // Formats we read ourselves, with no ADAPT plugin behind them.
-                // Only offered when no plugin claims the path, so a real ADAPT
-                // reader always wins.
-                if (hits.Count == 0 && RavenReader.CanRead(path))
-                    hits.Add(new PluginInfo(RavenReader.FormatName, "built-in", "SMSLIBRE"));
-                if (hits.Count == 0 && ArchivedIsoxml.CanRead(path))
-                    hits.Add(new PluginInfo(ArchivedIsoxml.FormatName, "built-in", "SMSLIBRE"));
+                var hits = DetectAll(host, path);
                 Emit(new { ok = true, path, supported = hits.Count > 0, count = hits.Count, plugins = hits });
                 return 0;
             }
@@ -130,16 +123,28 @@ internal static class Program
                 dirs.AddRange(Walk(root, depth, maxDirs));
 
                 var found = new List<object>();
+                var unclaimed = new List<object>();
                 foreach (var dir in dirs)
                 {
-                    var hits = host.Detect(dir);
+                    // Same rules as `detect`, so a scan cannot report a different
+                    // answer from the one the import will act on.
+                    var hits = DetectAll(host, dir);
                     if (hits.Count > 0)
                     {
                         Console.Error.WriteLine($"  {hits[0].Name}: {dir}");
                         found.Add(new { path = dir, plugins = hits });
                     }
+                    else
+                    {
+                        // Report what a rejected folder holds. A caller sweeping a
+                        // vault needs this to tell a format gap from a folder of
+                        // PDFs, and gathering it here saves walking the whole tree
+                        // a second time — expensive on a network share.
+                        var exts = FileTypes(dir);
+                        if (exts.Count > 0) unclaimed.Add(new { path = dir, exts });
+                    }
                 }
-                Emit(new { ok = true, root, scanned = dirs.Count, found });
+                Emit(new { ok = true, root, scanned = dirs.Count, found, unclaimed });
                 return 0;
             }
 
@@ -405,6 +410,7 @@ internal static class Program
                 catch { continue; }
                 foreach (var k in kids)
                 {
+                    if (SkipDir(Path.GetFileName(k))) continue;
                     result.Add(k);
                     next.Add(k);
                     if (result.Count >= maxDirs) break;
@@ -485,6 +491,59 @@ internal static class Program
 
     /// <summary>Channels dropped across the whole import, reported in the result.</summary>
     private static int droppedChannels;
+
+    /// <summary>
+    /// Every reader that can handle a path: the ADAPT plugins first, then the
+    /// formats we read ourselves. Ours are offered only when no plugin claims the
+    /// path, so a real vendor reader always wins.
+    /// </summary>
+    private static List<PluginInfo> DetectAll(AdaptHost host, string path)
+    {
+        var hits = host.Detect(path).ToList();
+        if (hits.Count > 0) return hits;
+
+        if (RavenReader.CanRead(path))
+            hits.Add(new PluginInfo(RavenReader.FormatName, "built-in", "SMSLIBRE"));
+        else if (ArchivedIsoxml.CanRead(path))
+            hits.Add(new PluginInfo(ArchivedIsoxml.FormatName, "built-in", "SMSLIBRE"));
+        return hits;
+    }
+
+    /// <summary>File extensions directly inside a folder, commonest first.</summary>
+    private static List<string> FileTypes(string dir, int cap = 400)
+    {
+        var counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        try
+        {
+            int i = 0;
+            foreach (var f in Directory.EnumerateFiles(dir))
+            {
+                if (i++ >= cap) break;
+                string ext = Path.GetExtension(f);
+                if (ext.Length == 0) continue;
+                counts[ext] = counts.GetValueOrDefault(ext) + 1;
+            }
+        }
+        catch { return new List<string>(); }
+
+        return counts.OrderByDescending(kv => kv.Value)
+                     .Take(8)
+                     .Select(kv => kv.Key.ToLowerInvariant())
+                     .ToList();
+    }
+
+    /// <summary>
+    /// Folders never worth descending into. On a network share every directory
+    /// listing is a round trip, and a document library can be thousands of them.
+    /// Matched on the leaf name, case-insensitively, anywhere in the tree.
+    /// </summary>
+    private static bool SkipDir(string name)
+        => name.StartsWith('.')
+           || name.Equals("$RECYCLE.BIN", StringComparison.OrdinalIgnoreCase)
+           || name.Equals("System Volume Information", StringComparison.OrdinalIgnoreCase)
+           || name.Contains("Training Videos", StringComparison.OrdinalIgnoreCase)
+           || name.Contains("Inventory Documents", StringComparison.OrdinalIgnoreCase)
+           || name.Contains("Vault Access", StringComparison.OrdinalIgnoreCase);
 
     private static void Usage()
     {
