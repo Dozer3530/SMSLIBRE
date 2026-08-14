@@ -224,7 +224,8 @@ def fingerprint(path: str, cap: int = 400) -> list[str]:
 
 
 def discover(exe: Path, root: str, depth: int, cap: int, timeout: int,
-             out_dir: Path, reuse: bool = False) -> tuple[dict[str, str], list[dict]]:
+             out_dir: Path, reuse: bool = False,
+             min_depth: int = 0) -> tuple[dict[str, str], list[dict]]:
     """Every directory a reader claims, from a single sidecar process.
 
     Detection is cheap but starting the sidecar is not: it loads every ADAPT
@@ -249,7 +250,7 @@ def discover(exe: Path, root: str, depth: int, cap: int, timeout: int,
         with open(scan_json, "w", encoding="utf-8") as so, \
              open(scan_log, "w", encoding="utf-8") as se:
             subprocess.run([str(exe), "scan", root, "--depth", str(depth),
-                            "--max", str(cap)],
+                            "--max", str(cap), "--min-depth", str(min_depth)],
                            stdout=so, stderr=se, timeout=timeout,
                            creationflags=creation)
 
@@ -488,6 +489,11 @@ def main() -> int:
                          "refreshing their numbers. Use after changing the sidecar: "
                          "the discovery walk is the slow part and its answer does "
                          "not change, but the import numbers do.")
+    ap.add_argument("--min-depth", type=int, default=0,
+                    help="do not ask a reader about directories shallower than "
+                         "this. Readers search recursively, so detection on the "
+                         "top of a vault walks the whole share for an answer that "
+                         "is discarded anyway")
     ap.add_argument("--reuse-scan", action="store_true",
                     help="reuse the scan.json from a previous discovery walk "
                          "instead of walking the tree again")
@@ -525,7 +531,7 @@ def main() -> int:
         print(f"discovering readers under {args.root} …", flush=True)
         readers, unclaimed = discover(exe, args.root, args.depth, args.cap,
                                       args.scan_timeout, out_dir,
-                                      args.reuse_scan)
+                                      args.reuse_scan, args.min_depth)
         nested = len(readers)
         readers = deepest_cards(readers)
         print(f"  {len(readers)} cards claimed ({nested - len(readers)} outer "

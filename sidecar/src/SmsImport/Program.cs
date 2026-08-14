@@ -118,10 +118,26 @@ internal static class Program
                 string root = args[1];
                 int depth = int.TryParse(Opt(args, "--depth"), out var d) ? d : 4;
                 int maxDirs = int.TryParse(Opt(args, "--max"), out var m) ? m : 3000;
+                // Readers search recursively, so asking one about the top of a
+                // vault means walking the entire share for an answer that is
+                // useless: a card is never the root or a section folder, and a
+                // caller collapsing nested hits discards it anyway. Measured on
+                // the Olds College vault, detection on "1. Smart Farm" (some
+                // 20,000 directories beneath it) did not return in 150 s, while
+                // every real card answered in under a second.
+                int minDepth = int.TryParse(Opt(args, "--min-depth"), out var md) ? md : 0;
 
                 var dirs = new List<string> { root };
                 dirs.AddRange(Walk(root, depth, maxDirs));
                 Console.Error.WriteLine($"walked {dirs.Count:N0} directories");
+                if (minDepth > 0)
+                {
+                    int before = dirs.Count;
+                    dirs = dirs.Where(d => Depth(root, d) >= minDepth).ToList();
+                    Console.Error.WriteLine(
+                        $"skipping {before - dirs.Count:N0} container directories " +
+                        $"above depth {minDepth}");
+                }
 
                 var found = new List<object>();
                 var unclaimed = new List<object>();
@@ -577,6 +593,15 @@ internal static class Program
             return LooseGen4.Import(path, d => ImportPath(host, d, null, depth + 1));
 
         return host.ImportAll(path, adapt);
+    }
+
+    /// <summary>How many levels <paramref name="dir"/> sits below the root.</summary>
+    private static int Depth(string root, string dir)
+    {
+        string rel = Path.GetRelativePath(root, dir);
+        if (rel == ".") return 0;
+        return rel.Count(c => c == Path.DirectorySeparatorChar
+                              || c == Path.AltDirectorySeparatorChar) + 1;
     }
 
     private static void Usage()
