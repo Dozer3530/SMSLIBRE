@@ -64,10 +64,16 @@ public class CorpusRegressionTests
     {
         foreach (var e in LoadCorpus()
                      .Where(e => e.Status == "ok" && e.Features > 0 && Directory.Exists(e.Path))
-                     // one representative per reader keeps the suite quick;
-                     // the largest card exercises the most code.
+                     // One representative per reader: the smallest card
+                     // carrying real data. The largest John Deere card takes 13
+                     // minutes on its own, and a one-feature card exercises
+                     // nothing, so take the smallest above a floor — or the
+                     // biggest available when every card is small.
                      .GroupBy(e => e.Detected)
-                     .Select(g => g.OrderByDescending(e => e.Features).First()))
+                     .Select(g => g.Where(e => e.Features >= 1000)
+                                   .OrderBy(e => e.Features)
+                                   .FirstOrDefault()
+                             ?? g.OrderByDescending(e => e.Features).First()))
             yield return new object[] { e.Path, e.Detected, e.Layers, e.Features };
     }
 
@@ -85,6 +91,19 @@ public class CorpusRegressionTests
             string id = File.ReadAllText(appId).Trim();
             AdaptHost.ApplicationId = Guid.TryParse(id, out var g) ? g.ToString("B") : id;
         }
+
+        // The Deere plugins read their licence from beside the running
+        // executable, which for a test run is the test assembly's folder. The
+        // CLI does this too; without it the plugins load, fail to initialise,
+        // and every John Deere card in the corpus quietly skips.
+        const string lic = "johndeere.adaptplugins.lic";
+        string dest = Path.Combine(AppContext.BaseDirectory, lic);
+        string src = Path.Combine(root, "secrets", lic);
+        if (!File.Exists(dest) && File.Exists(src))
+        {
+            try { File.Copy(src, dest); } catch { }
+        }
+
         return new AdaptHost(Path.Combine(sms, "ADAPT"),
                              new[] { Path.Combine(sms, "NetCoreDependencies") },
                              priority.ToArray());
@@ -97,20 +116,20 @@ public class CorpusRegressionTests
     {
         Skip.If(!Directory.Exists(path), "corpus data not present on this machine");
 
-        List<OperationLayer> layers;
-        if (reader == RavenReader.FormatName)
-        {
-            layers = RavenReader.Import(path);
-        }
-        else
-        {
-            var host = Host();
-            Skip.If(!host.Detect(path).Any(), $"{reader} unavailable here (licence or plugins missing)");
-            layers = host.ImportAll(path).Layers;
-        }
+        // Route exactly as the CLI does. Asking AdaptHost directly saw only the
+        // ADAPT plugins, so every card belonging to one of our own readers
+        // skipped and this suite reported green while testing nothing.
+        var host = Host();
+        Skip.If(!CardImporter.Detect(host, path).Any(),
+                $"{reader} unavailable here (licence or plugins missing)");
+        var (layers, boundaries) = CardImporter.Import(host, path);
 
-        int features = layers.Sum(l => l.Points.Count);
-        Assert.True(layers.Count > 0, $"{reader}: no layers (was {expectedLayers})");
+        // Boundaries are features too. Counting only points failed every
+        // setup card in the corpus — a field boundary package has no point
+        // layers at all, which is not the same as importing nothing.
+        int features = layers.Sum(l => l.Points.Count) + boundaries.Count;
+        Assert.True(layers.Count + boundaries.Count > 0,
+                    $"{reader}: nothing imported (was {expectedLayers} layer(s))");
         Assert.True(features > 0, $"{reader}: no features (was {expectedFeatures:N0})");
 
         // Allow growth and small reader-version drift, but catch a real collapse.
@@ -125,15 +144,16 @@ public class CorpusRegressionTests
         Skip.If(card is null, "corpus data not present on this machine");
 
         string path = (string)card![0];
-        string reader = (string)card[1];
-        List<OperationLayer> layers;
-        if (reader == RavenReader.FormatName) layers = RavenReader.Import(path);
-        else
-        {
-            var host = Host();
-            Skip.If(!host.Detect(path).Any(), "reader unavailable here");
-            layers = host.ImportAll(path).Layers;
-        }
+        var host = Host();
+        Skip.If(!CardImporter.Detect(host, path).Any(), "reader unavailable here");
+        var (layers, boundaries) = CardImporter.Import(host, path);
+
+        foreach (var ring in boundaries.SelectMany(b => b.Polygons).SelectMany(p => p))
+            foreach (var (lon, lat) in ring)
+            {
+                Assert.InRange(lat, -90, 90);
+                Assert.InRange(lon, -180, 180);
+            }
 
         foreach (var p in layers.SelectMany(l => l.Points))
         {

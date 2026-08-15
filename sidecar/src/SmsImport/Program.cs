@@ -105,7 +105,7 @@ internal static class Program
             {
                 if (args.Length < 2) { Usage(); return 2; }
                 string path = args[1];
-                var hits = DetectAll(host, path);
+                var hits = CardImporter.Detect(host, path);
                 Emit(new { ok = true, path, supported = hits.Count > 0, count = hits.Count, plugins = hits });
                 return 0;
             }
@@ -152,7 +152,7 @@ internal static class Program
 
                     // Same rules as `detect`, so a scan cannot report a different
                     // answer from the one the import will act on.
-                    var hits = DetectAll(host, dir);
+                    var hits = CardImporter.Detect(host, dir);
                     if (hits.Count > 0)
                     {
                         Console.Error.WriteLine($"  {hits[0].Name}: {dir}");
@@ -183,7 +183,7 @@ internal static class Program
                 List<OperationLayer> layers;
                 List<BoundaryFeature> boundaries;
 
-                (layers, boundaries) = ImportPath(host, path, pluginName);
+                (layers, boundaries) = CardImporter.Import(host, path, pluginName);
                 if (layers.Count == 0 && boundaries.Count == 0)
                 {
                     Emit(new { ok = true, path, layers = Array.Empty<object>(),
@@ -486,28 +486,6 @@ internal static class Program
     /// <summary>Channels dropped across the whole import, reported in the result.</summary>
     private static int droppedChannels;
 
-    /// <summary>
-    /// Every reader that can handle a path: the ADAPT plugins first, then the
-    /// formats we read ourselves. Ours are offered only when no plugin claims the
-    /// path, so a real vendor reader always wins.
-    /// </summary>
-    private static List<PluginInfo> DetectAll(AdaptHost host, string path)
-    {
-        var hits = host.Detect(path).ToList();
-        if (hits.Count > 0) return hits;
-
-        if (RavenReader.CanRead(path))
-            hits.Add(new PluginInfo(RavenReader.FormatName, "built-in", "SMSLIBRE"));
-        // Loose logs before archives: a folder often holds both the .jdl files
-        // and a zip of the same logs, and reading what is already on disk beats
-        // unpacking a copy of it.
-        else if (LooseGen4.CanRead(path))
-            hits.Add(new PluginInfo(LooseGen4.FormatName, "built-in", "SMSLIBRE"));
-        else if (ArchivedCard.CanRead(path))
-            hits.Add(new PluginInfo(ArchivedCard.FormatName, "built-in", "SMSLIBRE"));
-        return hits;
-    }
-
     /// <summary>File extensions directly inside a folder, commonest first.</summary>
     private static List<string> FileTypes(string dir, int cap = 400)
     {
@@ -562,41 +540,6 @@ internal static class Program
                    "from the display produces a card that does import.";
 
         return "No spatial operations or boundaries found.";
-    }
-
-    /// <summary>
-    /// Import a path with whichever reader fits: an ADAPT plugin if one claims
-    /// it, otherwise one of ours. Archives call back into this, so a card zipped
-    /// inside a folder is imported exactly as it would be unzipped.
-    /// </summary>
-    /// <param name="pluginName">A reader named by the caller — the QGIS dialog
-    /// passes back whatever detect reported, including our own format names.</param>
-    /// <param name="depth">Guards against an archive that contains an archive.</param>
-    private static (List<OperationLayer> Layers, List<BoundaryFeature> Boundaries)
-        ImportPath(AdaptHost host, string path, string? pluginName = null, int depth = 0)
-    {
-        bool named(string format) =>
-            string.Equals(pluginName, format, StringComparison.OrdinalIgnoreCase);
-
-        // Resolve the ADAPT plugin once and carry it into ImportAll. Detect()
-        // re-runs IsDataCardSupported across every loaded plugin and is slow on a
-        // large card, so calling it here and again inside ImportAll would double
-        // that cost on every import.
-        string? adapt = pluginName ?? host.Detect(path).FirstOrDefault()?.Name;
-        bool unclaimed = adapt is null;
-
-        if (named(RavenReader.FormatName) || (unclaimed && RavenReader.CanRead(path)))
-            return (RavenReader.Import(path), new List<BoundaryFeature>());
-
-        // Same order as DetectAll, so the import uses the reader detect promised.
-        if (named(LooseGen4.FormatName) || (unclaimed && LooseGen4.CanRead(path)))
-            return LooseGen4.Import(path, d => ImportPath(host, d, null, depth + 1));
-
-        if (depth < 2 && (named(ArchivedCard.FormatName)
-                          || (unclaimed && ArchivedCard.CanRead(path))))
-            return ArchivedCard.Import(path, d => ImportPath(host, d, null, depth + 1));
-
-        return host.ImportAll(path, adapt);
     }
 
     /// <summary>How many levels <paramref name="dir"/> sits below the root.</summary>
