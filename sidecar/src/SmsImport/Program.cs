@@ -498,10 +498,13 @@ internal static class Program
 
         if (RavenReader.CanRead(path))
             hits.Add(new PluginInfo(RavenReader.FormatName, "built-in", "SMSLIBRE"));
-        else if (ArchivedCard.CanRead(path))
-            hits.Add(new PluginInfo(ArchivedCard.FormatName, "built-in", "SMSLIBRE"));
+        // Loose logs before archives: a folder often holds both the .jdl files
+        // and a zip of the same logs, and reading what is already on disk beats
+        // unpacking a copy of it.
         else if (LooseGen4.CanRead(path))
             hits.Add(new PluginInfo(LooseGen4.FormatName, "built-in", "SMSLIBRE"));
+        else if (ArchivedCard.CanRead(path))
+            hits.Add(new PluginInfo(ArchivedCard.FormatName, "built-in", "SMSLIBRE"));
         return hits;
     }
 
@@ -585,12 +588,13 @@ internal static class Program
         if (named(RavenReader.FormatName) || (unclaimed && RavenReader.CanRead(path)))
             return (RavenReader.Import(path), new List<BoundaryFeature>());
 
+        // Same order as DetectAll, so the import uses the reader detect promised.
+        if (named(LooseGen4.FormatName) || (unclaimed && LooseGen4.CanRead(path)))
+            return LooseGen4.Import(path, d => ImportPath(host, d, null, depth + 1));
+
         if (depth < 2 && (named(ArchivedCard.FormatName)
                           || (unclaimed && ArchivedCard.CanRead(path))))
             return ArchivedCard.Import(path, d => ImportPath(host, d, null, depth + 1));
-
-        if (named(LooseGen4.FormatName) || (unclaimed && LooseGen4.CanRead(path)))
-            return LooseGen4.Import(path, d => ImportPath(host, d, null, depth + 1));
 
         return host.ImportAll(path, adapt);
     }

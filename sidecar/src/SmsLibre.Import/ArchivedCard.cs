@@ -65,7 +65,16 @@ public static class ArchivedCard
         catch { yield break; }
 
         foreach (var f in files.Where(IsCandidate).OrderBy(f => f, StringComparer.OrdinalIgnoreCase))
+        {
+            // People keep the archive next to the folder they extracted it into.
+            // Importing both is the same data twice — 32 cards in one vault
+            // sweep — so let the folder win: a reader handles it without
+            // unpacking 100 MB first.
+            string twin = Path.Combine(path, Path.GetFileNameWithoutExtension(f));
+            if (Directory.Exists(twin)) continue;
+
             if (HasCard(f)) yield return f;
+        }
     }
 
     private static bool IsCandidate(string file)

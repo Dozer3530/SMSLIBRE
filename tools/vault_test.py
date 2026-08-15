@@ -350,6 +350,28 @@ def _distinct_cards(rows: list[dict]) -> list[dict]:
     return [r for r in rows if r["path"] in keep]
 
 
+def nested_duplicates(cards: list[dict]) -> set[str]:
+    """Cards whose data an enclosing card already imported.
+
+    Two readers can both claim, at different depths, folders holding the same
+    data: a Gen4 card and the log folder inside it, or an archive and the folder
+    someone extracted it into. Each is a legitimate claim on its own, so the
+    same-reader collapse does not catch the pair, and the totals count those
+    features twice — 44 million of 134 million in one sweep before this existed.
+
+    The readers are fixed not to overlap, but a total that silently
+    double-counts is the kind of number a decision gets made on, so it is
+    checked here as well rather than trusted.
+    """
+    with_data = [c for c in cards if c["features"] > 0]
+    inner = set()
+    for c in with_data:
+        if any(c["path"].startswith(o["path"] + os.sep) for o in with_data
+               if o["path"] != c["path"]):
+            inner.add(c["path"])
+    return inner
+
+
 def build_report(results: list[dict], root: str) -> str:
     hits = [r for r in results if r.get("detected")]
     cards = _distinct_cards(hits)
@@ -357,6 +379,9 @@ def build_report(results: list[dict], root: str) -> str:
     empty = [r for r in cards if r["status"] == "empty"]
     err = [r for r in cards if r["status"] == "error"]
     miss = [r for r in results if not r.get("detected")]
+
+    dupes = nested_duplicates(cards)
+    counted = [r for r in ok if r["path"] not in dupes]
 
     L = [
         "# Vault import coverage",
@@ -374,9 +399,13 @@ def build_report(results: list[dict], root: str) -> str:
         f"| Detected but failed | {len(err)} |",
         f"| No reader | {len(miss):,} directories |",
         "",
-        f"Total features imported: **{sum(r['features'] for r in ok):,}** "
-        f"across **{sum(r['layers'] for r in ok):,}** layers.",
-        "",
+        f"Total features imported: **{sum(r['features'] for r in counted):,}** "
+        f"across **{sum(r['layers'] for r in counted):,}** layers.",
+        "",]
+    if dupes:
+        L += [f"{len(dupes)} card(s) are excluded from that total because an "
+              "enclosing card imported the same data — see Overlapping cards.", ""]
+    L += [
         "## By reader",
         "",
         "| Reader | Cards | Layers | Features | Max channels | Empty | Failed |",
@@ -432,6 +461,18 @@ def build_report(results: list[dict], root: str) -> str:
         for r in sorted(empty, key=lambda r: (r["detected"], r["path"])):
             exts = ", ".join(f"`{e}`" for e in (r.get("exts") or [])[:5]) or "no files"
             L.append(f"| `{Path(r['path']).name}` | {r['detected']} | {exts} |")
+
+    if dupes:
+        L += ["", "## Overlapping cards", "",
+              "Two readers claimed folders at different depths that hold the same "
+              "data. The enclosing card's numbers are the ones counted; these are "
+              "listed so the overlap is visible rather than silently halving or "
+              "doubling a total.", "", "| Inner card | Reader | Features |",
+              "|---|---|--:|"]
+        for r in sorted((c for c in cards if c["path"] in dupes),
+                        key=lambda r: -r["features"])[:15]:
+            L.append(f"| `{Path(r['path']).name}` | {r['detected']} | "
+                     f"{r['features']:,} |")
 
     # Quality flags — these are the reasons to distrust a number above.
     flagged = [r for r in ok if r["invalid_geom"] or r["out_of_range"]]

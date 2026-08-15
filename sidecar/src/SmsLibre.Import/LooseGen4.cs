@@ -34,6 +34,12 @@ public static class LooseGen4
         // A folder that still has its JD-Data tree is the plugin's job, not ours.
         if (Directory.Exists(Path.Combine(path, "JD-Data"))) return new List<string>();
 
+        // Nor is a folder *inside* one. `JD-Data/log/2023_Delongwest` holds .jdl
+        // files and looks exactly like a folder someone copied them into, but the
+        // card above it is already handled — claiming it imported the same data a
+        // second time, and a vault sweep counted 75 cards twice that way.
+        if (InsideCard(path)) return new List<string>();
+
         try
         {
             return Directory.EnumerateFiles(path, "*.jdl", SearchOption.TopDirectoryOnly)
@@ -41,6 +47,22 @@ public static class LooseGen4
                             .ToList();
         }
         catch { return new List<string>(); }
+    }
+
+    /// <summary>True when some ancestor is a John Deere card folder.</summary>
+    private static bool InsideCard(string path)
+    {
+        var dir = Directory.GetParent(path);
+        for (int i = 0; i < 8 && dir is not null; i++, dir = dir.Parent)
+        {
+            if (dir.Name.Equals("JD-Data", StringComparison.OrdinalIgnoreCase)) return true;
+            try
+            {
+                if (Directory.Exists(Path.Combine(dir.FullName, "JD-Data"))) return true;
+            }
+            catch { return false; }
+        }
+        return false;
     }
 
     /// <summary>
