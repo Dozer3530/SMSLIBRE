@@ -139,6 +139,7 @@ public static class ArchivedCard
                 // Try the likely roots and keep the first that yields anything.
                 string dir = temp;
                 var (l, b) = (new List<OperationLayer>(), new List<BoundaryFeature>());
+                int rxBefore = CardImporter.Prescriptions.Count;
                 foreach (var root in CandidateRoots(temp))
                 {
                     // Most candidates are not the card — the reader says so by
@@ -146,7 +147,11 @@ public static class ArchivedCard
                     // must not abandon the archive.
                     try { (l, b) = import(root); }
                     catch (NotSupportedException) { continue; }
-                    if (l.Count > 0 || b.Count > 0) { dir = root; break; }
+                    // A prescription counts as a find. Without this the search
+                    // ran on to the remaining roots, and since each sees the same
+                    // TASKDATA it collected the same zones again for every one.
+                    if (l.Count > 0 || b.Count > 0
+                        || CardImporter.Prescriptions.Count > rxBefore) { dir = root; break; }
                 }
                 if (l.Count == 0 && b.Count == 0 && IsPrescription(dir)) PrescriptionOnly++;
                 string job = Path.GetFileNameWithoutExtension(archive);

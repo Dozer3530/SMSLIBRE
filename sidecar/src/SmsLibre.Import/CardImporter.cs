@@ -8,12 +8,20 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace SmsLibre.Import;
 
 public static class CardImporter
 {
+    /// <summary>
+    /// Prescription zones found during the last Import. Kept beside the result
+    /// rather than folded into it: a rate plan is not logged work, and a caller
+    /// that conflates the two would map an intention as if it had happened.
+    /// </summary>
+    public static readonly List<PrescriptionZone> Prescriptions = new();
+
     /// <summary>
     /// Every reader that can handle a path: the ADAPT plugins first, then the
     /// formats we read ourselves. Ours are offered only when no plugin claims
@@ -74,6 +82,15 @@ public static class CardImporter
                           || (unclaimed && ArchivedCard.CanRead(path))))
             return ArchivedCard.Import(path, d => Import(host, d, null, depth + 1));
 
-        return host.ImportAll(path, adapt);
+        var result = host.ImportAll(path, adapt);
+
+        // A setup or prescription card yields no logged work; look for a rate
+        // plan before giving up on it.
+        if (result.Layers.Count == 0 && result.Boundaries.Count == 0)
+        {
+            try { Prescriptions.AddRange(PrescriptionReader.Read(path)); }
+            catch (IOException) { }
+        }
+        return result;
     }
 }

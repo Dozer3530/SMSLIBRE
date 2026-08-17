@@ -184,7 +184,8 @@ internal static class Program
                 List<BoundaryFeature> boundaries;
 
                 (layers, boundaries) = CardImporter.Import(host, path, pluginName);
-                if (layers.Count == 0 && boundaries.Count == 0)
+                var prescriptions = CardImporter.Prescriptions;
+                if (layers.Count == 0 && boundaries.Count == 0 && prescriptions.Count == 0)
                 {
                     Emit(new { ok = true, path, layers = Array.Empty<object>(),
                                archivesRead = ArchivedCard.ArchivesRead,
@@ -196,6 +197,51 @@ internal static class Program
                 var written = new List<object>();
                 using (var gpkg = new GeoPackageWriter(outGpkg))
                 {
+                    // Rate plans first: a card that carries one usually carries
+                    // nothing else, and it should not be buried under the
+                    // operation layers when it is.
+                    if (prescriptions.Count > 0)
+                    {
+                        var pFields = new List<GpkgField>
+                        {
+                            new("task", GpkgType.Text),
+                            new("field", GpkgType.Text),
+                            new("product", GpkgType.Text),
+                            new("rate", GpkgType.Double),
+                            new("unit", GpkgType.Text),
+                        };
+                        int np = gpkg.WritePolygonLayer("prescription_zones", pFields,
+                            prescriptions.Select(z =>
+                            {
+                                var pf = new GpkgPolygonFeature
+                                {
+                                    Values = new object?[]
+                                        { z.Task, z.Field, z.Product, z.Rate, z.Unit },
+                                };
+                                var poly = new GpkgPolygon();
+                                for (int i = 0; i < z.Rings.Count; i++)
+                                {
+                                    var ring = new GpkgRing();
+                                    ring.Points.AddRange(z.Rings[i]);
+                                    if (i == 0) poly.Exterior = ring; else poly.Interior.Add(ring);
+                                }
+                                pf.Polygons.Add(poly);
+                                return pf;
+                            }),
+                            description: "Planned application rates (not logged work)");
+
+                        Console.Error.WriteLine($"  prescription_zones: {np:N0} zone(s)");
+                        written.Add(new
+                        {
+                            table = "prescription_zones",
+                            operationType = "Prescription",
+                            points = np,
+                            field = prescriptions[0].Field,
+                            channels = new[] { new { column = "rate", name = "Target rate",
+                                                     unit = prescriptions[0].Unit } },
+                        });
+                    }
+
                     // Field boundaries first: a setup card may carry only these.
                     if (boundaries.Count > 0)
                     {
