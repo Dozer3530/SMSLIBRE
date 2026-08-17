@@ -26,6 +26,8 @@ public static class CardImporter
 
         if (RavenReader.CanRead(path))
             hits.Add(new PluginInfo(RavenReader.FormatName, "built-in", "SMSLIBRE"));
+        else if (RavenViperReader.CanRead(path))
+            hits.Add(new PluginInfo(RavenViperReader.FormatName, "built-in", "SMSLIBRE"));
         // Loose logs before archives: a folder often holds both the .jdl files
         // and a zip of the same logs, and reading what is already on disk beats
         // unpacking a copy of it.
@@ -59,6 +61,10 @@ public static class CardImporter
 
         if (named(RavenReader.FormatName) || (unclaimed && RavenReader.CanRead(path)))
             return (RavenReader.Import(path), new List<BoundaryFeature>());
+
+        if (named(RavenViperReader.FormatName)
+            || (unclaimed && RavenViperReader.CanRead(path)))
+            return (RavenViperReader.Import(path), new List<BoundaryFeature>());
 
         // Same order as Detect, so the import uses the reader detect promised.
         if (named(LooseGen4.FormatName) || (unclaimed && LooseGen4.CanRead(path)))
