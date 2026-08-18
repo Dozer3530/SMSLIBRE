@@ -41,6 +41,8 @@ public static class CardImporter
         // unpacking a copy of it.
         else if (LooseGen4.CanRead(path))
             hits.Add(new PluginInfo(LooseGen4.FormatName, "built-in", "SMSLIBRE"));
+        else if (LooseRcd.CanRead(path))
+            hits.Add(new PluginInfo(LooseRcd.FormatName, "built-in", "SMSLIBRE"));
         else if (ArchivedCard.CanRead(path))
             hits.Add(new PluginInfo(ArchivedCard.FormatName, "built-in", "SMSLIBRE"));
         return hits;
@@ -77,6 +79,9 @@ public static class CardImporter
         // Same order as Detect, so the import uses the reader detect promised.
         if (named(LooseGen4.FormatName) || (unclaimed && LooseGen4.CanRead(path)))
             return LooseGen4.Import(path, d => Import(host, d, null, depth + 1));
+
+        if (named(LooseRcd.FormatName) || (unclaimed && LooseRcd.CanRead(path)))
+            return LooseRcd.Import(path, d => Import(host, d, null, depth + 1));
 
         if (depth < 2 && (named(ArchivedCard.FormatName)
                           || (unclaimed && ArchivedCard.CanRead(path))))
