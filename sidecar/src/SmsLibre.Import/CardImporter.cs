@@ -66,8 +66,10 @@ public static class CardImporter
         // re-runs IsDataCardSupported across every loaded plugin and is slow on a
         // large card, so calling it here and again inside ImportAll would double
         // that cost on every import.
-        string? adapt = pluginName ?? host.Detect(path).FirstOrDefault()?.Name;
-        bool unclaimed = adapt is null;
+        var claims = pluginName is not null
+            ? new List<string> { pluginName }
+            : host.Detect(path).Select(h => h.Name).ToList();
+        bool unclaimed = claims.Count == 0;
 
         if (named(RavenReader.FormatName) || (unclaimed && RavenReader.CanRead(path)))
             return (RavenReader.Import(path), new List<BoundaryFeature>());
@@ -87,7 +89,26 @@ public static class CardImporter
                           || (unclaimed && ArchivedCard.CanRead(path))))
             return ArchivedCard.Import(path, d => Import(host, d, null, depth + 1));
 
-        var result = host.ImportAll(path, adapt);
+        // Try every plugin that claimed the path, not just the first. More than
+        // one can claim the same card and the first can legitimately produce
+        // nothing: the Brandt Seeding card carries a TASKDATA of guidance lines
+        // (ISOv4 claims it, imports nothing) beside a JD-Data tree holding
+        // millions of seeding points that ProtobufPlugins reads. First-wins left
+        // that card empty in three places. The second plugin only runs when the
+        // first came back empty, so the happy path costs nothing extra.
+        (List<OperationLayer> Layers, List<BoundaryFeature> Boundaries) result = (new(), new());
+        if (unclaimed)
+        {
+            result = host.ImportAll(path);   // throws the proper "no plugin" error
+        }
+        else
+        {
+            foreach (var name in claims)
+            {
+                result = host.ImportAll(path, name);
+                if (result.Layers.Count > 0 || result.Boundaries.Count > 0) break;
+            }
+        }
 
         // A setup or prescription card yields no logged work; look for a rate
         // plan before giving up on it.

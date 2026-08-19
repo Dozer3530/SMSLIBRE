@@ -72,7 +72,9 @@ public class RavenViperTests : IDisposable
         var layers = RavenViperReader.Import(dir);
         var layer = Assert.Single(layers);
 
-        Assert.Equal(new[] { "elevation", "speed", "distance" }, layer.Channels);
+        Assert.Equal(new[] { "elevation", "speed", "distance", "rate_applied",
+                             "rate_target", "sections_on", "heading", "cross_track" },
+                     layer.Channels);
         Assert.Equal(2, layer.Points.Count);
 
         var p = layer.Points[0];
@@ -81,6 +83,73 @@ public class RavenViperTests : IDisposable
         Assert.Equal(1030.30, p.Values[0]!.Value, 2);
         Assert.Equal(1.4, p.Values[1]!.Value, 3);
         Assert.Equal(49.4761, p.Values[2]!.Value, 3);
+        // No product, guidance or section record preceded this fix.
+        Assert.Null(p.Values[3]);
+        Assert.Null(p.Values[5]);
+    }
+
+    /// <summary>A type 111 product event: rates at offsets 18 and 22.</summary>
+    private static byte[] Product(float applied, float target)
+    {
+        var b = new byte[58];
+        BitConverter.GetBytes((ushort)58).CopyTo(b, 0);
+        BitConverter.GetBytes((ushort)111).CopyTo(b, 2);
+        BitConverter.GetBytes(applied).CopyTo(b, 18);
+        BitConverter.GetBytes(target).CopyTo(b, 22);
+        return b;
+    }
+
+    /// <summary>A type 156 guidance record: heading rad, speed, cross-track.</summary>
+    private static byte[] Guidance(float headingRad, float speed, float xte)
+    {
+        var b = new byte[20];
+        BitConverter.GetBytes((ushort)20).CopyTo(b, 0);
+        BitConverter.GetBytes((ushort)156).CopyTo(b, 2);
+        BitConverter.GetBytes(headingRad).CopyTo(b, 8);
+        BitConverter.GetBytes(speed).CopyTo(b, 12);
+        BitConverter.GetBytes(xte).CopyTo(b, 16);
+        return b;
+    }
+
+    /// <summary>A type 118 section record: two length-prefixed state arrays.</summary>
+    private static byte[] Sections(params byte[] states)
+    {
+        int len = 4 + 2 + 2 + states.Length + 2 + states.Length;
+        var b = new byte[len];
+        BitConverter.GetBytes((ushort)len).CopyTo(b, 0);
+        BitConverter.GetBytes((ushort)118).CopyTo(b, 2);
+        BitConverter.GetBytes((ushort)states.Length).CopyTo(b, 6);
+        states.CopyTo(b, 8);
+        BitConverter.GetBytes((ushort)states.Length).CopyTo(b, 8 + states.Length);
+        return b;
+    }
+
+    [Fact]
+    public void Carries_rates_guidance_and_sections_onto_the_following_fixes()
+    {
+        // The real values from the 2025 1T spraying job: 93.54 L/ha is exactly
+        // 10 US gal/ac, which is what pinned the unit.
+        string dir = Job("OLDS COLLEGE", "SMART FARM", "1T", "rates",
+            Position(1, 51.79, -114.08, 1030f, 1.4f, 1.0f),           // before any data
+            Product(93.5396f, 93.54f),
+            Guidance((float)Math.PI, 1.4f, -0.5f),
+            Sections(1, 1, 0, 1),
+            Position(2, 51.7901, -114.0801, 1030f, 1.4f, 2.4f),
+            Position(3, 51.7902, -114.0802, 1030f, 1.4f, 3.8f));       // values persist
+
+        var layer = RavenViperReader.Import(dir).Single();
+        Assert.Equal(3, layer.Points.Count);
+
+        Assert.Null(layer.Points[0].Values[3]);                        // no rate yet
+
+        var p = layer.Points[1];
+        Assert.Equal(93.5396, p.Values[3]!.Value, 3);                  // rate_applied
+        Assert.Equal(93.54, p.Values[4]!.Value, 3);                    // rate_target
+        Assert.Equal(3, p.Values[5]!.Value);                           // sections on
+        Assert.Equal(180.0, p.Values[6]!.Value, 3);                    // heading, degrees
+        Assert.Equal(-0.5, p.Values[7]!.Value, 3);                     // cross-track
+
+        Assert.Equal(93.5396, layer.Points[2].Values[3]!.Value, 3);    // carried forward
     }
 
     [Fact]

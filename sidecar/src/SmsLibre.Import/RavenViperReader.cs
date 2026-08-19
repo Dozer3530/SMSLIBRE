@@ -35,10 +35,27 @@
 // Decoding one gives a 2,640-point track over a 360 m x 200 m field at
 // 51.79 N, 114.08 W, 1,030 m altitude — the Smart Farm, which sits at 1,040 m.
 //
-// The per-channel values (record types 118, 155, 156 and 157, each carrying a
-// timestamp that lines up with the fixes) are NOT decoded yet: which DDI from
-// the pool each one carries has still to be established. So this reader gives
-// the track, elevation, speed and distance, and no agronomic rates.
+// The value records were identified by correlating candidate fields against
+// ground speed computed from the fixes, then checking magnitudes against the
+// DVP unit table in the pool:
+//
+//   type 111 (58 B)  product event, ~every 14 s: two floats at offsets 18 and
+//                    22 are ACTUAL and TARGET application rate. On the sample
+//                    job both read 93.540 - exactly 10 US gal/ac in L/ha, and
+//                    the DVP table confirms Raven stores SI and converts for
+//                    display. The pool declares no volume-rate DPD at all;
+//                    rates live only here. Ends with two lat/lon double pairs.
+//   type 156 (20 B)  guidance, 1 Hz: heading (radians, 0..2pi), speed (m/s,
+//                    correlation 1.00 against computed ground speed), and
+//                    cross-track error (m).
+//   type 118 (172 B) per-section work state: two length-prefixed byte arrays,
+//                    one entry per section (81 on the sample sprayer). The
+//                    count of non-zero entries in the first is sections on.
+//   type 155         attitude (roll/pitch, +-pi/2); 157 constant mode flags -
+//                    both left alone.
+//
+// Types 111 and 118 carry no timestamp; the stream is chronological, so their
+// values are carried forward onto every following position fix.
 
 using System;
 using System.Collections.Generic;
@@ -141,32 +158,53 @@ public static class RavenViperReader
             OperationType = "Raven",
             Description = Path.GetFileNameWithoutExtension(jobPath),
         };
-        layer.Channels.AddRange(new[] { "elevation", "speed", "distance" });
-        layer.Units.AddRange(new[] { "m", "m/s", "m" });
+        layer.Channels.AddRange(new[]
+        {
+            "elevation", "speed", "distance",
+            "rate_applied", "rate_target", "sections_on", "heading", "cross_track",
+        });
+        layer.Units.AddRange(new[] { "m", "m/s", "m", "L/ha", "L/ha", "", "deg", "m" });
 
         var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-        foreach (var (seconds, lat, lon, alt, speed, distance) in Positions(data))
+        foreach (var s in Samples(data))
         {
-            if (!Coordinates.IsPlausible(lon, lat)) continue;
+            if (!Coordinates.IsPlausible(s.Lon, s.Lat)) continue;
             layer.Points.Add(new LayerPoint
             {
-                Lon = lon,
-                Lat = lat,
+                Lon = s.Lon,
+                Lat = s.Lat,
                 // The counter is monotonic and one-per-second but its origin is
                 // not established, so it is offered as an offset rather than
                 // dressed up as a wall-clock time it may not be.
-                Timestamp = epoch.AddSeconds(seconds),
-                Values = new double?[] { alt, speed, distance },
+                Timestamp = epoch.AddSeconds(s.Seconds),
+                Values = new double?[]
+                {
+                    s.Alt, s.Speed, s.Distance,
+                    s.RateApplied, s.RateTarget, s.SectionsOn, s.Heading, s.CrossTrack,
+                },
             });
         }
         return layer;
     }
 
-    /// <summary>Every position fix in a .jdf, in file order.</summary>
-    private static IEnumerable<(uint Seconds, double Lat, double Lon,
-                                double Alt, double Speed, double Distance)>
-        Positions(byte[] d)
+    private sealed record Sample(
+        uint Seconds, double Lat, double Lon, double Alt, double Speed,
+        double Distance, double? RateApplied, double? RateTarget,
+        double? SectionsOn, double? Heading, double? CrossTrack);
+
+    private const int ProductRecord = 111;
+    private const int SectionRecord = 118;
+    private const int GuidanceRecord = 156;
+
+    /// <summary>
+    /// Every position fix in file order, each carrying the latest value from
+    /// the rate, guidance and section records that precede it in the stream.
+    /// </summary>
+    private static IEnumerable<Sample> Samples(byte[] d)
     {
+        double? rateApplied = null, rateTarget = null;
+        double? sectionsOn = null, heading = null, crossTrack = null;
+
         int off = 0;
         while (off + 4 <= d.Length)
         {
@@ -176,15 +214,51 @@ public static class RavenViperReader
             // framing is wrong; either way stop rather than loop or overrun.
             if (len < 4 || off + len > d.Length) yield break;
 
-            if (type == PositionRecord && len == PositionLength)
+            switch (type)
             {
-                uint seconds = BitConverter.ToUInt32(d, off + 4);
-                double lat = BitConverter.ToDouble(d, off + 8) * Deg;
-                double lon = BitConverter.ToDouble(d, off + 16) * Deg;
-                float alt = BitConverter.ToSingle(d, off + 24);
-                float speed = BitConverter.ToSingle(d, off + 28);
-                float dist = BitConverter.ToSingle(d, off + 32);
-                yield return (seconds, lat, lon, alt, speed, dist);
+                case ProductRecord when len >= 26:
+                {
+                    float applied = BitConverter.ToSingle(d, off + 18);
+                    float target = BitConverter.ToSingle(d, off + 22);
+                    if (float.IsFinite(applied)) rateApplied = applied;
+                    if (float.IsFinite(target)) rateTarget = target;
+                    break;
+                }
+                case GuidanceRecord when len >= 20:
+                {
+                    float hdg = BitConverter.ToSingle(d, off + 8);
+                    float xte = BitConverter.ToSingle(d, off + 16);
+                    if (float.IsFinite(hdg)) heading = hdg * Deg;
+                    if (float.IsFinite(xte)) crossTrack = xte;
+                    break;
+                }
+                case SectionRecord when len >= 8:
+                {
+                    // Two length-prefixed byte arrays; the first is one work
+                    // state per section. Only trusted when the lengths add up.
+                    int n1 = BitConverter.ToUInt16(d, off + 6);
+                    if (8 + n1 + 2 <= len)
+                    {
+                        int on = 0;
+                        for (int i = 0; i < n1; i++)
+                            if (d[off + 8 + i] != 0) on++;
+                        sectionsOn = on;
+                    }
+                    break;
+                }
+                case PositionRecord when len == PositionLength:
+                {
+                    uint seconds = BitConverter.ToUInt32(d, off + 4);
+                    double lat = BitConverter.ToDouble(d, off + 8) * Deg;
+                    double lon = BitConverter.ToDouble(d, off + 16) * Deg;
+                    float alt = BitConverter.ToSingle(d, off + 24);
+                    float speed = BitConverter.ToSingle(d, off + 28);
+                    float dist = BitConverter.ToSingle(d, off + 32);
+                    yield return new Sample(seconds, lat, lon, alt, speed, dist,
+                                            rateApplied, rateTarget, sectionsOn,
+                                            heading, crossTrack);
+                    break;
+                }
             }
             off += len;
         }
