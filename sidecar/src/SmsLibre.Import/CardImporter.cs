@@ -105,7 +105,18 @@ public static class CardImporter
         {
             foreach (var name in claims)
             {
-                result = host.ImportAll(path, name);
+                try
+                {
+                    result = host.ImportAll(path, name);
+                }
+                catch (FileNotFoundException ex) when (CardRepair.CanRepair(path, ex))
+                {
+                    // The card itself is missing a file (an orphaned .fdl whose
+                    // .fdd is gone, on the Saskler PreSeed cards). Retry from a
+                    // temp copy without the orphans rather than losing the ~140
+                    // intact documents beside them.
+                    result = CardRepair.Import(path, d => host.ImportAll(d, name));
+                }
                 if (result.Layers.Count > 0 || result.Boundaries.Count > 0) break;
             }
         }
