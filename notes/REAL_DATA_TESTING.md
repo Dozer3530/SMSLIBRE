@@ -15,29 +15,38 @@ It writes `analysis/vault/results.json` (the corpus the regression tests read)
 and `analysis/vault/COVERAGE.md` (the report). `--only-detected` re-imports just
 the claimed folders after a sidecar change; `--reuse-scan` skips the walk.
 
-## Headline
+## Headline (both drives, August 18 2026 sweep)
 
-**13,052 directories walked. 432 cards. 62,711,501 features across 16,689
-layers.** No invalid or out-of-range geometry survived import.
+Two drives swept end to end in one 5-hour run with all nine readers:
 
-| Outcome | Cards |
-|---|--:|
-| Imported with data | 232 |
-| Detected but empty | 189 |
-| Detected but failed | 11 |
-| No reader | 12,620 directories |
+| Drive | Dirs walked | Cards | Imported | Features |
+|---|--:|--:|--:|--:|
+| Smart Farm Vault | 13,455 | 797 | 547 | **81,614,258** |
+| 210600 STAAR | 9,228 | 116 | 82 | **67,377,366** |
 
-| Reader | Cards | Features | Max channels |
-|---|--:|--:|--:|
-| ProtobufPlugins (JD Gen4) | 102 | 46,739,121 | 1351 |
-| RCDPlugins (JD GS3/GS4) | 53 | 11,610,409 | 63 |
-| Card in an archive | 32 | 4,128,215 | 590 |
-| John Deere Gen4 logs (.jdl) | 12 | 2,460,216 | 1215 |
-| Raven Slingshot (.jdp) | 2 | 1,595,167 | 489 |
-| ISO v4 (ISOXML) | 28 | 1,549,997 | 102 |
-| ADMPlugin | 3 | 436,928 | 56 |
-| Trimble AgData | 0 | — | licence |
-| PrecisionPlanting | 0 | — | no real cards |
+No invalid or out-of-range geometry survived import on either drive. STAAR had
+**zero** import failures; the vault has 9, all previously known (1 Trimble
+licence, 3 Saskler PreSeed path errors, 5 Precision Planting drone-imagery
+false positives). The two chopper cards that always timed out imported with a
+2-hour budget: ~1,330 layers and 5.6-5.8M features each.
+
+The readers written from vault findings carried the second sweep: Raven Viper
+native jobs put 210 cards on the map, stranded RCD folders 77 (including the
+STAAR Tyson lentils card), archived cards grew to 59, and on STAAR a single
+archived-card folder held 50.5M features.
+
+### What still cannot import (the improvement backlog)
+
+Genuine gaps — data folders outside any imported card:
+
+| What | Where | Why |
+|---|---|---|
+| 18 folders of `.jdl` under a `JD-Data/log` the Deere plugin declines | vault, e.g. `Brandt Seeding\JD-Data\log4_Test_Test_Test` | card structure present but plugin returns nothing; LooseGen4 correctly stays out of intact trees |
+| `.bin` calibration files (`CalFiles`) | vault 2022 harvest | combine calibration, not spatial data — likely not importable by design |
+| `.db` folders | mostly image databases (crop-stage photos, OPI screenshots) | not machine data |
+| CNH Voyager2 native (`.fmd`/`.fld`, empty-stub TASKDATA) | both drives | no reader exists; route remains ISOXML export from the display |
+| Raven Viper channel values (rates) | 210 imported cards | track/elevation/speed/distance only until DDI record types 118/155/156/157 are decoded |
+| Point-grid prescriptions | 1 job | only polygon rate maps are parsed |
 
 ## What the sweep found
 
