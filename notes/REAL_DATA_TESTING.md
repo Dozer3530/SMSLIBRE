@@ -41,7 +41,7 @@ Genuine gaps — data folders outside any imported card:
 
 | What | Where | Why |
 |---|---|---|
-| 18 folders of `.jdl` under a `JD-Data/log` the Deere plugin declines | vault, e.g. `Brandt Seeding\JD-Data\log4_Test_Test_Test` | card structure present but plugin returns nothing; LooseGen4 correctly stays out of intact trees |
+| 18 folders of `.jdl` under a `JD-Data/log` the Deere plugin declines | vault, e.g. `Brandt Seeding/JD-Data/log/2024_Test_Test_Test` | card structure present but plugin returns nothing; LooseGen4 correctly stays out of intact trees |
 | `.bin` calibration files (`CalFiles`) | vault 2022 harvest | combine calibration, not spatial data — likely not importable by design |
 | `.db` folders | mostly image databases (crop-stage photos, OPI screenshots) | not machine data |
 | CNH Voyager2 native (`.fmd`/`.fld`, empty-stub TASKDATA) | both drives | no reader exists; route remains ISOXML export from the display |
