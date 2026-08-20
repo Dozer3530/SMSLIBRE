@@ -285,8 +285,14 @@ def test_candidate(exe: Path, path: str, out_dir: Path, timeout: int,
             return r
         r.detected = detected
 
-        safe = "".join(ch if ch.isalnum() else "_" for ch in path)[-90:]
-        gpkg = out_dir / f"{safe}.gpkg"
+        # The name must be unique per FULL path. Truncating to the tail made
+        # sibling copies collide: the vault holds three PreSeed cards whose
+        # last 90 characters are identical, and two workers importing "the
+        # same" gpkg concurrently died on a Windows sharing violation.
+        import hashlib
+        digest = hashlib.sha1(path.encode("utf-8")).hexdigest()[:10]
+        safe = "".join(ch if ch.isalnum() else "_" for ch in path)[-80:]
+        gpkg = out_dir / f"{safe}_{digest}.gpkg"
         gpkg.unlink(missing_ok=True)
 
         imp = run_sidecar(exe, ["import", path, str(gpkg)], timeout=timeout)
