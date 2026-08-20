@@ -63,7 +63,8 @@ vendor/
 
 # Vault sweep working files: multi-GB GeoPackages written and deleted per card,
 # plus the raw scan output. The report and results.json are committed by hand.
-analysis/vault*/*.gpkg
-analysis/vault*/scan.json
-analysis/vault*/run.log
-analysis/vault*/scan.log
+analysis/*/*.gpkg
+analysis/*/scan.json
+analysis/*/run.log
+analysis/*/scan.log
+analysis/sweep_all.log
