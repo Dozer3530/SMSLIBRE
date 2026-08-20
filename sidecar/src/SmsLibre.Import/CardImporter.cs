@@ -59,6 +59,12 @@ public static class CardImporter
     public static (List<OperationLayer> Layers, List<BoundaryFeature> Boundaries) Import(
         AdaptHost host, string path, string? pluginName = null, int depth = 0)
     {
+        // One import, one prescription list. The CLI runs one import per
+        // process so it never noticed, but a host that imports twice (the test
+        // suite does) would see the first card's zones appended to the second.
+        // Archives recurse back into this method, hence the depth guard.
+        if (depth == 0) Prescriptions.Clear();
+
         bool named(string format) =>
             string.Equals(pluginName, format, StringComparison.OrdinalIgnoreCase);
 

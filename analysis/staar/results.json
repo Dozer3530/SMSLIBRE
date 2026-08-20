@@ -601,24 +601,6 @@
   ]
  },
  {
-  "path": "G:/Shared drives/210600 STAAR\\2. Potential Projects-Grants\\Johnston Grain",
-  "detected": "",
-  "status": "not-detected",
-  "layers": 0,
-  "features": 0,
-  "max_channels": 0,
-  "operations": [],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 0.0,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".pdf"
-  ]
- },
- {
   "path": "G:/Shared drives/210600 STAAR\\6. Industry-Team Meetings\\Z - ARCHIVES 210600 STAAR - Industry-Team Meetings",
   "detected": "",
   "status": "not-detected",
@@ -1321,6 +1303,24 @@
   "exts": [
    ".txt",
    ".ini"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\Johnston Grain",
+  "detected": "",
+  "status": "not-detected",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 0.0,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".pdf"
   ]
  },
  {
@@ -18351,7 +18351,8 @@
   "error": "",
   "retried": false,
   "exts": [
-   ".docx"
+   ".docx",
+   ".pdf"
   ]
  },
  {
@@ -23384,7 +23385,7 @@
   "error": "",
   "retried": false,
   "exts": [
-   ".docx"
+   ".pdf"
   ]
  },
  {
@@ -35679,6 +35680,24 @@
   ]
  },
  {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3859 CNH Industrial\\2026 AFA Desiccant\\Pictures\\Pictures_Aug_19_Roy_Kinsella",
+  "detected": "",
+  "status": "not-detected",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 0.0,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".jpg"
+  ]
+ },
+ {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3885 Alberta Grains PGR 2025\\4. Data _ In season reporting\\Raw\\Triple H",
   "detected": "",
   "status": "not-detected",
@@ -40195,6 +40214,24 @@
   ]
  },
  {
+  "path": "G:/Shared drives/210600 STAAR\\8. Libraries\\4. Photos for General Use\\2026\\PPSN Marginal Land\\18\\Trail Cam",
+  "detected": "",
+  "status": "not-detected",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 0.0,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".jpg"
+  ]
+ },
+ {
   "path": "G:/Shared drives/210600 STAAR\\8. Libraries\\4. Photos for General Use\\2024\\Marginal Land\\Bushnell Cameras\\Zone 2",
   "detected": "",
   "status": "not-detected",
@@ -42610,6 +42647,24 @@
   "retried": false,
   "exts": [
    ".jpg"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\13. OFPE - AB & Sask Jan 2026 - Mar 2028\\1. Admin\\1. Agreements\\AB Grains and SWDC\\archived",
+  "detected": "",
+  "status": "not-detected",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 0.0,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".docx"
   ]
  },
  {
@@ -61033,6 +61088,24 @@
   ]
  },
  {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3983 ALI - DUC  VR Impact on Wetlands 2026\\2026\\4. Data _ InSeason reporting\\Site Info\\As Applied Rates and Maps",
+  "detected": "",
+  "status": "not-detected",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 0.0,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".zip"
+  ]
+ },
+ {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3983 ALI - DUC  VR Impact on Wetlands 2026\\2026\\4. Data _ InSeason reporting\\Water Samples\\April 28 2026 ALS Results Package",
   "detected": "",
   "status": "not-detected",
@@ -62085,6 +62158,42 @@
    ".asc",
    ".gz",
    ".json"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\8. Libraries\\4. Photos for General Use\\2026\\PPSN Marginal Land\\18\\Trail Cam\\100EK113",
+  "detected": "",
+  "status": "not-detected",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 0.0,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".jpg"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\8. Libraries\\4. Photos for General Use\\2026\\PPSN Marginal Land\\18\\Trail Cam\\101EK113",
+  "detected": "",
+  "status": "not-detected",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 0.0,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".jpg"
   ]
  },
  {
@@ -63204,7 +63313,8 @@
   "error": "",
   "retried": false,
   "exts": [
-   ".gsheet"
+   ".gsheet",
+   ".gdoc"
   ]
  },
  {
@@ -87697,7 +87807,8 @@
   "error": "",
   "retried": false,
   "exts": [
-   ".pdf"
+   ".pdf",
+   ".xls"
   ]
  },
  {
@@ -87738,24 +87849,6 @@
   ]
  },
  {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\11. FCC - Farm Credit Canada\\2026\\AIVA 2026\\A4000 FCC Sustainability - AgExpert 2026\\4. Data and In Season Reporting\\2026_Sustainability_SE14\\SE14_Jul_7_2026",
-  "detected": "",
-  "status": "not-detected",
-  "layers": 0,
-  "features": 0,
-  "max_channels": 0,
-  "operations": [],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 0.0,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".pdf"
-  ]
- },
- {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\11. FCC - Farm Credit Canada\\2026\\AIVA 2026\\A4000 FCC Sustainability - AgExpert 2026\\4. Data and In Season Reporting\\2026_Sustainability_SE14\\SE14_July_30_2026",
   "detected": "",
   "status": "not-detected",
@@ -87770,7 +87863,8 @@
   "error": "",
   "retried": false,
   "exts": [
-   ".pdf"
+   ".pdf",
+   ".xls"
   ]
  },
  {
@@ -101254,6 +101348,24 @@
   ]
  },
  {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A4006 AUG Signal\\2026\\4. Data_in Season Reporting\\2026\\Weather Data\\Field 18\\Aug 15",
+  "detected": "",
+  "status": "not-detected",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 0.0,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".csv"
+  ]
+ },
+ {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A4006 AUG Signal\\2026\\4. Data_in Season Reporting\\2026\\Weather Data\\Field 19\\June 20",
   "detected": "",
   "status": "not-detected",
@@ -101383,6 +101495,24 @@
  },
  {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A4006 AUG Signal\\2026\\4. Data_in Season Reporting\\2026\\Weather Data\\Field 19\\Aug 08",
+  "detected": "",
+  "status": "not-detected",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 0.0,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".csv"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A4006 AUG Signal\\2026\\4. Data_in Season Reporting\\2026\\Weather Data\\Field 19\\Aug 15",
   "detected": "",
   "status": "not-detected",
   "layers": 0,
@@ -118505,6 +118635,42 @@
   ]
  },
  {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\11. FCC - Farm Credit Canada\\2025\\A3771 FCC - Land Restoration 2025\\4. Data _ In Season Reporting\\2026 Season\\Pictures\\August 19, 2026\\18",
+  "detected": "",
+  "status": "not-detected",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 0.0,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".jpg"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\11. FCC - Farm Credit Canada\\2025\\A3771 FCC - Land Restoration 2025\\4. Data _ In Season Reporting\\2026 Season\\Pictures\\August 19, 2026\\Delong",
+  "detected": "",
+  "status": "not-detected",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 0.0,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".jpg"
+  ]
+ },
+ {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\11. FCC - Farm Credit Canada\\2025\\A3771 FCC - Land Restoration 2025\\4. Data _ In Season Reporting\\2025 Season\\Potential Sites Assessments (June 17, 2025)\\Pictures\\June 17 - Initial Land Assessments",
   "detected": "",
   "status": "not-detected",
@@ -121156,6 +121322,25 @@
   ]
  },
  {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\11. FCC - Farm Credit Canada\\2026\\AIVA 2026\\A4000 FCC Sustainability - AgExpert 2026\\4. Data and In Season Reporting\\2026_Sustainability_1516\\1516_Aug_13_2026\\Lab_Results",
+  "detected": "",
+  "status": "not-detected",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 0.0,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".pdf",
+   ".xls"
+  ]
+ },
+ {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\11. FCC - Farm Credit Canada\\2026\\AIVA 2026\\A4000 FCC Sustainability - AgExpert 2026\\4. Data and In Season Reporting\\2026_Sustainability_19\\19_Jun_19_2026\\Lab_Results",
   "detected": "",
   "status": "not-detected",
@@ -121215,6 +121400,25 @@
  },
  {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\11. FCC - Farm Credit Canada\\2026\\AIVA 2026\\A4000 FCC Sustainability - AgExpert 2026\\4. Data and In Season Reporting\\2026_Sustainability_19\\19_July_31_2026\\Lab_Results",
+  "detected": "",
+  "status": "not-detected",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 0.0,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".pdf",
+   ".xls"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\11. FCC - Farm Credit Canada\\2026\\AIVA 2026\\A4000 FCC Sustainability - AgExpert 2026\\4. Data and In Season Reporting\\2026_Sustainability_19\\19_Aug_13_2026\\Lab_Results",
   "detected": "",
   "status": "not-detected",
   "layers": 0,
@@ -121310,6 +121514,25 @@
   ]
  },
  {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\11. FCC - Farm Credit Canada\\2026\\AIVA 2026\\A4000 FCC Sustainability - AgExpert 2026\\4. Data and In Season Reporting\\2026_Sustainability_18\\18_Aug_13_2026\\Lab_Results",
+  "detected": "",
+  "status": "not-detected",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 0.0,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".pdf",
+   ".xls"
+  ]
+ },
+ {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\11. FCC - Farm Credit Canada\\2026\\AIVA 2026\\A4000 FCC Sustainability - AgExpert 2026\\4. Data and In Season Reporting\\2026_Sustainability_E10\\E10_Jun_16_2026\\Lab_results",
   "detected": "",
   "status": "not-detected",
@@ -121383,7 +121606,8 @@
   "error": "",
   "retried": false,
   "exts": [
-   ".xls"
+   ".xls",
+   ".pdf"
   ]
  },
  {
@@ -174530,7 +174754,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 10.400460004806519,
+  "seconds": 4.645197629928589,
   "error": "",
   "retried": false,
   "exts": [
@@ -174550,7 +174774,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 4.422724723815918,
+  "seconds": 5.474670648574829,
   "error": "",
   "retried": false,
   "exts": [
@@ -174570,7 +174794,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 16.260318517684937,
+  "seconds": 12.152459621429443,
   "error": "",
   "retried": false,
   "exts": [
@@ -174589,7 +174813,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 18.2221200466156,
+  "seconds": 12.17391061782837,
   "error": "",
   "retried": false,
   "exts": [
@@ -174609,30 +174833,12 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 12.112098217010498,
+  "seconds": 5.125636100769043,
   "error": "",
   "retried": false,
   "exts": [
    ".zip",
    ".eml"
-  ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\7. Multi-Project Data\\2022\\General Information (NDVI, Equipment data, etc)\\Field 19\\n20 Application Maps\\Perscriptions",
-  "detected": "Card in an archive (.zip/.jdp)",
-  "status": "empty",
-  "layers": 0,
-  "features": 0,
-  "max_channels": 0,
-  "operations": [],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 11.137508153915405,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".zip"
   ]
  },
  {
@@ -174648,13 +174854,31 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 16.060345888137817,
+  "seconds": 8.251299858093262,
   "error": "",
   "retried": false,
   "exts": [
    ".zip",
    ".gdoc",
    ".pdf"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\7. Multi-Project Data\\2022\\General Information (NDVI, Equipment data, etc)\\Field 19\\n20 Application Maps\\Perscriptions",
+  "detected": "Card in an archive (.zip/.jdp)",
+  "status": "empty",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 7.759204626083374,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".zip"
   ]
  },
  {
@@ -174668,7 +174892,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 3.426173686981201,
+  "seconds": 4.6088011264801025,
   "error": "",
   "retried": false,
   "exts": [
@@ -174691,7 +174915,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 20.693174362182617,
+  "seconds": 30.0733163356781,
   "error": "",
   "retried": false,
   "exts": [
@@ -174714,7 +174938,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 11.620784997940063,
+  "seconds": 14.947796821594238,
   "error": "",
   "retried": false,
   "exts": [
@@ -174736,54 +174960,11 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 12,
-  "seconds": 37.27922701835632,
+  "seconds": 48.187265396118164,
   "error": "",
   "retried": false,
   "exts": [
    ".txt"
-  ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3859 CNH Industrial\\2026 AFA Desiccant\\Tyson lentils\\lentils 2026 ash old",
-  "detected": "John Deere RCD folder (.rcd)",
-  "status": "ok",
-  "layers": 83,
-  "features": 722535,
-  "max_channels": 40,
-  "operations": [
-   "Harvesting"
-  ],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 8,
-  "seconds": 72.5299506187439,
-  "error": "",
-  "retried": false,
-  "exts": []
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_022_Klassen_Merle_Linden_AB\\00_Inbox\\Trial_022_OFPE",
-  "detected": "RCDPlugins",
-  "status": "empty",
-  "layers": 0,
-  "features": 0,
-  "max_channels": 0,
-  "operations": [],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 2.8265490531921387,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".zip",
-   ".prj",
-   ".shp",
-   ".shx",
-   ".dbf",
-   ".pdf",
-   ".jpg",
-   ".db"
   ]
  },
  {
@@ -174801,11 +174982,36 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 14.082353591918945,
+  "seconds": 19.175336360931396,
   "error": "",
   "retried": false,
   "exts": [
    ".zip"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_022_Klassen_Merle_Linden_AB\\00_Inbox\\Trial_022_OFPE",
+  "detected": "RCDPlugins",
+  "status": "empty",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 4.7994771003723145,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".zip",
+   ".prj",
+   ".shp",
+   ".shx",
+   ".dbf",
+   ".pdf",
+   ".jpg",
+   ".db"
   ]
  },
  {
@@ -174819,30 +175025,12 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 2.970486640930176,
+  "seconds": 4.870424270629883,
   "error": "",
   "retried": false,
   "exts": [
    ".zip",
    ".pdf"
-  ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_019_Salewski_Kurt_Wilkie_SK\\03_Data_Collection\\1_Seeding_Data_Raw",
-  "detected": "Raven Viper 4 job (.jdp)",
-  "status": "empty",
-  "layers": 0,
-  "features": 0,
-  "max_channels": 0,
-  "operations": [],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 3.0812854766845703,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".jdp"
   ]
  },
  {
@@ -174858,7 +175046,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 5.207472562789917,
+  "seconds": 6.808210134506226,
   "error": "",
   "retried": false,
   "exts": [
@@ -174868,6 +175056,45 @@
    ".prj",
    ".shp",
    ".pdf"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_019_Salewski_Kurt_Wilkie_SK\\03_Data_Collection\\1_Seeding_Data_Raw",
+  "detected": "Raven Viper 4 job (.jdp)",
+  "status": "empty",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 5.827754735946655,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".jdp"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_017_Watrin_Lee_ Edmonton_AB\\03_Data_Collection\\1_Seeding_Data_Raw",
+  "detected": "Card in an archive (.zip/.jdp)",
+  "status": "ok",
+  "layers": 2,
+  "features": 1448374,
+  "max_channels": 36,
+  "operations": [
+   "SowingAndPlanting",
+   "Tillage"
+  ],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 64.61292171478271,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".zip"
   ]
  },
  {
@@ -174881,7 +175108,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 4.069429397583008,
+  "seconds": 4.54726767539978,
   "error": "",
   "retried": false,
   "exts": [
@@ -174900,7 +175127,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 4.653841733932495,
+  "seconds": 4.584299564361572,
   "error": "",
   "retried": false,
   "exts": [
@@ -174920,7 +175147,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 4.6213538646698,
+  "seconds": 4.59559965133667,
   "error": "",
   "retried": false,
   "exts": [
@@ -174942,7 +175169,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 5.246873617172241,
+  "seconds": 6.984255313873291,
   "error": "",
   "retried": false,
   "exts": [
@@ -174958,14 +175185,14 @@
   "status": "ok",
   "layers": 1,
   "features": 8503,
-  "max_channels": 3,
+  "max_channels": 8,
   "operations": [
    "Raven"
   ],
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 4.788201808929443,
+  "seconds": 5.077601909637451,
   "error": "",
   "retried": false,
   "exts": [
@@ -174987,31 +175214,10 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 12.271142721176147,
+  "seconds": 19.794357776641846,
   "error": "",
   "retried": false,
   "exts": []
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_017_Watrin_Lee_ Edmonton_AB\\03_Data_Collection\\1_Seeding_Data_Raw",
-  "detected": "Card in an archive (.zip/.jdp)",
-  "status": "ok",
-  "layers": 2,
-  "features": 1448374,
-  "max_channels": 36,
-  "operations": [
-   "SowingAndPlanting",
-   "Tillage"
-  ],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 57.82905602455139,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".zip"
-  ]
  },
  {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\University of SK - PPSN\\3. Literature _ Background_Data\\Yield_File_Collection_As_Of_1Apr2025\\OC_SmartFarm_SK\\NW11_GMS_NW_11_24_29_W2\\2023\\NW11_GMS_Harvest_Sept272023_Part1",
@@ -175027,7 +175233,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 11.85023808479309,
+  "seconds": 21.98992395401001,
   "error": "",
   "retried": false,
   "exts": []
@@ -175046,12 +175252,30 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 39,
-  "seconds": 23.28986954689026,
+  "seconds": 32.09262037277222,
   "error": "",
   "retried": false,
   "exts": [
    ".txt"
   ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3859 CNH Industrial\\2026 AFA Desiccant\\Tyson lentils\\lentils 2026 ash old",
+  "detected": "John Deere RCD folder (.rcd)",
+  "status": "ok",
+  "layers": 83,
+  "features": 722535,
+  "max_channels": 40,
+  "operations": [
+   "Harvesting"
+  ],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 8,
+  "seconds": 240.08054327964783,
+  "error": "",
+  "retried": false,
+  "exts": []
  },
  {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_006_Hartzler_Devin_Didsbury_AB\\03_Data_Collection\\3_Yield_Data_Raw",
@@ -175067,7 +175291,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 30,
-  "seconds": 396.54530453681946,
+  "seconds": 582.8876321315765,
   "error": "",
   "retried": false,
   "exts": [
@@ -175094,7 +175318,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 51,
-  "seconds": 37.0445294380188,
+  "seconds": 38.597108364105225,
   "error": "",
   "retried": false,
   "exts": [
@@ -175115,7 +175339,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 15,
-  "seconds": 10.71718454360962,
+  "seconds": 13.0872220993042,
   "error": "",
   "retried": false,
   "exts": [
@@ -175136,7 +175360,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 41,
-  "seconds": 386.4294226169586,
+  "seconds": 605.7852604389191,
   "error": "",
   "retried": false,
   "exts": [
@@ -175157,7 +175381,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 38,
-  "seconds": 398.42033338546753,
+  "seconds": 604.6513829231262,
   "error": "",
   "retried": false,
   "exts": [
@@ -175178,7 +175402,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 15,
-  "seconds": 79.9509346485138,
+  "seconds": 121.3533775806427,
   "error": "",
   "retried": false,
   "exts": [
@@ -175199,7 +175423,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 26,
-  "seconds": 20.934430837631226,
+  "seconds": 26.28195023536682,
   "error": "",
   "retried": false,
   "exts": [
@@ -175220,7 +175444,47 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 9,
-  "seconds": 344.3265075683594,
+  "seconds": 514.578063249588,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".txt"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3859 CNH Industrial\\2025 AFA Desiccant\\Kinsella JD S680 Combine Data",
+  "detected": "RCDPlugins",
+  "status": "ok",
+  "layers": 498,
+  "features": 998329,
+  "max_channels": 36,
+  "operations": [
+   "Boundary",
+   "Harvesting"
+  ],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 25,
+  "seconds": 1259.2881495952606,
+  "error": "",
+  "retried": false,
+  "exts": []
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3885 Alberta Grains PGR 2025\\4. Data _ In season reporting\\Raw\\Goldridge\\Yield_Data\\HC 4 NO 3\\1H0X910XEP0825304_09032025",
+  "detected": "ProtobufPlugins",
+  "status": "ok",
+  "layers": 93,
+  "features": 106997,
+  "max_channels": 1033,
+  "operations": [
+   "DataCollection",
+   "Harvesting"
+  ],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 75,
+  "seconds": 99.62042379379272,
   "error": "",
   "retried": false,
   "exts": [
@@ -175241,28 +175505,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 3,
-  "seconds": 283.9700005054474,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".txt"
-  ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3885 Alberta Grains PGR 2025\\4. Data _ In season reporting\\Raw\\Goldridge\\Yield_Data\\HC 4 NO 3\\1H0X910XEP0825304_09032025",
-  "detected": "ProtobufPlugins",
-  "status": "ok",
-  "layers": 93,
-  "features": 106997,
-  "max_channels": 1033,
-  "operations": [
-   "DataCollection",
-   "Harvesting"
-  ],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 75,
-  "seconds": 78.7580053806305,
+  "seconds": 434.70703315734863,
   "error": "",
   "retried": false,
   "exts": [
@@ -175283,50 +175526,11 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 12,
-  "seconds": 17.147886514663696,
+  "seconds": 24.293378353118896,
   "error": "",
   "retried": false,
   "exts": [
    ".txt"
-  ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3885 Alberta Grains PGR 2025\\4. Data _ In season reporting\\Raw\\Goldridge\\Yield_Data\\HC 4 NO 3\\1H0X910XEP0825304_09022025",
-  "detected": "ProtobufPlugins",
-  "status": "ok",
-  "layers": 45,
-  "features": 292816,
-  "max_channels": 1033,
-  "operations": [
-   "DataCollection",
-   "Harvesting"
-  ],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 302.48662781715393,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".txt"
-  ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_001_Gatez_Blaine_Crossfield_AB\\02_Trial_Design\\4_Guidance_Lines\\TASKDATA",
-  "detected": "ISO v4 Plugin",
-  "status": "empty",
-  "layers": 0,
-  "features": 0,
-  "max_channels": 0,
-  "operations": [],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 5.2521069049835205,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".xml"
   ]
  },
  {
@@ -175343,7 +175547,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 14.538893222808838,
+  "seconds": 22.68669867515564,
   "error": "",
   "retried": false,
   "exts": [
@@ -175353,23 +175557,22 @@
   ]
  },
  {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3859 CNH Industrial\\2025 AFA Desiccant\\Kinsella JD S680 Combine Data",
-  "detected": "RCDPlugins",
-  "status": "ok",
-  "layers": 498,
-  "features": 998329,
-  "max_channels": 36,
-  "operations": [
-   "Boundary",
-   "Harvesting"
-  ],
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_001_Gatez_Blaine_Crossfield_AB\\02_Trial_Design\\4_Guidance_Lines\\TASKDATA",
+  "detected": "ISO v4 Plugin",
+  "status": "empty",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
   "invalid_geom": 0,
   "out_of_range": 0,
-  "static_layers": 25,
-  "seconds": 934.4401521682739,
+  "static_layers": 0,
+  "seconds": 7.202256917953491,
   "error": "",
   "retried": false,
-  "exts": []
+  "exts": [
+   ".xml"
+  ]
  },
  {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_002_Ellis_Gordon_Olds_AB\\02_Trial_Design\\4_Guidance_Lines\\Guidance Line",
@@ -175384,7 +175587,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 11.932321786880493,
+  "seconds": 20.07881760597229,
   "error": "",
   "retried": false,
   "exts": [
@@ -175393,6 +175596,28 @@
    ".shx",
    ".dbf",
    ".zip"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_007_MacFarquhar_Cam_Cremona_AB\\03_Data_Collection\\1_Seeding_Data_Raw\\TASKDATA",
+  "detected": "ISO v4 Plugin",
+  "status": "ok",
+  "layers": 8,
+  "features": 32159,
+  "max_channels": 31,
+  "operations": [
+   "Boundary",
+   "Unknown"
+  ],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 4,
+  "seconds": 29.71588659286499,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".xml",
+   ".bin"
   ]
  },
  {
@@ -175408,7 +175633,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 13.07304072380066,
+  "seconds": 19.14992117881775,
   "error": "",
   "retried": false,
   "exts": []
@@ -175426,95 +175651,30 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 11.640707015991211,
+  "seconds": 17.107850790023804,
   "error": "",
   "retried": false,
   "exts": []
  },
  {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_007_MacFarquhar_Cam_Cremona_AB\\03_Data_Collection\\1_Seeding_Data_Raw\\TASKDATA",
-  "detected": "ISO v4 Plugin",
-  "status": "ok",
-  "layers": 8,
-  "features": 32159,
-  "max_channels": 31,
-  "operations": [
-   "Boundary",
-   "Unknown"
-  ],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 4,
-  "seconds": 22.624048233032227,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".xml",
-   ".bin"
-  ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_053_Ellis_Gordon_Olds_AB\\03_Data_Collection\\1_Seeding_Data_Raw\\TASKDATA",
-  "detected": "ISO v4 Plugin",
-  "status": "ok",
-  "layers": 7,
-  "features": 788503,
-  "max_channels": 83,
-  "operations": [
-   "Boundary",
-   "SowingAndPlanting",
-   "Tillage"
-  ],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 42.45712351799011,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".xml",
-   ".bin",
-   ".dbf",
-   ".shx",
-   ".shp"
-  ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_026_Cartwright_Connor_High_River_AB\\00_Inbox\\Trial_026_OFPE\\JD4600",
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3885 Alberta Grains PGR 2025\\4. Data _ In season reporting\\Raw\\Goldridge\\Yield_Data\\HC 4 NO 3\\1H0X910XEP0825304_09022025",
   "detected": "ProtobufPlugins",
   "status": "ok",
-  "layers": 1,
-  "features": 1,
-  "max_channels": 3,
+  "layers": 45,
+  "features": 292816,
+  "max_channels": 1033,
   "operations": [
-   "Boundary"
+   "DataCollection",
+   "Harvesting"
   ],
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 7.0555033683776855,
-  "error": "",
-  "retried": false,
-  "exts": []
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_025_Waldenberger_Chris_Marquis_SK\\00_Inbox\\Trial_025_OFPE\\TASKDATA",
-  "detected": "ISO v4 Plugin",
-  "status": "ok",
-  "layers": 1,
-  "features": 1,
-  "max_channels": 3,
-  "operations": [
-   "Boundary"
-  ],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 5.438380479812622,
+  "seconds": 475.9281666278839,
   "error": "",
   "retried": false,
   "exts": [
-   ".xml"
+   ".txt"
   ]
  },
  {
@@ -175531,7 +175691,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 64.15848875045776,
+  "seconds": 125.98949217796326,
   "error": "",
   "retried": false,
   "exts": [
@@ -175553,12 +175713,50 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 64.67055535316467,
+  "seconds": 120.31759476661682,
   "error": "",
   "retried": false,
   "exts": [
    ".xml",
    ".bin"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_026_Cartwright_Connor_High_River_AB\\00_Inbox\\Trial_026_OFPE\\JD4600",
+  "detected": "ProtobufPlugins",
+  "status": "ok",
+  "layers": 1,
+  "features": 1,
+  "max_channels": 3,
+  "operations": [
+   "Boundary"
+  ],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 9.266934633255005,
+  "error": "",
+  "retried": false,
+  "exts": []
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_025_Waldenberger_Chris_Marquis_SK\\00_Inbox\\Trial_025_OFPE\\TASKDATA",
+  "detected": "ISO v4 Plugin",
+  "status": "ok",
+  "layers": 1,
+  "features": 1,
+  "max_channels": 3,
+  "operations": [
+   "Boundary"
+  ],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 7.873591184616089,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".xml"
   ]
  },
  {
@@ -175572,7 +175770,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 5.166959047317505,
+  "seconds": 9.587228059768677,
   "error": "",
   "retried": false,
   "exts": [
@@ -175591,7 +175789,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 5.224665880203247,
+  "seconds": 10.3931725025177,
   "error": "",
   "retried": false,
   "exts": [
@@ -175610,7 +175808,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 5.32714056968689,
+  "seconds": 10.977293729782104,
   "error": "",
   "retried": false,
   "exts": [
@@ -175629,10 +175827,36 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 5.264504909515381,
+  "seconds": 9.746586084365845,
   "error": "",
   "retried": false,
   "exts": []
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_053_Ellis_Gordon_Olds_AB\\03_Data_Collection\\1_Seeding_Data_Raw\\TASKDATA",
+  "detected": "ISO v4 Plugin",
+  "status": "ok",
+  "layers": 7,
+  "features": 788503,
+  "max_channels": 83,
+  "operations": [
+   "Boundary",
+   "SowingAndPlanting",
+   "Tillage"
+  ],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 65.50292539596558,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".xml",
+   ".bin",
+   ".dbf",
+   ".shx",
+   ".shp"
+  ]
  },
  {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\Z - ARCHIVES 210600 STAAR - Projects-Grants\\A3524 Trochu Motors Precision Seeding\\2024\\4. Data _ In season reporting\\SMS\\Ideal combine\\241007_204349_exported_Cam_Bluck_Canola\\TASKDATA",
@@ -175648,7 +175872,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 6,
-  "seconds": 25.651824951171875,
+  "seconds": 32.75374984741211,
   "error": "",
   "retried": false,
   "exts": [
@@ -175670,7 +175894,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 26,
-  "seconds": 53.02838611602783,
+  "seconds": 65.13072943687439,
   "error": "",
   "retried": false,
   "exts": [
@@ -175692,7 +175916,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 16.22506046295166,
+  "seconds": 20.853479146957397,
   "error": "",
   "retried": false,
   "exts": [
@@ -175702,6 +175926,47 @@
    ".cpg",
    ".shx",
    ".qmd"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_007_MacFarquhar_Cam_Cremona_AB\\03_Data_Collection\\1_Seeding_Data_Raw\\250509R1.cn1\\xml",
+  "detected": "ISO v4 Plugin",
+  "status": "empty",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 6.14044189453125,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".xml"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_002_Ellis_Gordon_Olds_AB\\03_Data_Collection\\2_Seeding_Data_Processed\\Seeding\\TASKDATA",
+  "detected": "ISO v4 Plugin",
+  "status": "ok",
+  "layers": 22,
+  "features": 1475673,
+  "max_channels": 82,
+  "operations": [
+   "Boundary",
+   "SowingAndPlanting",
+   "Tillage"
+  ],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 15,
+  "seconds": 105.26375365257263,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".xml",
+   ".bin"
   ]
  },
  {
@@ -175719,51 +175984,12 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 15,
-  "seconds": 71.70966649055481,
+  "seconds": 110.06821751594543,
   "error": "",
   "retried": false,
   "exts": [
    ".xml",
    ".bin"
-  ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_007_MacFarquhar_Cam_Cremona_AB\\03_Data_Collection\\1_Seeding_Data_Raw\\250509R1.cn1\\xml",
-  "detected": "ISO v4 Plugin",
-  "status": "empty",
-  "layers": 0,
-  "features": 0,
-  "max_channels": 0,
-  "operations": [],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 4.557147026062012,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".xml"
-  ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3885 Alberta Grains PGR 2025\\4. Data _ In season reporting\\Raw\\Goldridge\\Yield_Data\\HC 4 NO 4\\1H0X910XKP0825244_09022025",
-  "detected": "ProtobufPlugins",
-  "status": "ok",
-  "layers": 54,
-  "features": 286937,
-  "max_channels": 1033,
-  "operations": [
-   "DataCollection",
-   "Harvesting"
-  ],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 270.4650688171387,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".txt"
   ]
  },
  {
@@ -175779,33 +176005,28 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 10.895473003387451,
+  "seconds": 16.29263710975647,
   "error": "",
   "retried": false,
   "exts": []
  },
  {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_002_Ellis_Gordon_Olds_AB\\03_Data_Collection\\2_Seeding_Data_Processed\\Seeding\\TASKDATA",
-  "detected": "ISO v4 Plugin",
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_013_Johnson_Scott_Caroline_AB\\03_Data_Collection\\1_Seeding_Data_Raw\\Seeding\\Me_2 Lazy 2_SE 18, Hyway_1",
+  "detected": "RCDPlugins",
   "status": "ok",
-  "layers": 22,
-  "features": 1475673,
-  "max_channels": 82,
+  "layers": 2,
+  "features": 20355,
+  "max_channels": 36,
   "operations": [
-   "Boundary",
-   "SowingAndPlanting",
-   "Tillage"
+   "Harvesting"
   ],
   "invalid_geom": 0,
   "out_of_range": 0,
-  "static_layers": 15,
-  "seconds": 68.99032473564148,
+  "static_layers": 0,
+  "seconds": 19.649827003479004,
   "error": "",
   "retried": false,
-  "exts": [
-   ".xml",
-   ".bin"
-  ]
+  "exts": []
  },
  {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_026_Cartwright_Connor_High_River_AB\\00_Inbox\\Trial_026_OFPE\\4600\\TASKDATA",
@@ -175820,7 +176041,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 5.726836204528809,
+  "seconds": 9.235799551010132,
   "error": "",
   "retried": false,
   "exts": [
@@ -175839,7 +176060,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 4.012040376663208,
+  "seconds": 6.580497741699219,
   "error": "",
   "retried": false,
   "exts": [
@@ -175854,22 +176075,25 @@
   ]
  },
  {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_013_Johnson_Scott_Caroline_AB\\03_Data_Collection\\1_Seeding_Data_Raw\\Seeding\\Me_2 Lazy 2_SE 18, Hyway_1",
-  "detected": "RCDPlugins",
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3885 Alberta Grains PGR 2025\\4. Data _ In season reporting\\Raw\\Goldridge\\Yield_Data\\HC 4 NO 4\\1H0X910XKP0825244_09022025",
+  "detected": "ProtobufPlugins",
   "status": "ok",
-  "layers": 2,
-  "features": 20355,
-  "max_channels": 36,
+  "layers": 54,
+  "features": 286937,
+  "max_channels": 1033,
   "operations": [
+   "DataCollection",
    "Harvesting"
   ],
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 13.441725730895996,
+  "seconds": 435.3640184402466,
   "error": "",
   "retried": false,
-  "exts": []
+  "exts": [
+   ".txt"
+  ]
  },
  {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3743 CanN2ONet -UGuelph\\4. Data _ In season reporting\\Backgound\\Historical Data Package\\19-20241119T182324Z-001\\19\\2023\\5. Chemical Applications (pre-seed, Herbicide, Fungicide, Desiccant, post seed applications)\\Desiccant",
@@ -175882,7 +176106,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 3.87111234664917,
+  "seconds": 8.735259294509888,
   "error": "",
   "retried": false,
   "exts": [
@@ -175903,7 +176127,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 4.003635883331299,
+  "seconds": 6.4592835903167725,
   "error": "",
   "retried": false,
   "exts": [
@@ -175919,39 +176143,18 @@
   "status": "ok",
   "layers": 1,
   "features": 8503,
-  "max_channels": 3,
+  "max_channels": 8,
   "operations": [
    "Raven"
   ],
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 4.170176029205322,
+  "seconds": 6.737039804458618,
   "error": "",
   "retried": false,
   "exts": [
    ".jdp"
-  ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_001_Gatez_Blaine_Crossfield_AB\\03_Data_Collection\\3_Yield_Data_Raw\\Trial_001_Yield\\requestedFiles (3)\\1H0S680-3224864  _09062024",
-  "detected": "ProtobufPlugins",
-  "status": "ok",
-  "layers": 6,
-  "features": 11786,
-  "max_channels": 1329,
-  "operations": [
-   "DataCollection",
-   "Harvesting"
-  ],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 3,
-  "seconds": 24.48308300971985,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".txt"
   ]
  },
  {
@@ -175969,7 +176172,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 72,
-  "seconds": 88.73623204231262,
+  "seconds": 121.70197868347168,
   "error": "",
   "retried": false,
   "exts": [
@@ -175977,20 +176180,20 @@
   ]
  },
  {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3885 Alberta Grains PGR 2025\\4. Data _ In season reporting\\Raw\\Goldridge\\Supporting_info\\Gold Ridge Plot\\Plot_Application\\As_Applied\\1N0412RXHN0224724_06042025",
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_001_Gatez_Blaine_Crossfield_AB\\03_Data_Collection\\3_Yield_Data_Raw\\Trial_001_Yield\\requestedFiles (3)\\1H0S680-3224864  _09062024",
   "detected": "ProtobufPlugins",
   "status": "ok",
-  "layers": 4,
-  "features": 144417,
-  "max_channels": 1188,
+  "layers": 6,
+  "features": 11786,
+  "max_channels": 1329,
   "operations": [
    "DataCollection",
-   "Fertilizing"
+   "Harvesting"
   ],
   "invalid_geom": 0,
   "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 91.70542335510254,
+  "static_layers": 3,
+  "seconds": 40.11694288253784,
   "error": "",
   "retried": false,
   "exts": [
@@ -176011,7 +176214,28 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 11,
-  "seconds": 42.66131663322449,
+  "seconds": 61.656092405319214,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".txt"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3885 Alberta Grains PGR 2025\\4. Data _ In season reporting\\Raw\\Goldridge\\Supporting_info\\Gold Ridge Plot\\Plot_Application\\As_Applied\\1N0412RXHN0224724_06042025",
+  "detected": "ProtobufPlugins",
+  "status": "ok",
+  "layers": 4,
+  "features": 144417,
+  "max_channels": 1188,
+  "operations": [
+   "DataCollection",
+   "Fertilizing"
+  ],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 137.06818151474,
   "error": "",
   "retried": false,
   "exts": [
@@ -176031,7 +176255,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 6.877351522445679,
+  "seconds": 11.312044143676758,
   "error": "",
   "retried": false,
   "exts": []
@@ -176049,10 +176273,31 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 8.396032810211182,
+  "seconds": 9.212671995162964,
   "error": "",
   "retried": false,
   "exts": []
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_001_Gatez_Blaine_Crossfield_AB\\03_Data_Collection\\3_Yield_Data_Raw\\Trial_001_Yield\\requestedFiles (3)\\1H0S680-3224864  _09092024",
+  "detected": "ProtobufPlugins",
+  "status": "ok",
+  "layers": 124,
+  "features": 76146,
+  "max_channels": 1329,
+  "operations": [
+   "DataCollection",
+   "Harvesting"
+  ],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 112,
+  "seconds": 193.12778639793396,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".txt"
+  ]
  },
  {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3743 CanN2ONet -UGuelph\\4. Data _ In season reporting\\Backgound\\Historical Data Package\\19-20241119T182324Z-001\\19\\2023\\3. Seeding (Seed and Fertilizer - Broadcast or in-row)\\Field 18, 19, 20E Seeding\\TASKDATA",
@@ -176067,7 +176312,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 2,
-  "seconds": 40.329734325408936,
+  "seconds": 50.25273585319519,
   "error": "",
   "retried": false,
   "exts": [
@@ -176089,7 +176334,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 68.10120868682861,
+  "seconds": 106.36393189430237,
   "error": "",
   "retried": false,
   "exts": [
@@ -176110,7 +176355,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 14.15421438217163,
+  "seconds": 22.78225827217102,
   "error": "",
   "retried": false,
   "exts": []
@@ -176128,31 +176373,10 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 10.909938097000122,
+  "seconds": 19.25458312034607,
   "error": "",
   "retried": false,
   "exts": []
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_001_Gatez_Blaine_Crossfield_AB\\03_Data_Collection\\3_Yield_Data_Raw\\Trial_001_Yield\\requestedFiles (3)\\1H0S680-3224864  _09092024",
-  "detected": "ProtobufPlugins",
-  "status": "ok",
-  "layers": 124,
-  "features": 76146,
-  "max_channels": 1329,
-  "operations": [
-   "DataCollection",
-   "Harvesting"
-  ],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 112,
-  "seconds": 147.69495034217834,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".txt"
-  ]
  },
  {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3743 CanN2ONet -UGuelph\\4. Data _ In season reporting\\Backgound\\Historical Data Package\\19-20241119T182324Z-001\\19\\2023\\6. Harvest (Grain, Silage, Hay, Straw)\\19_Harvest_2023_RawData\\Harvesting_19_9660STS combine",
@@ -176167,7 +176391,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 1,
-  "seconds": 14.082828521728516,
+  "seconds": 24.637632846832275,
   "error": "",
   "retried": false,
   "exts": []
@@ -176185,7 +176409,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 12.04613208770752,
+  "seconds": 17.776548147201538,
   "error": "",
   "retried": false,
   "exts": []
@@ -176203,7 +176427,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 12.815261363983154,
+  "seconds": 16.193543434143066,
   "error": "",
   "retried": false,
   "exts": []
@@ -176222,30 +176446,12 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 22.61960458755493,
+  "seconds": 31.506189823150635,
   "error": "",
   "retried": false,
   "exts": [
    ".txt"
   ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3743 CanN2ONet -UGuelph\\4. Data _ In season reporting\\Backgound\\Historical Data Package\\19-20241119T182324Z-001\\19\\2023\\6. Harvest (Grain, Silage, Hay, Straw)\\19_Harvest_2023_RawData\\Harvesting_19_9660STS combine_4",
-  "detected": "RCDPlugins",
-  "status": "ok",
-  "layers": 1,
-  "features": 7910,
-  "max_channels": 32,
-  "operations": [
-   "Harvesting"
-  ],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 11.149415254592896,
-  "error": "",
-  "retried": false,
-  "exts": []
  },
  {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3743 CanN2ONet -UGuelph\\4. Data _ In season reporting\\Backgound\\Historical Data Package\\19-20241119T182324Z-001\\19\\2023\\6. Harvest (Grain, Silage, Hay, Straw)\\19_Harvest_2023_RawData\\Harvesting_19_9660STS combine_7",
@@ -176260,7 +176466,25 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 11.82413625717163,
+  "seconds": 20.76091241836548,
+  "error": "",
+  "retried": false,
+  "exts": []
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\A3743 CanN2ONet -UGuelph\\4. Data _ In season reporting\\Backgound\\Historical Data Package\\19-20241119T182324Z-001\\19\\2023\\6. Harvest (Grain, Silage, Hay, Straw)\\19_Harvest_2023_RawData\\Harvesting_19_9660STS combine_4",
+  "detected": "RCDPlugins",
+  "status": "ok",
+  "layers": 1,
+  "features": 7910,
+  "max_channels": 32,
+  "operations": [
+   "Harvesting"
+  ],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 18.051741123199463,
   "error": "",
   "retried": false,
   "exts": []
@@ -176278,7 +176502,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 11.54281759262085,
+  "seconds": 18.96008825302124,
   "error": "",
   "retried": false,
   "exts": []
@@ -176297,7 +176521,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 3,
-  "seconds": 29.806191205978394,
+  "seconds": 40.5251829624176,
   "error": "",
   "retried": false,
   "exts": [
@@ -176315,7 +176539,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 18.503983736038208,
+  "seconds": 22.172283411026,
   "error": "",
   "retried": false,
   "exts": [
@@ -176336,7 +176560,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 63,
-  "seconds": 84.43544793128967,
+  "seconds": 117.99586725234985,
   "error": "",
   "retried": false,
   "exts": [
@@ -176357,7 +176581,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 43,
-  "seconds": 129.43911123275757,
+  "seconds": 192.695641040802,
   "error": "",
   "retried": false,
   "exts": [
@@ -176379,25 +176603,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 99,
-  "seconds": 631.3062634468079,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".txt"
-  ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_002_Ellis_Gordon_Olds_AB\\03_Data_Collection\\3_Yield_Data_Raw\\Harvest\\Gord Elllis\\requestedFiles\\1H0S780STJ0800331_09052024",
-  "detected": "ProtobufPlugins",
-  "status": "empty",
-  "layers": 0,
-  "features": 0,
-  "max_channels": 0,
-  "operations": [],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 20.679181575775146,
+  "seconds": 1061.5292384624481,
   "error": "",
   "retried": false,
   "exts": [
@@ -176418,7 +176624,25 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 127,
-  "seconds": 457.9426591396332,
+  "seconds": 648.1869766712189,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".txt"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_002_Ellis_Gordon_Olds_AB\\03_Data_Collection\\3_Yield_Data_Raw\\Harvest\\Gord Elllis\\requestedFiles\\1H0S780STJ0800331_09052024",
+  "detected": "ProtobufPlugins",
+  "status": "empty",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 24.206392288208008,
   "error": "",
   "retried": false,
   "exts": [
@@ -176436,49 +176660,12 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 11.739099264144897,
+  "seconds": 13.981785297393799,
   "error": "",
   "retried": false,
   "exts": [
    ".txt"
   ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_002_Ellis_Gordon_Olds_AB\\03_Data_Collection\\3_Yield_Data_Raw\\Harvest\\Gord Elllis\\requestedFiles\\1H0X910XKN0820722_09052024",
-  "detected": "ProtobufPlugins",
-  "status": "ok",
-  "layers": 167,
-  "features": 409636,
-  "max_channels": 1039,
-  "operations": [
-   "DataCollection",
-   "Harvesting"
-  ],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 92,
-  "seconds": 441.45590806007385,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".txt"
-  ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\ZZ_Retired_Folders\\2. Devin Hartzler_Retired\\1. DIFM Data_Done\\DIFM output\\USB-2\\requestedFiles\\Browns_EastUREA",
-  "detected": "RCDPlugins",
-  "status": "empty",
-  "layers": 0,
-  "features": 0,
-  "max_channels": 0,
-  "operations": [],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 0,
-  "seconds": 5.134279012680054,
-  "error": "",
-  "retried": false,
-  "exts": []
  },
  {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\ZZ_Retired_Folders\\2. Devin Hartzler_Retired\\1. DIFM Data_Done\\DIFM output\\USB-2\\requestedFiles\\Work_Setup_SEEDING_20240503_1116",
@@ -176493,7 +176680,23 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 7.0620667934417725,
+  "seconds": 10.313052892684937,
+  "error": "",
+  "retried": false,
+  "exts": []
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\ZZ_Retired_Folders\\2. Devin Hartzler_Retired\\1. DIFM Data_Done\\DIFM output\\USB-2\\requestedFiles\\Browns_EastUREA",
+  "detected": "RCDPlugins",
+  "status": "empty",
+  "layers": 0,
+  "features": 0,
+  "max_channels": 0,
+  "operations": [],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 0,
+  "seconds": 7.676116228103638,
   "error": "",
   "retried": false,
   "exts": []
@@ -176509,10 +176712,31 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 4.890710353851318,
+  "seconds": 6.90418553352356,
   "error": "",
   "retried": false,
   "exts": []
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_002_Ellis_Gordon_Olds_AB\\03_Data_Collection\\3_Yield_Data_Raw\\Harvest\\Gord Elllis\\requestedFiles\\1H0X910XKN0820722_09052024",
+  "detected": "ProtobufPlugins",
+  "status": "ok",
+  "layers": 167,
+  "features": 409636,
+  "max_channels": 1039,
+  "operations": [
+   "DataCollection",
+   "Harvesting"
+  ],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 92,
+  "seconds": 642.723313331604,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".txt"
+  ]
  },
  {
   "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\ZZ_Retired_Folders\\2. Devin Hartzler_Retired\\1. DIFM Data_Done\\DIFM output\\USB-2\\requestedFiles\\ab-lines-farmer-applicator_urea-2024",
@@ -176525,7 +176749,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 4.821702718734741,
+  "seconds": 6.2019312381744385,
   "error": "",
   "retried": false,
   "exts": []
@@ -176544,7 +176768,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 478.81749200820923,
+  "seconds": 694.667149066925,
   "error": "",
   "retried": false,
   "exts": [
@@ -176565,7 +176789,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 12,
-  "seconds": 128.59197521209717,
+  "seconds": 160.42705821990967,
   "error": "",
   "retried": false,
   "exts": [
@@ -176586,7 +176810,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 6,
-  "seconds": 160.16574788093567,
+  "seconds": 207.7151792049408,
   "error": "",
   "retried": false,
   "exts": [
@@ -176607,7 +176831,28 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 31,
-  "seconds": 69.50749588012695,
+  "seconds": 95.47753477096558,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".txt"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_003_Hartzler_Devin_Didsbury_AB\\03_Data_Collection\\3_Yield_Data_Raw\\Harvest\\Triple H (Hartzler)\\requestedFiles\\Triple H Farms_Browns_SE 16-30-2-W5 E_1",
+  "detected": "ProtobufPlugins",
+  "status": "ok",
+  "layers": 45,
+  "features": 174103,
+  "max_channels": 810,
+  "operations": [
+   "DataCollection",
+   "Harvesting"
+  ],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 17,
+  "seconds": 152.61307573318481,
   "error": "",
   "retried": false,
   "exts": [
@@ -176628,7 +176873,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 23,
-  "seconds": 212.9031445980072,
+  "seconds": 288.8878140449524,
   "error": "",
   "retried": false,
   "exts": [
@@ -176646,7 +176891,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 4.197479724884033,
+  "seconds": 6.638813018798828,
   "error": "",
   "retried": false,
   "exts": [
@@ -176664,32 +176909,11 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 3.7030272483825684,
+  "seconds": 6.555727243423462,
   "error": "",
   "retried": false,
   "exts": [
    ".2020"
-  ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_003_Hartzler_Devin_Didsbury_AB\\03_Data_Collection\\3_Yield_Data_Raw\\Harvest\\Triple H (Hartzler)\\requestedFiles\\Triple H Farms_Browns_SE 16-30-2-W5 E_1",
-  "detected": "ProtobufPlugins",
-  "status": "ok",
-  "layers": 45,
-  "features": 174103,
-  "max_channels": 810,
-  "operations": [
-   "DataCollection",
-   "Harvesting"
-  ],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 17,
-  "seconds": 114.82750153541565,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".txt"
   ]
  },
  {
@@ -176703,7 +176927,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 3.8193867206573486,
+  "seconds": 6.631083965301514,
   "error": "",
   "retried": false,
   "exts": [
@@ -176721,7 +176945,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 4.470310926437378,
+  "seconds": 6.813112020492554,
   "error": "",
   "retried": false,
   "exts": [
@@ -176740,7 +176964,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 3.8914990425109863,
+  "seconds": 5.852704286575317,
   "error": "",
   "retried": false,
   "exts": [
@@ -176758,7 +176982,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 3.7628138065338135,
+  "seconds": 5.9427735805511475,
   "error": "",
   "retried": false,
   "exts": [
@@ -176776,7 +177000,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 5.1738221645355225,
+  "seconds": 9.662447929382324,
   "error": "",
   "retried": false,
   "exts": [
@@ -176795,7 +177019,7 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 0,
-  "seconds": 3.656510591506958,
+  "seconds": 7.4495861530303955,
   "error": "",
   "retried": false,
   "exts": [
@@ -176818,11 +177042,32 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 20,
-  "seconds": 412.65993452072144,
+  "seconds": 569.7283625602722,
   "error": "",
   "retried": false,
   "exts": [
    ".txt"
+  ]
+ },
+ {
+  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_005_Ellis_Gordon_Olds_AB\\03_Data_Collection\\3_Yield_Data_Raw\\HarvestDataRaw\\john deere\\2025\\10_24",
+  "detected": "John Deere Gen4 logs (.jdl)",
+  "status": "ok",
+  "layers": 337,
+  "features": 1564915,
+  "max_channels": 1056,
+  "operations": [
+   "DataCollection",
+   "Harvesting"
+  ],
+  "invalid_geom": 0,
+  "out_of_range": 0,
+  "static_layers": 58,
+  "seconds": 1823.9505581855774,
+  "error": "",
+  "retried": false,
+  "exts": [
+   ".jdl"
   ]
  },
  {
@@ -176840,32 +177085,11 @@
   "invalid_geom": 0,
   "out_of_range": 0,
   "static_layers": 132,
-  "seconds": 2418.313997745514,
+  "seconds": 5624.268265247345,
   "error": "",
   "retried": false,
   "exts": [
    ".zip"
-  ]
- },
- {
-  "path": "G:/Shared drives/210600 STAAR\\1. PROJECTS-GRANTS\\12. OFPE - Alberta Grains 2024-25\\A3604 On Farm Precision Exp (OFPE) 2024-25\\7. OFPE_Project\\0001_Active_Trials\\Trial_005_Ellis_Gordon_Olds_AB\\03_Data_Collection\\3_Yield_Data_Raw\\HarvestDataRaw\\john deere\\2025\\10_24",
-  "detected": "John Deere Gen4 logs (.jdl)",
-  "status": "ok",
-  "layers": 337,
-  "features": 1564915,
-  "max_channels": 1056,
-  "operations": [
-   "DataCollection",
-   "Harvesting"
-  ],
-  "invalid_geom": 0,
-  "out_of_range": 0,
-  "static_layers": 58,
-  "seconds": 830.352367401123,
-  "error": "",
-  "retried": false,
-  "exts": [
-   ".jdl"
   ]
  }
 ]

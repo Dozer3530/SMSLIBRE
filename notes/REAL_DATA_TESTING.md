@@ -15,25 +15,27 @@ It writes `analysis/vault/results.json` (the corpus the regression tests read)
 and `analysis/vault/COVERAGE.md` (the report). `--only-detected` re-imports just
 the claimed folders after a sidecar change; `--reuse-scan` skips the walk.
 
-## Headline (both drives, August 18 2026 sweep)
-
-Two drives swept end to end in one 5-hour run with all nine readers:
+## Headline (both drives, August 19 2026 sweep — all nine readers final)
 
 | Drive | Dirs walked | Cards | Imported | Features |
 |---|--:|--:|--:|--:|
-| Smart Farm Vault | 13,455 | 797 | 547 | **81,614,258** |
-| 210600 STAAR | 9,228 | 116 | 82 | **67,377,366** |
+| Smart Farm Vault | 13,458 | 800 | 553 | **108,864,986** |
+| 210600 STAAR | 9,240 | 116 | 82 | **67,377,366** |
 
-No invalid or out-of-range geometry survived import on either drive. STAAR had
-**zero** import failures; the vault has 9, all previously known (1 Trimble
-licence, 3 Saskler PreSeed path errors, 5 Precision Planting drone-imagery
-false positives). The two chopper cards that always timed out imported with a
-2-hour budget: ~1,330 layers and 5.6-5.8M features each.
+No invalid or out-of-range geometry survived import on either drive. STAAR has
+zero import failures. The vault has exactly six, none of them format gaps:
+one Trimble card (licence pending) and five Precision Planting claims that are
+drone-imagery folders, not machine data.
 
-The readers written from vault findings carried the second sweep: Raven Viper
-native jobs put 210 cards on the map, stranded RCD folders 77 (including the
-STAAR Tyson lentils card), archived cards grew to 59, and on STAAR a single
-archived-card folder held 50.5M features.
+Landmarks of this sweep:
+- **Brandt Seeding**, empty in every earlier sweep, imports from all three of
+  its vault locations at 7,049,181 features each — multi-claimant routing
+  (ISOv4 claims its guidance-line TASKDATA and yields nothing; ProtobufPlugins
+  gets the next turn and reads the JD-Data tree).
+- **All three PreSeed cards** import at 2,054,311 features each after
+  CardRepair skips the one orphaned .fdl whose .fdd is missing.
+- **Raven Viper jobs carry agronomy**: rate_applied/rate_target (L/ha),
+  sections_on, heading and cross_track decoded from the native records.
 
 ### What still cannot import (the improvement backlog)
 

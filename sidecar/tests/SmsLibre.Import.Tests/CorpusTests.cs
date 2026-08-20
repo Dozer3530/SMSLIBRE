@@ -123,12 +123,14 @@ public class CorpusRegressionTests
         Skip.If(!CardImporter.Detect(host, path).Any(),
                 $"{reader} unavailable here (licence or plugins missing)");
         var (layers, boundaries) = CardImporter.Import(host, path);
+        int rx = CardImporter.Prescriptions.Count;
 
-        // Boundaries are features too. Counting only points failed every
-        // setup card in the corpus — a field boundary package has no point
-        // layers at all, which is not the same as importing nothing.
-        int features = layers.Sum(l => l.Points.Count) + boundaries.Count;
-        Assert.True(layers.Count + boundaries.Count > 0,
+        // Boundaries and prescription zones are features too. Counting only
+        // points failed every setup card in the corpus: a boundary package has
+        // no point layers, and a Jobs folder of rate maps yields 15,555 zones
+        // through CardImporter.Prescriptions — neither is importing nothing.
+        int features = layers.Sum(l => l.Points.Count) + boundaries.Count + rx;
+        Assert.True(layers.Count + boundaries.Count + rx > 0,
                     $"{reader}: nothing imported (was {expectedLayers} layer(s))");
         Assert.True(features > 0, $"{reader}: no features (was {expectedFeatures:N0})");
 

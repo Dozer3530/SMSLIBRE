@@ -2,14 +2,14 @@
 
 Root: `G:/Shared drives/210600 STAAR`
 
-Walked **9,228 directories**. A reader claimed **116** of them, which collapse to **116 distinct cards** once nested parent/child hits are merged.
+Walked **9,240 directories**. A reader claimed **116** of them, which collapse to **116 distinct cards** once nested parent/child hits are merged.
 
 | Outcome | Cards |
 |---|--:|
 | Imported with data | 82 |
 | Detected but empty | 34 |
 | Detected but failed | 0 |
-| No reader | 9,112 directories |
+| No reader | 9,124 directories |
 
 Total features imported: **67,377,366** across **4,249** layers.
 
@@ -24,94 +24,94 @@ Total features imported: **67,377,366** across **4,249** layers.
 | PrecisionPlanting.ADAPT.2020 | 0 | 0 | 0 | 0 | 5 | 0 |
 | ProtobufPlugins | 37 | 2,275 | 6,707,435 | 1329 | 3 | 0 |
 | RCDPlugins | 17 | 523 | 1,165,093 | 36 | 12 | 0 |
-| Raven Viper 4 job (.jdp) | 2 | 2 | 17,006 | 3 | 7 | 0 |
+| Raven Viper 4 job (.jdp) | 2 | 2 | 17,006 | 8 | 7 | 0 |
 
 ## Cards that imported
 
 | Card | Reader | Layers | Features | Operations | s |
 |---|---|--:|--:|---|--:|
-| `1_Seeding_Data_Raw` | Card in an archive (.zip/.jdp) | 721 | 47,177,523 | Boundary, SowingAndPlanting, Unknown | 2418 |
-| `10_24` | John Deere Gen4 logs (.jdl) | 337 | 1,564,915 | DataCollection, Harvesting | 830 |
-| `TASKDATA` | ISO v4 Plugin | 22 | 1,475,673 | Boundary, SowingAndPlanting, Tillage | 72 |
-| `TASKDATA` | ISO v4 Plugin | 22 | 1,475,673 | Boundary, SowingAndPlanting, Tillage | 69 |
-| `1_Seeding_Data_Raw` | Card in an archive (.zip/.jdp) | 2 | 1,448,374 | SowingAndPlanting, Tillage | 58 |
-| `Kinsella JD S680 Combine Data` | RCDPlugins | 498 | 998,329 | Boundary, Harvesting | 934 |
-| `TASKDATA` | ISO v4 Plugin | 7 | 788,503 | Boundary, SowingAndPlanting, Tillage | 42 |
-| `lentils 2026 ash old` | John Deere RCD folder (.rcd) | 83 | 722,535 | Harvesting | 73 |
-| `CaseIH 555-1 Cody_05082025` | ProtobufPlugins | 204 | 696,867 | DataCollection, Fertilizing, SowingAndPlanting | 631 |
-| `1_Seeding_Data_Raw` | Card in an archive (.zip/.jdp) | 2 | 695,950 | SowingAndPlanting, Tillage | 21 |
-| `TASKDATA` | ISO v4 Plugin | 2 | 695,950 | SowingAndPlanting, Tillage | 68 |
-| `TASKDATA` | ISO v4 Plugin | 2 | 663,408 | SowingAndPlanting, Tillage | 65 |
-| `TASKDATA` | ISO v4 Plugin | 2 | 660,018 | SowingAndPlanting, Tillage | 64 |
-| `Triple H Farms_Curts_Chalack_N 16-30-2-W5_4` | ProtobufPlugins | 182 | 620,979 | DataCollection, Harvesting | 398 |
-| `Triple H Farms_Curts_Chalack_N 16-30-2-W5_3` | ProtobufPlugins | 177 | 606,789 | DataCollection, Harvesting | 386 |
-| `TASKDATA` | ISO v4 Plugin | 45 | 550,219 | Harvesting | 53 |
-| `3_Yield_Data_Raw` | Card in an archive (.zip/.jdp) | 147 | 453,565 | DataCollection, Harvesting | 397 |
-| `1_Seeding_Data_Raw` | Card in an archive (.zip/.jdp) | 3 | 440,817 | Boundary, SowingAndPlanting, Tillage | 14 |
-| `1H0X910XKN0820722_09042024` | ProtobufPlugins | 72 | 436,218 | DataCollection, Harvesting | 479 |
-| `1H0X910XTN0820720_09042024` | ProtobufPlugins | 86 | 414,808 | DataCollection, Harvesting | 413 |
-| `1H0X910XKN0820722_09052024` | ProtobufPlugins | 167 | 409,636 | DataCollection, Harvesting | 441 |
-| `1H0X910XTN0820720_09052024` | ProtobufPlugins | 199 | 392,062 | DataCollection, Harvesting | 458 |
-| `1H0X910XAP0825282_09022025` | ProtobufPlugins | 60 | 296,301 | DataCollection, Harvesting | 344 |
-| `1H0X910XEP0825304_09022025` | ProtobufPlugins | 45 | 292,816 | DataCollection, Harvesting | 302 |
-| `1H0X910XKP0825244_09022025` | ProtobufPlugins | 54 | 286,937 | DataCollection, Harvesting | 270 |
-| `1H0X910XCP0825313_09022025` | ProtobufPlugins | 48 | 282,744 | DataCollection, Harvesting | 284 |
-| `1_Seeding_Data_Raw` | Card in an archive (.zip/.jdp) | 3 | 275,673 | Boundary, SowingAndPlanting, Tillage | 12 |
-| `Triple H Farms_Browns_SE 16-30-2-W5 E_3` | ProtobufPlugins | 74 | 269,843 | DataCollection, Harvesting | 213 |
-| `TASKDATA` | ISO v4 Plugin | 19 | 247,339 | Boundary, Harvesting | 26 |
-| `CaseIH 555-1 Cody_05092025` | ProtobufPlugins | 96 | 195,060 | DataCollection, Fertilizing, SowingAndPlanting | 89 |
-| `Triple H Farms_Browns_SE 16-30-2-W5 W` | ProtobufPlugins | 45 | 186,644 | DataCollection, Harvesting | 160 |
-| `_19_1H0S780SCJ0800500_3` | ProtobufPlugins | 76 | 180,707 | DataCollection, Harvesting | 129 |
-| `Triple H Farms_Browns_SE 16-30-2-W5 E_2` | ProtobufPlugins | 42 | 174,435 | DataCollection, Harvesting | 129 |
-| `Triple H Farms_Browns_SE 16-30-2-W5 E_1` | ProtobufPlugins | 45 | 174,103 | DataCollection, Harvesting | 115 |
-| `1N0412RXHN0224724_06042025` | ProtobufPlugins | 4 | 144,417 | DataCollection, Fertilizing | 92 |
-| `1H0X910XEP0825304_09032025` | ProtobufPlugins | 93 | 106,997 | DataCollection, Harvesting | 79 |
-| `_19_1H0S780SCJ0800500_2` | ProtobufPlugins | 75 | 104,007 | DataCollection, Harvesting | 84 |
-| `Triple H Farms_Browns_SE 16-30-2-W5 E` | ProtobufPlugins | 49 | 86,887 | DataCollection, Harvesting | 70 |
-| `TASKDATA` | ISO v4 Plugin | 8 | 80,413 | Unknown | 40 |
-| `1H0S680-3224864  _09092024` | ProtobufPlugins | 124 | 76,146 | DataCollection, Harvesting | 148 |
-| `1H0X910XAP0825282_09032025` | ProtobufPlugins | 30 | 59,208 | DataCollection, Harvesting | 80 |
-| `_19_1H0S780SCJ0800500_1` | ProtobufPlugins | 9 | 45,004 | DataCollection, Harvesting | 30 |
-| `Triple H Farms_Curts_Chalack_N 16-30-2-W5` | ProtobufPlugins | 16 | 39,390 | DataCollection, Fertilizing | 37 |
-| `Field 13` | Card in an archive (.zip/.jdp) | 3 | 32,676 | DataCollection, Harvesting | 15 |
-| `TASKDATA` | ISO v4 Plugin | 8 | 32,159 | Boundary, Unknown | 23 |
-| `1H0S680-3224864  _09082024` | ProtobufPlugins | 17 | 26,969 | DataCollection, Harvesting | 43 |
-| `Triple H Farms_Curts_Chalack_N 16-30-2-W5_2` | ProtobufPlugins | 48 | 25,758 | DataCollection, Harvesting | 23 |
-| `_19_1H0S780SCJ0800500` | ProtobufPlugins | 3 | 23,806 | DataCollection, Harvesting | 23 |
-| `Triple H Farms_Curts_Chalack_N 16-30-2-W5_1` | ProtobufPlugins | 60 | 23,239 | DataCollection, Harvesting | 37 |
-| `Me_2 Lazy 2_SE 18, Hyway_1` | RCDPlugins | 2 | 20,355 | Harvesting | 13 |
-| `NW11_GMS_Harvest_Sept272023_Part2` | RCDPlugins | 1 | 18,232 | Harvesting | 12 |
-| `H0S680S795167 DR _2lzy2stk__092720250229` | RCDPlugins | 2 | 16,839 | Harvesting | 13 |
-| `H0S680S747101 OL_092720250131` | RCDPlugins | 1 | 16,643 | Harvesting | 12 |
-| `Me_2 Lazy 2_SE 18, Hyway` | RCDPlugins | 1 | 15,957 | Harvesting | 11 |
-| `NW11_GMS_Harvest_Sept272023_Part1` | RCDPlugins | 4 | 15,064 | Harvesting, Unknown | 12 |
-| `1H0S680-3224864  _09062024` | ProtobufPlugins | 6 | 11,786 | DataCollection, Harvesting | 24 |
-| `Harvesting_19_9660STS combine` | RCDPlugins | 3 | 11,411 | Harvesting | 14 |
-| `Harvesting_19_9660STS combine_7` | RCDPlugins | 1 | 9,612 | Harvesting | 12 |
-| `Harvesting_19_9660STS combine_6` | RCDPlugins | 1 | 8,975 | Harvesting | 12 |
-| `1H0X910XKP0825244_09032025` | ProtobufPlugins | 18 | 8,894 | DataCollection, Harvesting | 17 |
-| `Harvesting_19_9660STS combine_5` | RCDPlugins | 2 | 8,611 | Harvesting | 12 |
+| `1_Seeding_Data_Raw` | Card in an archive (.zip/.jdp) | 721 | 47,177,523 | Boundary, SowingAndPlanting, Unknown | 5624 |
+| `10_24` | John Deere Gen4 logs (.jdl) | 337 | 1,564,915 | DataCollection, Harvesting | 1824 |
+| `TASKDATA` | ISO v4 Plugin | 22 | 1,475,673 | Boundary, SowingAndPlanting, Tillage | 105 |
+| `TASKDATA` | ISO v4 Plugin | 22 | 1,475,673 | Boundary, SowingAndPlanting, Tillage | 110 |
+| `1_Seeding_Data_Raw` | Card in an archive (.zip/.jdp) | 2 | 1,448,374 | SowingAndPlanting, Tillage | 65 |
+| `Kinsella JD S680 Combine Data` | RCDPlugins | 498 | 998,329 | Boundary, Harvesting | 1259 |
+| `TASKDATA` | ISO v4 Plugin | 7 | 788,503 | Boundary, SowingAndPlanting, Tillage | 66 |
+| `lentils 2026 ash old` | John Deere RCD folder (.rcd) | 83 | 722,535 | Harvesting | 240 |
+| `CaseIH 555-1 Cody_05082025` | ProtobufPlugins | 204 | 696,867 | DataCollection, Fertilizing, SowingAndPlanting | 1062 |
+| `1_Seeding_Data_Raw` | Card in an archive (.zip/.jdp) | 2 | 695,950 | SowingAndPlanting, Tillage | 30 |
+| `TASKDATA` | ISO v4 Plugin | 2 | 695,950 | SowingAndPlanting, Tillage | 106 |
+| `TASKDATA` | ISO v4 Plugin | 2 | 663,408 | SowingAndPlanting, Tillage | 120 |
+| `TASKDATA` | ISO v4 Plugin | 2 | 660,018 | SowingAndPlanting, Tillage | 126 |
+| `Triple H Farms_Curts_Chalack_N 16-30-2-W5_4` | ProtobufPlugins | 182 | 620,979 | DataCollection, Harvesting | 605 |
+| `Triple H Farms_Curts_Chalack_N 16-30-2-W5_3` | ProtobufPlugins | 177 | 606,789 | DataCollection, Harvesting | 606 |
+| `TASKDATA` | ISO v4 Plugin | 45 | 550,219 | Harvesting | 65 |
+| `3_Yield_Data_Raw` | Card in an archive (.zip/.jdp) | 147 | 453,565 | DataCollection, Harvesting | 583 |
+| `1_Seeding_Data_Raw` | Card in an archive (.zip/.jdp) | 3 | 440,817 | Boundary, SowingAndPlanting, Tillage | 19 |
+| `1H0X910XKN0820722_09042024` | ProtobufPlugins | 72 | 436,218 | DataCollection, Harvesting | 695 |
+| `1H0X910XTN0820720_09042024` | ProtobufPlugins | 86 | 414,808 | DataCollection, Harvesting | 570 |
+| `1H0X910XKN0820722_09052024` | ProtobufPlugins | 167 | 409,636 | DataCollection, Harvesting | 643 |
+| `1H0X910XTN0820720_09052024` | ProtobufPlugins | 199 | 392,062 | DataCollection, Harvesting | 648 |
+| `1H0X910XAP0825282_09022025` | ProtobufPlugins | 60 | 296,301 | DataCollection, Harvesting | 515 |
+| `1H0X910XEP0825304_09022025` | ProtobufPlugins | 45 | 292,816 | DataCollection, Harvesting | 476 |
+| `1H0X910XKP0825244_09022025` | ProtobufPlugins | 54 | 286,937 | DataCollection, Harvesting | 435 |
+| `1H0X910XCP0825313_09022025` | ProtobufPlugins | 48 | 282,744 | DataCollection, Harvesting | 435 |
+| `1_Seeding_Data_Raw` | Card in an archive (.zip/.jdp) | 3 | 275,673 | Boundary, SowingAndPlanting, Tillage | 15 |
+| `Triple H Farms_Browns_SE 16-30-2-W5 E_3` | ProtobufPlugins | 74 | 269,843 | DataCollection, Harvesting | 289 |
+| `TASKDATA` | ISO v4 Plugin | 19 | 247,339 | Boundary, Harvesting | 33 |
+| `CaseIH 555-1 Cody_05092025` | ProtobufPlugins | 96 | 195,060 | DataCollection, Fertilizing, SowingAndPlanting | 122 |
+| `Triple H Farms_Browns_SE 16-30-2-W5 W` | ProtobufPlugins | 45 | 186,644 | DataCollection, Harvesting | 208 |
+| `_19_1H0S780SCJ0800500_3` | ProtobufPlugins | 76 | 180,707 | DataCollection, Harvesting | 193 |
+| `Triple H Farms_Browns_SE 16-30-2-W5 E_2` | ProtobufPlugins | 42 | 174,435 | DataCollection, Harvesting | 160 |
+| `Triple H Farms_Browns_SE 16-30-2-W5 E_1` | ProtobufPlugins | 45 | 174,103 | DataCollection, Harvesting | 153 |
+| `1N0412RXHN0224724_06042025` | ProtobufPlugins | 4 | 144,417 | DataCollection, Fertilizing | 137 |
+| `1H0X910XEP0825304_09032025` | ProtobufPlugins | 93 | 106,997 | DataCollection, Harvesting | 100 |
+| `_19_1H0S780SCJ0800500_2` | ProtobufPlugins | 75 | 104,007 | DataCollection, Harvesting | 118 |
+| `Triple H Farms_Browns_SE 16-30-2-W5 E` | ProtobufPlugins | 49 | 86,887 | DataCollection, Harvesting | 95 |
+| `TASKDATA` | ISO v4 Plugin | 8 | 80,413 | Unknown | 50 |
+| `1H0S680-3224864  _09092024` | ProtobufPlugins | 124 | 76,146 | DataCollection, Harvesting | 193 |
+| `1H0X910XAP0825282_09032025` | ProtobufPlugins | 30 | 59,208 | DataCollection, Harvesting | 121 |
+| `_19_1H0S780SCJ0800500_1` | ProtobufPlugins | 9 | 45,004 | DataCollection, Harvesting | 41 |
+| `Triple H Farms_Curts_Chalack_N 16-30-2-W5` | ProtobufPlugins | 16 | 39,390 | DataCollection, Fertilizing | 48 |
+| `Field 13` | Card in an archive (.zip/.jdp) | 3 | 32,676 | DataCollection, Harvesting | 23 |
+| `TASKDATA` | ISO v4 Plugin | 8 | 32,159 | Boundary, Unknown | 30 |
+| `1H0S680-3224864  _09082024` | ProtobufPlugins | 17 | 26,969 | DataCollection, Harvesting | 62 |
+| `Triple H Farms_Curts_Chalack_N 16-30-2-W5_2` | ProtobufPlugins | 48 | 25,758 | DataCollection, Harvesting | 32 |
+| `_19_1H0S780SCJ0800500` | ProtobufPlugins | 3 | 23,806 | DataCollection, Harvesting | 32 |
+| `Triple H Farms_Curts_Chalack_N 16-30-2-W5_1` | ProtobufPlugins | 60 | 23,239 | DataCollection, Harvesting | 39 |
+| `Me_2 Lazy 2_SE 18, Hyway_1` | RCDPlugins | 2 | 20,355 | Harvesting | 20 |
+| `NW11_GMS_Harvest_Sept272023_Part2` | RCDPlugins | 1 | 18,232 | Harvesting | 20 |
+| `H0S680S795167 DR _2lzy2stk__092720250229` | RCDPlugins | 2 | 16,839 | Harvesting | 19 |
+| `H0S680S747101 OL_092720250131` | RCDPlugins | 1 | 16,643 | Harvesting | 17 |
+| `Me_2 Lazy 2_SE 18, Hyway` | RCDPlugins | 1 | 15,957 | Harvesting | 16 |
+| `NW11_GMS_Harvest_Sept272023_Part1` | RCDPlugins | 4 | 15,064 | Harvesting, Unknown | 22 |
+| `1H0S680-3224864  _09062024` | ProtobufPlugins | 6 | 11,786 | DataCollection, Harvesting | 40 |
+| `Harvesting_19_9660STS combine` | RCDPlugins | 3 | 11,411 | Harvesting | 25 |
+| `Harvesting_19_9660STS combine_7` | RCDPlugins | 1 | 9,612 | Harvesting | 21 |
+| `Harvesting_19_9660STS combine_6` | RCDPlugins | 1 | 8,975 | Harvesting | 18 |
+| `1H0X910XKP0825244_09032025` | ProtobufPlugins | 18 | 8,894 | DataCollection, Harvesting | 24 |
+| `Harvesting_19_9660STS combine_5` | RCDPlugins | 2 | 8,611 | Harvesting | 19 |
 | `Fent Canola seed` | Raven Viper 4 job (.jdp) | 1 | 8,503 | Raven | 5 |
-| `Fent Canola seed` | Raven Viper 4 job (.jdp) | 1 | 8,503 | Raven | 4 |
-| `Harvesting_19_9660STS combine_4` | RCDPlugins | 1 | 7,910 | Harvesting | 11 |
-| `Harvesting_19_9660STS combine_3` | RCDPlugins | 1 | 7,658 | Harvesting | 13 |
-| `1H0X910XCP0825313_09032025` | ProtobufPlugins | 32 | 7,653 | DataCollection, Harvesting | 21 |
-| `Calibration data from next instruments` | Card in an archive (.zip/.jdp) | 5 | 6,441 | Harvesting | 16 |
-| `Harvesting_19_9660STS combine_1` | RCDPlugins | 1 | 4,822 | Harvesting | 11 |
-| `Harvesting_19_9660STS combine_2` | RCDPlugins | 2 | 4,673 | Harvesting | 14 |
-| `Triple H Farms_Curts_Chalack_N 16-30-2-W5` | ProtobufPlugins | 15 | 321 | DataCollection, Harvesting | 11 |
-| `TASKDATA` | ISO v4 Plugin | 1 | 2 | Boundary | 4 |
-| `PreHarvestFiles` | Card in an archive (.zip/.jdp) | 1 | 2 | Boundary | 16 |
-| `TASKDATA` | ISO v4 Plugin | 1 | 1 | Boundary | 10 |
-| `3_Prescriptions_Maps` | Card in an archive (.zip/.jdp) | 1 | 1 | Boundary | 5 |
-| `Guidance Line` | RCDPlugins | 1 | 1 | Boundary | 12 |
-| `JD4600` | ProtobufPlugins | 1 | 1 | Boundary | 7 |
+| `Fent Canola seed` | Raven Viper 4 job (.jdp) | 1 | 8,503 | Raven | 7 |
+| `Harvesting_19_9660STS combine_4` | RCDPlugins | 1 | 7,910 | Harvesting | 18 |
+| `Harvesting_19_9660STS combine_3` | RCDPlugins | 1 | 7,658 | Harvesting | 16 |
+| `1H0X910XCP0825313_09032025` | ProtobufPlugins | 32 | 7,653 | DataCollection, Harvesting | 26 |
+| `Calibration data from next instruments` | Card in an archive (.zip/.jdp) | 5 | 6,441 | Harvesting | 8 |
+| `Harvesting_19_9660STS combine_1` | RCDPlugins | 1 | 4,822 | Harvesting | 19 |
+| `Harvesting_19_9660STS combine_2` | RCDPlugins | 2 | 4,673 | Harvesting | 23 |
+| `Triple H Farms_Curts_Chalack_N 16-30-2-W5` | ProtobufPlugins | 15 | 321 | DataCollection, Harvesting | 13 |
+| `TASKDATA` | ISO v4 Plugin | 1 | 2 | Boundary | 5 |
+| `PreHarvestFiles` | Card in an archive (.zip/.jdp) | 1 | 2 | Boundary | 12 |
 | `TASKDATA` | ISO v4 Plugin | 1 | 1 | Boundary | 5 |
-| `USB-1` | RCDPlugins | 1 | 1 | Boundary | 16 |
-| `TASKDATA` | ISO v4 Plugin | 1 | 1 | Boundary | 6 |
-| `Brown_East_OFPE` | ProtobufPlugins | 1 | 1 | Boundary | 7 |
-| `Work_Setup_SEEDING_20240503_1028` | ProtobufPlugins | 1 | 1 | Boundary | 8 |
-| `Work_Setup_SEEDING_20240503_1116` | ProtobufPlugins | 1 | 1 | Boundary | 7 |
+| `3_Prescriptions_Maps` | Card in an archive (.zip/.jdp) | 1 | 1 | Boundary | 7 |
+| `Guidance Line` | RCDPlugins | 1 | 1 | Boundary | 20 |
+| `JD4600` | ProtobufPlugins | 1 | 1 | Boundary | 9 |
+| `TASKDATA` | ISO v4 Plugin | 1 | 1 | Boundary | 8 |
+| `USB-1` | RCDPlugins | 1 | 1 | Boundary | 21 |
+| `TASKDATA` | ISO v4 Plugin | 1 | 1 | Boundary | 9 |
+| `Brown_East_OFPE` | ProtobufPlugins | 1 | 1 | Boundary | 11 |
+| `Work_Setup_SEEDING_20240503_1028` | ProtobufPlugins | 1 | 1 | Boundary | 9 |
+| `Work_Setup_SEEDING_20240503_1116` | ProtobufPlugins | 1 | 1 | Boundary | 10 |
 
 ## Detected but empty
 
@@ -177,13 +177,13 @@ File types found in the unclaimed directories. Documents and images are expected
 
 | Extension | Meaning | Directories |
 |---|---|--:|
-| `.pdf` | document | 2,405 |
-| `.jpg` | image | 1,354 |
+| `.pdf` | document | 2,410 |
+| `.jpg` | image | 1,360 |
 | `.shp` | shapefile | 1,285 |
 | `.xlsx` | spreadsheet | 920 |
-| `.zip` | archive | 900 |
+| `.zip` | archive | 901 |
 | `.docx` | document | 687 |
-| `.csv` | text export | 558 |
+| `.csv` | text export | 560 |
 | `.png` | image | 316 |
 | `.xml` | ISOXML/TASKDATA | 282 |
 | `.db` | SQLite (JD GS3/GS4) | 26 |
