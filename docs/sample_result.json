@@ -1,0 +1,1011 @@
+{
+ "ok": true,
+ "path": "G:\\Shared drives\\Olds College Smart Farm Vault\\1. Smart Farm\\Raw Equipment Data\\2025\\2025_Raw_Spraying_Data\\Raven51025\\GFF\\No Grower\\No Farm\\No Field\\Jobs",
+ "geopackage": "C:\\Users\\you\\Documents\\SMSLIBRE\\smslibre_20260820_080810.gpkg",
+ "layers": [
+  {
+   "table": "op01_Raven_1T",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 2640,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op02_Raven_2W",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 734,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op03_Raven_FCDC",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 2159,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op04_Raven_Feild_17_and_Delong_W",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 3690,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op05_Raven_Field_13_14_Post_seed",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 2926,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op06_Raven_Field_13_14",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 4195,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op07_Raven_Field_18_Preburn",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 4520,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op08_Raven_Field_18",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 6350,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op09_Raven_Field_19",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 6765,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op10_Raven_Job_20240621_1934",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 2484,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op11_Raven_Job_20241004_1912",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 25,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op12_Raven_Job_20241004_1913",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 41,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op13_Raven_Job_20241004_1915",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 588,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op14_Raven_Job_20241017_2010",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 861,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op15_Raven_Job_Test",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 1535,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op16_Raven_Rx_water_test_June_04_2024",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 2867,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op17_Raven_Steckler",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 9153,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op18_Raven_Test",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 631,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op19_Raven_Test4",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 69,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  },
+  {
+   "table": "op20_Raven_Test5",
+   "grower": "",
+   "farm": "",
+   "field": "",
+   "operationType": "Raven",
+   "points": 729,
+   "channels": [
+    {
+     "column": "elevation",
+     "name": "elevation",
+     "unit": "m"
+    },
+    {
+     "column": "speed",
+     "name": "speed",
+     "unit": "m/s"
+    },
+    {
+     "column": "distance",
+     "name": "distance",
+     "unit": "m"
+    },
+    {
+     "column": "rate_applied",
+     "name": "rate_applied",
+     "unit": "L/ha"
+    },
+    {
+     "column": "rate_target",
+     "name": "rate_target",
+     "unit": "L/ha"
+    },
+    {
+     "column": "sections_on",
+     "name": "sections_on",
+     "unit": ""
+    },
+    {
+     "column": "heading",
+     "name": "heading",
+     "unit": "deg"
+    },
+    {
+     "column": "cross_track",
+     "name": "cross_track",
+     "unit": "m"
+    }
+   ]
+  }
+ ],
+ "skippedGeometries": {},
+ "rejectedPoints": 0,
+ "droppedChannels": 0,
+ "archivesRead": 0
+}

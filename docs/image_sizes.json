@@ -1,0 +1,38 @@
+{
+ "architecture": [
+  1351,
+  479
+ ],
+ "card-structures": [
+  1549,
+  643
+ ],
+ "coverage-by-reader": [
+  1521,
+  709
+ ],
+ "dialog-1-empty": [
+  1040,
+  640
+ ],
+ "dialog-2-detected": [
+  1040,
+  640
+ ],
+ "dialog-3-imported": [
+  1040,
+  640
+ ],
+ "dialog-4-settings": [
+  1040,
+  640
+ ],
+ "dialog-5-not-recognised": [
+  1040,
+  617
+ ],
+ "map-track-rate": [
+  667,
+  950
+ ]
+}

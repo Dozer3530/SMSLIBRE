@@ -68,3 +68,7 @@ analysis/*/scan.json
 analysis/*/run.log
 analysis/*/scan.log
 analysis/sweep_all.log
+
+# Figure source: a GeoPackage produced by importing a real card. Regenerate with
+# the smsimport command noted at the top of docs/make_figures.py.
+docs/sample.gpkg

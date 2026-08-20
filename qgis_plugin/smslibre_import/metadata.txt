@@ -13,5 +13,5 @@ repository=https://github.com/Dozer3530/SMSLIBRE
 tags=agriculture,precision agriculture,yield,import,isoxml,adapt,gps,machine data
 category=Plugins
 icon=icon.svg
-experimental=True
+experimental=False
 hasProcessingProvider=no
