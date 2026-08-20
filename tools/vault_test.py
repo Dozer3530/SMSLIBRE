@@ -263,7 +263,12 @@ def discover(exe: Path, root: str, depth: int, cap: int, timeout: int,
     for f in res.get("found") or []:
         plugins = f.get("plugins") or []
         if plugins:
-            hits[f["path"]] = plugins[0].get("Name", "?")
+            # Every claimant, not just the first. The Brandt Seeding card is
+            # claimed by ISOv4 (a guidance-line TASKDATA, yields nothing) AND
+            # ProtobufPlugins (7M points); recording only the first made the
+            # collapse fold the card into its empty TASKDATA child and the
+            # sweep never imported it at all.
+            hits[f["path"]] = [pl.get("Name", "?") for pl in plugins]
     # The same walk reports what it rejected and what those folders hold, so the
     # "what does not import" half of the report costs no extra traversal.
     return hits, res.get("unclaimed") or []
@@ -319,8 +324,8 @@ def test_candidate(exe: Path, path: str, out_dir: Path, timeout: int,
     return r
 
 
-def deepest_cards(paths: dict[str, str]) -> dict[str, str]:
-    """Drop a claimed directory when a descendant is claimed by the same reader.
+def deepest_cards(paths: dict[str, list[str]]) -> dict[str, list[str]]:
+    """Drop a claimed directory when a descendant carries all its claims.
 
     Readers match recursively: ISOv4 claims any folder with a TASKDATA anywhere
     beneath it, which means it claims the crop folder, the year folder, the card
@@ -328,24 +333,32 @@ def deepest_cards(paths: dict[str, str]) -> dict[str, str]:
     "card" and one enormous import; taking the innermost gives the folder that
     actually holds the data, and per-card numbers in the report.
 
-    Only same-reader nesting collapses. A different reader claiming a subfolder
-    is a different card the parent's import did not cover, and dropping it hides
-    real failures: the Trimble licence error sits inside a folder the ISOXML
-    reader imports happily.
+    The collapse compares full claim SETS, not first claimants. A folder claimed
+    by {ISOv4, ProtobufPlugins} is not covered by a child claimed by {ISOv4}
+    alone — that is the Brandt Seeding card, whose 7M points vanished from a
+    sweep when the first-claimant collapse folded it into its empty TASKDATA
+    child. And a different reader claiming a subfolder is a different card: the
+    Trimble licence error sits inside a folder the ISOXML reader imports happily.
     """
     keep = {}
-    for path, reader in paths.items():
+    for path, readers in paths.items():
         prefix = path + os.sep
-        if any(other.startswith(prefix) and r == reader
+        mine = set(readers)
+        if any(other.startswith(prefix) and mine <= set(r)
                for other, r in paths.items()):
-            continue          # a descendant covers this one
-        keep[path] = reader
+            continue          # a descendant covers every reader that claims this
+        keep[path] = readers
     return keep
 
 
 def _distinct_cards(rows: list[dict]) -> list[dict]:
-    """The report's view of `deepest_cards`, applied to result rows."""
-    readers = {r["path"]: r["detected"] for r in rows}
+    """The report's view of `deepest_cards`, applied to result rows.
+
+    Rows carry only the first claimant, so this sees single-reader claim sets —
+    the full-set collapse already happened during discovery, and rows exist only
+    for directories that survived it.
+    """
+    readers = {r["path"]: [r["detected"]] for r in rows}
     keep = deepest_cards(readers)
     return [r for r in rows if r["path"] in keep]
 
@@ -562,7 +575,7 @@ def main() -> int:
             print(f"no prior run to re-test: {results_path}", file=sys.stderr)
             return 2
         prior = json.loads(results_path.read_text())
-        readers = {d["path"]: d["detected"] for d in prior if d.get("detected")}
+        readers = {d["path"]: [d["detected"]] for d in prior if d.get("detected")}
         # keep the untouched rows; the re-tested ones are replaced below
         done = {d["path"]: d for d in prior if not d.get("detected")}
         unclaimed = []          # carried over untouched in `done`
@@ -592,7 +605,7 @@ def main() -> int:
 
     with futures.ThreadPoolExecutor(max_workers=args.workers) as pool:
         futs = {pool.submit(test_candidate, exe, c, out_dir, args.timeout,
-                            readers[c]): c for c in cands}
+                            readers[c][0]): c for c in cands}
         for i, f in enumerate(futures.as_completed(futs), 1):
             r = f.result()
             results.append(asdict(r))
