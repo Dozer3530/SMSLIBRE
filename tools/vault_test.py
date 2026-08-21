@@ -29,6 +29,7 @@ import concurrent.futures as futures
 import json
 import math
 import os
+import shutil
 import sqlite3
 import struct
 import subprocess
@@ -46,7 +47,7 @@ DEFAULT_EXE = (Path(os.environ.get("APPDATA", "")) /
 class Result:
     path: str
     detected: str = ""            # reader name, or "" when nothing claimed it
-    status: str = "not-detected"  # not-detected | ok | empty | error
+    status: str = "not-detected"  # not-detected | ok | empty | error | skipped-disk
     layers: int = 0
     features: int = 0
     max_channels: int = 0
@@ -274,6 +275,33 @@ def discover(exe: Path, root: str, depth: int, cap: int, timeout: int,
     return hits, res.get("unclaimed") or []
 
 
+# A single wide card can write six gigabytes. The working file is deleted after
+# each card, but several workers hold one at once and a crashed run leaves them
+# behind, so a long sweep can fill the disk and then every remaining card fails
+# for a reason that has nothing to do with the data.
+MIN_FREE_GB = 15
+
+
+def free_gb(where: Path) -> float:
+    try:
+        return shutil.disk_usage(where).free / 1e9
+    except OSError:
+        return float("inf")
+
+
+def reclaim(out_dir: Path) -> int:
+    """Delete working GeoPackages left behind by an earlier run."""
+    freed = 0
+    for f in out_dir.glob("*.gpkg"):
+        try:
+            size = f.stat().st_size
+            f.unlink()
+            freed += size
+        except OSError:
+            pass
+    return freed
+
+
 def test_candidate(exe: Path, path: str, out_dir: Path, timeout: int,
                    detected: str = "") -> Result:
     r = Result(path=path)
@@ -291,6 +319,19 @@ def test_candidate(exe: Path, path: str, out_dir: Path, timeout: int,
         # same" gpkg concurrently died on a Windows sharing violation.
         import hashlib
         digest = hashlib.sha1(path.encode("utf-8")).hexdigest()[:10]
+        if free_gb(out_dir) < MIN_FREE_GB:
+            freed = reclaim(out_dir)
+            if freed:
+                print(f"  reclaimed {freed / 1e9:.1f} GB of working files",
+                      flush=True)
+        if free_gb(out_dir) < MIN_FREE_GB:
+            # Recording this rather than failing keeps the distinction between
+            # "this card is a problem" and "this machine ran out of room".
+            r.status = "skipped-disk"
+            r.error = f"only {free_gb(out_dir):.1f} GB free"
+            r.seconds = time.time() - t0
+            return r
+
         safe = "".join(ch if ch.isalnum() else "_" for ch in path)[-80:]
         gpkg = out_dir / f"{safe}_{digest}.gpkg"
         gpkg.unlink(missing_ok=True)
@@ -397,6 +438,7 @@ def build_report(results: list[dict], root: str) -> str:
     ok = [r for r in cards if r["status"] == "ok"]
     empty = [r for r in cards if r["status"] == "empty"]
     err = [r for r in cards if r["status"] == "error"]
+    disk = [r for r in cards if r["status"] == "skipped-disk"]
     miss = [r for r in results if not r.get("detected")]
 
     dupes = nested_duplicates(cards)
@@ -416,6 +458,7 @@ def build_report(results: list[dict], root: str) -> str:
         f"| Imported with data | {len(ok)} |",
         f"| Detected but empty | {len(empty)} |",
         f"| Detected but failed | {len(err)} |",
+        f"| Skipped, disk full | {len(disk)} |",
         f"| No reader | {len(miss):,} directories |",
         "",
         f"Total features imported: **{sum(r['features'] for r in counted):,}** "
