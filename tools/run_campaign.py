@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
+import os
 import pathlib
 import shutil
 import subprocess
@@ -59,6 +60,23 @@ def free_gb() -> float:
         return float("nan")
 
 
+def build_env() -> dict:
+    """Environment for a phase.
+
+    The project targets .NET 10, whose SDK lives in the user profile, while
+    Windows has an older SDK on PATH under Program Files. Inheriting the plain
+    environment finds the wrong one and every dotnet phase dies instantly with
+    NETSDK1045 — which reads like a test failure and is not.
+    """
+    env = dict(os.environ)
+    local = pathlib.Path.home() / ".dotnet"
+    if local.is_dir():
+        env["DOTNET_ROOT"] = str(local)
+        env["PATH"] = str(local) + os.pathsep + env.get("PATH", "")
+    env["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1"
+    return env
+
+
 def run(cmd: list[str], phase: str, timeout: int) -> tuple[bool, str]:
     """Run one phase. A non-zero exit is reported, never fatal to the campaign."""
     log(f"  $ {' '.join(str(c) for c in cmd)}")
@@ -66,7 +84,7 @@ def run(cmd: list[str], phase: str, timeout: int) -> tuple[bool, str]:
     try:
         with open(out_file, "w", encoding="utf-8") as f:
             proc = subprocess.run(cmd, stdout=f, stderr=subprocess.STDOUT,
-                                  timeout=timeout, cwd=ROOT)
+                                  timeout=timeout, cwd=ROOT, env=build_env())
         ok = proc.returncode == 0
         return ok, f"exit {proc.returncode}"
     except subprocess.TimeoutExpired:
