@@ -69,10 +69,22 @@ def build_env() -> dict:
     NETSDK1045 — which reads like a test failure and is not.
     """
     env = dict(os.environ)
-    local = pathlib.Path.home() / ".dotnet"
-    if local.is_dir():
-        env["DOTNET_ROOT"] = str(local)
-        env["PATH"] = str(local) + os.pathsep + env.get("PATH", "")
+    # Look for the executable, not the folder. This machine has an empty
+    # .dotnet under the Windows profile while the real SDK lives on the H:
+    # network drive, so testing the directory picks the wrong one and the
+    # phase dies with NETSDK1045 in under a second.
+    candidates = []
+    for var in ("HOME", "USERPROFILE"):
+        if env.get(var):
+            candidates.append(pathlib.Path(env[var]) / ".dotnet")
+    candidates.append(pathlib.Path("H:/.dotnet"))
+    candidates.append(pathlib.Path.home() / ".dotnet")
+
+    for local in candidates:
+        if (local / "dotnet.exe").is_file():
+            env["DOTNET_ROOT"] = str(local)
+            env["PATH"] = str(local) + os.pathsep + env.get("PATH", "")
+            break
     env["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1"
     return env
 
