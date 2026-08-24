@@ -9,10 +9,10 @@ from datetime import datetime
 from qgis.core import QgsProject, QgsSettings, QgsVectorLayer
 from qgis.PyQt.QtCore import Qt, QThread, pyqtSignal
 from qgis.PyQt.QtWidgets import (
-    QAbstractItemView, QCheckBox, QDialog, QDialogButtonBox, QFileDialog,
-    QGridLayout, QGroupBox, QHBoxLayout, QHeaderView, QLabel, QLineEdit,
-    QMessageBox, QProgressBar, QPushButton, QTableWidget, QTableWidgetItem,
-    QVBoxLayout, QWidget,
+    QAbstractItemView, QCheckBox, QComboBox, QDialog, QDialogButtonBox,
+    QFileDialog, QGridLayout, QGroupBox, QHBoxLayout, QHeaderView, QLabel,
+    QLineEdit, QMessageBox, QProgressBar, QPushButton, QTableWidget,
+    QTableWidgetItem, QVBoxLayout, QWidget,
 )
 
 from .sidecar import Sidecar, SidecarError, default_sidecar_path, default_sms_dir
@@ -50,6 +50,30 @@ try:
 except ImportError:                                   # pragma: no cover
     def _make_group(title: str, collapsed: bool = True):
         return QGroupBox(title)
+
+
+def _cell(text: str) -> QTableWidgetItem:
+    item = QTableWidgetItem(text)
+    item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
+    return item
+
+
+def _num_cell(value: int) -> QTableWidgetItem:
+    """A right-aligned cell that sorts numerically, not as text."""
+    item = QTableWidgetItem()
+    item.setData(Qt.ItemDataRole.DisplayRole, value)
+    item.setTextAlignment(Qt.AlignmentFlag.AlignRight
+                          | Qt.AlignmentFlag.AlignVCenter)
+    item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
+    return item
+
+
+def _day(start: str | None, end: str | None) -> str:
+    """The day a job ran, or the span when it crossed midnight."""
+    if not start:
+        return ""
+    first, last = start[:10], (end or start)[:10]
+    return first if first == last else f"{first} … {last}"
 
 
 class _ImportWorker(QThread):
@@ -150,14 +174,70 @@ class ImportDialog(QDialog):
         # --- results -------------------------------------------------------
         res = QGroupBox("Layers found")
         rl = QVBoxLayout(res)
+
+        # A full card is routinely 100+ jobs, so the list needs narrowing before
+        # it needs ticking. Filters hide rows; they never change what is ticked,
+        # so a selection survives changing your mind about the filter.
+        flt = QHBoxLayout()
+        self.filter_edit = QLineEdit()
+        self.filter_edit.setPlaceholderText(
+            "Filter by layer, field, farm or grower…")
+        self.filter_edit.setClearButtonEnabled(True)
+        self.filter_edit.textChanged.connect(self._apply_filter)
+        self.op_combo = QComboBox()
+        self.op_combo.addItem("All operations", "")
+        self.op_combo.currentIndexChanged.connect(self._apply_filter)
+        self.date_combo = QComboBox()
+        self.date_combo.addItem("All dates", "")
+        self.date_combo.currentIndexChanged.connect(self._apply_filter)
+        flt.addWidget(QLabel("Filter:"))
+        flt.addWidget(self.filter_edit, stretch=1)
+        flt.addWidget(self.op_combo)
+        flt.addWidget(self.date_combo)
+        rl.addLayout(flt)
+
+        self.table = QTableWidget(0, 6)
         # Enums are written in their scoped form throughout — Qt6 (QGIS 4)
         # removed the unscoped aliases, and Qt5 accepts the scoped form,
         # so one spelling serves both.
-        self.table = QTableWidget(0, 5)
-        self.table.setHorizontalHeaderLabels(["Add", "Layer", "Points", "Channels", "Field / Operation"])
-        self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
-        self.table.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
+        self.table.setHorizontalHeaderLabels(
+            ["Add", "Layer", "Points", "Channels", "Field / Operation", "When"])
+        self.table.horizontalHeader().setSectionResizeMode(
+            1, QHeaderView.ResizeMode.Stretch)
+        # Rows are selectable so shift-click takes a range and ctrl-click adds
+        # one. Ticking is a separate act from selecting: you select the rows you
+        # mean, then tick them all at once.
+        self.table.setSelectionMode(
+            QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.table.setSelectionBehavior(
+            QAbstractItemView.SelectionBehavior.SelectRows)
+        self.table.setSortingEnabled(True)
+        self.table.itemChanged.connect(self._on_item_changed)
         rl.addWidget(self.table)
+
+        # Selection actions, above the display options so the two do not read as
+        # one row of unrelated switches.
+        sel = QHBoxLayout()
+        self.count_label = QLabel("")
+        for text, slot, tip in (
+            ("Tick selected", lambda: self._set_selected(True),
+             "Tick every highlighted row (shift-click for a range, "
+             "ctrl-click to add one)"),
+            ("Untick selected", lambda: self._set_selected(False),
+             "Untick every highlighted row"),
+            ("Tick all shown", lambda: self._set_visible(True),
+             "Tick every row the filter is currently showing"),
+            ("Untick all", lambda: self._set_visible(False),
+             "Untick every row the filter is currently showing"),
+        ):
+            b = QPushButton(text)
+            b.setToolTip(tip)
+            b.clicked.connect(slot)
+            sel.addWidget(b)
+        sel.addStretch(1)
+        sel.addWidget(self.count_label)
+        rl.addLayout(sel)
+
         opts = QHBoxLayout()
         self.style_cb = QCheckBox("Apply yield styling")
         self.style_cb.setChecked(True)
@@ -303,23 +383,46 @@ class ImportDialog(QDialog):
             return
 
         threshold = 50 if self.skip_small_cb.isChecked() else 0
+        # Sorting and change signals off while filling: each insert would
+        # otherwise re-sort under us and fire a callback per cell.
+        self.table.setSortingEnabled(False)
+        self.table.blockSignals(True)
         for row, lyr in enumerate(layers):
             self.table.insertRow(row)
-            cb = QCheckBox()
-            cb.setChecked(lyr.get("points", 0) >= threshold)
-            holder = QWidget()
-            h = QHBoxLayout(holder)
-            h.addWidget(cb)
-            h.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            h.setContentsMargins(0, 0, 0, 0)
-            self.table.setCellWidget(row, 0, holder)
-            cb.setProperty("table_name", lyr.get("table", ""))
 
-            self.table.setItem(row, 1, QTableWidgetItem(lyr.get("table", "")))
-            self.table.setItem(row, 2, QTableWidgetItem(f"{lyr.get('points', 0):,}"))
-            self.table.setItem(row, 3, QTableWidgetItem(str(len(lyr.get("channels", [])))))
+            # A checkable item rather than a checkbox widget: a widget in a cell
+            # is invisible to the selection model, which is what makes
+            # shift-click and keyboard selection work at all.
+            tick = QTableWidgetItem()
+            tick.setFlags((tick.flags() | Qt.ItemFlag.ItemIsUserCheckable)
+                          & ~Qt.ItemFlag.ItemIsEditable)
+            tick.setCheckState(
+                Qt.CheckState.Checked if lyr.get("points", 0) >= threshold
+                else Qt.CheckState.Unchecked)
+            tick.setData(Qt.ItemDataRole.UserRole, lyr.get("table", ""))
+            self.table.setItem(row, 0, tick)
+
+            self.table.setItem(row, 1, _cell(lyr.get("table", "")))
+            # Sort by the number, not by the string: "9,000" must not come
+            # after "10,000" because "9" sorts after "1".
+            self.table.setItem(row, 2, _num_cell(lyr.get("points", 0)))
+            self.table.setItem(row, 3, _num_cell(len(lyr.get("channels", []))))
             desc = " / ".join(x for x in (lyr.get("field", ""), lyr.get("operationType", "")) if x)
-            self.table.setItem(row, 4, QTableWidgetItem(desc))
+            self.table.setItem(row, 4, _cell(desc))
+            self.table.setItem(row, 5, _cell(_day(lyr.get("start"), lyr.get("end"))))
+        self.table.blockSignals(False)
+        self.table.setSortingEnabled(True)
+        self.table.resizeColumnsToContents()
+        # The layer name is the identifier people scan for, so it gets the
+        # leftover width — but sizing every column to its contents first can
+        # leave it none. Cap the descriptive columns so it always has room.
+        for col, cap in ((4, 200), (5, 150)):   # 150 fits a full ISO date
+            self.table.setColumnWidth(col, min(self.table.columnWidth(col), cap))
+        self.table.horizontalHeader().setSectionResizeMode(
+            1, QHeaderView.ResizeMode.Stretch)
+
+        self._fill_filter_choices(layers)
+        self._apply_filter()
 
         total = sum(l.get("points", 0) for l in layers)
         msg = f"Imported {len(layers)} layer(s), {total:,} points → {data.get('geopackage','')}"
@@ -334,6 +437,88 @@ class ImportDialog(QDialog):
         self.status.setText(msg)
         self.add_btn.setEnabled(True)
 
+    # -- filtering and bulk ticking ---------------------------------------
+
+    def _fill_filter_choices(self, layers):
+        """Offer only the operations and days this card actually contains."""
+        ops = sorted({l.get("operationType", "") for l in layers if l.get("operationType")})
+        days = sorted({(l.get("start") or "")[:10] for l in layers if l.get("start")})
+
+        for combo, values, label in ((self.op_combo, ops, "All operations"),
+                                     (self.date_combo, days, "All dates")):
+            combo.blockSignals(True)
+            combo.clear()
+            combo.addItem(f"{label} ({len(values)})" if values else label, "")
+            for v in values:
+                combo.addItem(v, v)
+            combo.setEnabled(bool(values))
+            combo.blockSignals(False)
+
+    def _row_matches(self, row: int) -> bool:
+        text = self.filter_edit.text().strip().lower()
+        op = self.op_combo.currentData() or ""
+        day = self.date_combo.currentData() or ""
+
+        if op and op not in (self.table.item(row, 4).text() if self.table.item(row, 4) else ""):
+            return False
+        if day and not (self.table.item(row, 5).text() if self.table.item(row, 5) else "").startswith(day):
+            return False
+        if text:
+            # Search the columns a person would search by: the layer name and
+            # the field/operation description.
+            hay = " ".join(
+                (self.table.item(row, c).text() if self.table.item(row, c) else "")
+                for c in (1, 4, 5)).lower()
+            if text not in hay:
+                return False
+        return True
+
+    def _apply_filter(self):
+        shown = 0
+        for row in range(self.table.rowCount()):
+            ok = self._row_matches(row)
+            self.table.setRowHidden(row, not ok)
+            shown += ok
+        self._update_counts(shown)
+
+    def _update_counts(self, shown: int | None = None):
+        if shown is None:
+            shown = sum(1 for r in range(self.table.rowCount())
+                        if not self.table.isRowHidden(r))
+        ticked = sum(1 for r in range(self.table.rowCount())
+                     if (i := self.table.item(r, 0))
+                     and i.checkState() == Qt.CheckState.Checked)
+        total = self.table.rowCount()
+        self.count_label.setText(
+            f"{shown} of {total} shown · {ticked} ticked")
+
+    def _on_item_changed(self, _item):
+        self._update_counts()
+
+    def _set_rows(self, rows, checked: bool):
+        state = Qt.CheckState.Checked if checked else Qt.CheckState.Unchecked
+        self.table.blockSignals(True)
+        for row in rows:
+            item = self.table.item(row, 0)
+            if item:
+                item.setCheckState(state)
+        self.table.blockSignals(False)
+        self._update_counts()
+
+    def _set_selected(self, checked: bool):
+        rows = {i.row() for i in self.table.selectedIndexes()}
+        if not rows:
+            self.status.setText(
+                "Select rows first — click one, then shift-click another for a "
+                "range, or ctrl-click to add individual rows.")
+            return
+        self._set_rows(sorted(rows), checked)
+
+    def _set_visible(self, checked: bool):
+        rows = [r for r in range(self.table.rowCount())
+                if not self.table.isRowHidden(r)]
+        self._set_rows(rows, checked)
+
     def _add_layers(self):
         if not self._result:
             return
@@ -341,11 +526,10 @@ class ImportDialog(QDialog):
         added = 0
         styled = 0
         for row in range(self.table.rowCount()):
-            holder = self.table.cellWidget(row, 0)
-            cb = holder.findChild(QCheckBox) if holder else None
-            if not cb or not cb.isChecked():
+            item = self.table.item(row, 0)
+            if not item or item.checkState() != Qt.CheckState.Checked:
                 continue
-            table = cb.property("table_name")
+            table = item.data(Qt.ItemDataRole.UserRole)
             layer = QgsVectorLayer(f"{gpkg}|layername={table}", table, "ogr")
             if not layer.isValid():
                 continue

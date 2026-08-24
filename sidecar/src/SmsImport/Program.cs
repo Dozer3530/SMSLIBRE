@@ -339,6 +339,20 @@ internal static class Program
                             description: $"{layer.Field} {layer.OperationType}".Trim());
 
                         Console.Error.WriteLine($"  {table}: {n:N0} points, {colNames.Count} channels");
+                        // When the work happened, so a caller can filter a card
+                        // holding a whole season down to one day. Only points
+                        // that carry a timestamp count: a reader that cannot
+                        // date its records should report nothing rather than
+                        // 1970, which would sort to the top of every list.
+                        var stamps = layer.Points
+                            .Where(p => p.Timestamp != default)
+                            .Select(p => p.Timestamp)
+                            .ToList();
+                        string? firstSeen = stamps.Count > 0
+                            ? stamps.Min().ToString("yyyy-MM-dd HH:mm:ss") : null;
+                        string? lastSeen = stamps.Count > 0
+                            ? stamps.Max().ToString("yyyy-MM-dd HH:mm:ss") : null;
+
                         written.Add(new
                         {
                             table,
@@ -347,6 +361,8 @@ internal static class Program
                             field = layer.Field,
                             operationType = layer.OperationType,
                             points = n,
+                            start = firstSeen,
+                            end = lastSeen,
                             channels = colNames.Select((c, i) => new
                             {
                                 column = c,

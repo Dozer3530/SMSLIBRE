@@ -207,7 +207,7 @@ children.push(
     alignment: AlignmentType.CENTER, spacing: { after: 120 },
   }),
   new Paragraph({
-    children: [new TextRun({ text: "Version 1.0.0", size: 22, color: "5A5A5A" })],
+    children: [new TextRun({ text: "Version 1.2.0", size: 22, color: "5A5A5A" })],
     alignment: AlignmentType.CENTER, spacing: { after: 1400 },
   }),
   new Paragraph({
@@ -482,8 +482,59 @@ children.push(TABLE(
     ["Points", "How many logged records the layer holds."],
     ["Channels", "How many sensor channels were recorded — these become attribute columns."],
     ["Field / Operation", "The field name and operation type the machine recorded, when it did."],
+    ["When", "The day the job ran, from the logged timestamps. Blank when the card\nrecorded no time; a span when the job crossed midnight."],
   ],
   [0.16, 0.84]));
+
+children.push(H2("Working through a card with a hundred jobs"));
+children.push(P(
+  "A season's card routinely holds a hundred or more logged jobs, and ticking " +
+  "them one at a time is not a workflow. The list can be narrowed first, then " +
+  "ticked in bulk."));
+
+children.push(H3("Filtering"));
+children.push(P(
+  "Three filters sit above the list and combine: a text box matching the layer " +
+  "name, field and operation; an operation menu; and a date menu. Both menus " +
+  "list only the values this card actually contains, so an empty menu means " +
+  "the card records nothing to filter on."));
+children.push(...FIGURE("dialog-6-filtering",
+  "A 100-job card narrowed to Field 19 harvesting on the text and operation " +
+  "filters — eight rows of the hundred, with the tick count kept in view.", 620));
+children.push(CALLOUT("note", "Filtering never changes what is ticked", [
+  "Hiding a row does not untick it. Narrow the list, tick what you want, clear " +
+  "the filter and narrow it a different way — the ticks accumulate, and the " +
+  "counter on the right always shows how many are set across the whole card, " +
+  "not just the rows in view.",
+]));
+
+children.push(H3("Selecting several rows at once"));
+children.push(P(
+  "Rows select the way they do everywhere else. Click one; shift-click another " +
+  "to take the whole range between them; ctrl-click to add or remove " +
+  "individual rows. Selecting a row does not tick it — the two are separate, " +
+  "so you can build up a selection and then act on it."));
+children.push(TABLE(
+  ["Button", "What it does"],
+  [
+    ["Tick selected", "Ticks every highlighted row."],
+    ["Untick selected", "Unticks every highlighted row."],
+    ["Tick all shown", "Ticks every row the filter is currently showing, selected or not."],
+    ["Untick all", "Unticks every row the filter is currently showing."],
+  ],
+  [0.22, 0.78]));
+children.push(SPACER());
+children.push(P(
+  "So the common job — \"add the August harvest passes on Field 19 and nothing " +
+  "else\" — is: type the field, choose the operation and the date, press Tick " +
+  "all shown, clear the filter, and press Add selected to map."));
+
+children.push(H3("Sorting"));
+children.push(P(
+  "Click any column heading to sort by it. Points and Channels sort " +
+  "numerically rather than as text, so 9,000 lands where it belongs rather " +
+  "than after 10,000. Sorting rearranges the rows only — a tick stays with its " +
+  "layer."));
 
 children.push(H2("The three options"));
 children.push(TABLE(
@@ -1028,7 +1079,7 @@ const doc = new Document({
     headers: {
       default: new Header({
         children: [new Paragraph({
-          children: [new TextRun({ text: "SMSLIBRE User Guide  ·  v1.0.0",
+          children: [new TextRun({ text: "SMSLIBRE User Guide  ·  v1.2.0",
             size: 17, color: "8A8A8A" })],
           alignment: AlignmentType.RIGHT,
         })],
