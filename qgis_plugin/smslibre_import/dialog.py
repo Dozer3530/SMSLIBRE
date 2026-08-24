@@ -150,10 +150,13 @@ class ImportDialog(QDialog):
         # --- results -------------------------------------------------------
         res = QGroupBox("Layers found")
         rl = QVBoxLayout(res)
+        # Enums are written in their scoped form throughout — Qt6 (QGIS 4)
+        # removed the unscoped aliases, and Qt5 accepts the scoped form,
+        # so one spelling serves both.
         self.table = QTableWidget(0, 5)
         self.table.setHorizontalHeaderLabels(["Add", "Layer", "Points", "Channels", "Field / Operation"])
-        self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-        self.table.setSelectionMode(QAbstractItemView.NoSelection)
+        self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        self.table.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
         rl.addWidget(self.table)
         opts = QHBoxLayout()
         self.style_cb = QCheckBox("Apply yield styling")
@@ -183,9 +186,9 @@ class ImportDialog(QDialog):
         layout.addWidget(self.status)
 
         btns = QDialogButtonBox()
-        self.import_btn = btns.addButton("Import", QDialogButtonBox.AcceptRole)
-        self.add_btn = btns.addButton("Add selected to map", QDialogButtonBox.ApplyRole)
-        close_btn = btns.addButton(QDialogButtonBox.Close)
+        self.import_btn = btns.addButton("Import", QDialogButtonBox.ButtonRole.AcceptRole)
+        self.add_btn = btns.addButton("Add selected to map", QDialogButtonBox.ButtonRole.ApplyRole)
+        close_btn = btns.addButton(QDialogButtonBox.StandardButton.Close)
         self.import_btn.clicked.connect(self._import)
         self.add_btn.clicked.connect(self._add_layers)
         close_btn.clicked.connect(self.reject)
@@ -307,7 +310,7 @@ class ImportDialog(QDialog):
             holder = QWidget()
             h = QHBoxLayout(holder)
             h.addWidget(cb)
-            h.setAlignment(Qt.AlignCenter)
+            h.setAlignment(Qt.AlignmentFlag.AlignCenter)
             h.setContentsMargins(0, 0, 0, 0)
             self.table.setCellWidget(row, 0, holder)
             cb.setProperty("table_name", lyr.get("table", ""))

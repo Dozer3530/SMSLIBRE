@@ -120,19 +120,35 @@ def build_zip(internal: bool) -> Path:
     return zip_path
 
 
-def install_locally() -> None:
+def plugin_dirs() -> list[Path]:
+    """Every QGIS profile on this machine that could hold the plugin.
+
+    QGIS 4 keeps its profiles under QGIS4/, separate from QGIS 3's QGIS3/, so a
+    machine with both installed needs both populated — installing to one and
+    testing in the other is a confusing half hour.
+    """
+    roots = []
     if sys.platform.startswith("win"):
-        base = Path(os.environ["APPDATA"]) / "QGIS/QGIS3/profiles/default/python/plugins"
+        appdata = Path(os.environ["APPDATA"])
+        roots = [appdata / "QGIS/QGIS3", appdata / "QGIS/QGIS4"]
     else:
-        base = Path.home() / ".local/share/QGIS/QGIS3/profiles/default/python/plugins"
-    target = base / "smslibre_import"
-    if not base.exists():
-        print(f"QGIS plugin folder not found: {base}")
+        share = Path.home() / ".local/share/QGIS"
+        roots = [share / "QGIS3", share / "QGIS4"]
+    return [r / "profiles/default/python/plugins" for r in roots if r.is_dir()]
+
+
+def install_locally() -> None:
+    bases = plugin_dirs()
+    if not bases:
+        print("No QGIS profile folder found — is QGIS installed?")
         return
-    shutil.rmtree(target, ignore_errors=True)
-    shutil.copytree(PLUGIN_DIR, target,
-                    ignore=shutil.ignore_patterns("__pycache__"))
-    print(f"Installed to {target}")
+    for base in bases:
+        base.mkdir(parents=True, exist_ok=True)
+        target = base / "smslibre_import"
+        shutil.rmtree(target, ignore_errors=True)
+        shutil.copytree(PLUGIN_DIR, target,
+                        ignore=shutil.ignore_patterns("__pycache__"))
+        print(f"Installed to {target}")
 
 
 def main() -> int:

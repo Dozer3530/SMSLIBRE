@@ -1,9 +1,11 @@
 [general]
 name=SMSLIBRE Machine Data Import
 qgisMinimumVersion=3.22
+qgisMaximumVersion=4.99
+supportsQt6=True
 description=Import precision-ag machine data (John Deere, Climate, Precision Planting, Trimble, CNH, ISOXML) straight into QGIS.
 about=Internal tool for Olds College Center For Innovation, Smart Farm — not for public distribution. Reads yield monitor / as-applied / as-planted cards using the AgGateway ADAPT plugin suite and converts them to a GeoPackage, keeping every logged sensor channel as an attribute. Vendor ADAPT plugins are loaded from the user's own licensed installation and are never redistributed.
-version=1.0.0
+version=1.1.0
 author=Zach Komarnisky
 email=zachkom@telus.net
 

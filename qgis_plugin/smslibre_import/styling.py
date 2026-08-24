@@ -7,6 +7,7 @@ convention for yield maps.
 
 from __future__ import annotations
 
+from qgis.PyQt.QtCore import Qt
 from qgis.core import (
     QgsClassificationQuantile,
     QgsFillSymbol,
@@ -31,7 +32,13 @@ PREFERRED_CHANNELS = (
     "yield_vol",
     "yield",
     "harvest_moisture",
+    # Both spellings: ADAPT plugins emit "applied_rate", the Raven Viper reader
+    # emits "rate_applied". Matching is a substring test, so one does not cover
+    # the other — and without this a sprayer layer styled by elevation, which is
+    # not what anyone opens a spray map to see.
+    "rate_applied",
     "applied_rate",
+    "rate_target",
     "target_rate",
     "seed_rate",
     "elevation",
@@ -140,7 +147,10 @@ def apply_yield_style(layer: QgsVectorLayer, classes: int = 7,
     symbol = QgsSymbol.defaultSymbol(layer.geometryType())
     symbol.setSize(1.2)
     try:
-        symbol.symbolLayer(0).setStrokeStyle(0)  # no outline: dense point clouds
+        # No outline: dense point clouds turn into solid ink otherwise. Qt6
+        # rejects the bare 0 that Qt5 accepted for a pen style, and the except
+        # below would have swallowed that into outlines silently coming back.
+        symbol.symbolLayer(0).setStrokeStyle(Qt.PenStyle.NoPen)
     except Exception:
         pass
 
