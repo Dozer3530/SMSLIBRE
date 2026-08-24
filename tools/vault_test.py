@@ -34,6 +34,7 @@ import sqlite3
 import struct
 import subprocess
 import sys
+import threading
 import time
 from dataclasses import dataclass, asdict, field
 from pathlib import Path
@@ -275,11 +276,20 @@ def discover(exe: Path, root: str, depth: int, cap: int, timeout: int,
     return hits, res.get("unclaimed") or []
 
 
-# A single wide card can write six gigabytes. The working file is deleted after
-# each card, but several workers hold one at once and a crashed run leaves them
-# behind, so a long sweep can fill the disk and then every remaining card fails
-# for a reason that has nothing to do with the data.
-MIN_FREE_GB = 15
+# A single wide card can write six gigabytes and several workers hold one at
+# once, so a long sweep can fill the disk. Running out does far more damage than
+# a failed import: the shared drives are Google Drive File Stream mounts, which
+# need local cache space to materialise folders, and with the disk full they
+# silently enumerate FEWER directories instead of reporting an error. A campaign
+# run that way swept a tree that had quietly shrunk — 110 folders that import
+# fine were never even visited — and the sweep looked like it succeeded.
+#
+# So the reserve is generous, and a card waits for space rather than skipping:
+# skipping cascaded, because the workers already running kept the disk full and
+# every card after the first skip skipped too.
+MIN_FREE_GB = 40.0
+WAIT_STEP_S = 30
+MAX_WAIT_S = 1800
 
 
 def free_gb(where: Path) -> float:
@@ -289,10 +299,12 @@ def free_gb(where: Path) -> float:
         return float("inf")
 
 
-def reclaim(out_dir: Path) -> int:
-    """Delete working GeoPackages left behind by an earlier run."""
+def reclaim(out_dir: Path, keep: set[str]) -> int:
+    """Delete working GeoPackages no worker is currently writing."""
     freed = 0
     for f in out_dir.glob("*.gpkg"):
+        if str(f) in keep:
+            continue
         try:
             size = f.stat().st_size
             f.unlink()
@@ -300,6 +312,26 @@ def reclaim(out_dir: Path) -> int:
         except OSError:
             pass
     return freed
+
+
+# Files currently being written, so reclaim() cannot delete one mid-import.
+_active: set[str] = set()
+_active_lock = threading.Lock()
+
+
+def wait_for_space(out_dir: Path, gpkg: Path) -> bool:
+    """Block until there is room to write, or give up after MAX_WAIT_S."""
+    waited = 0
+    while free_gb(out_dir) < MIN_FREE_GB:
+        with _active_lock:
+            freed = reclaim(out_dir, set(_active))
+        if freed:
+            continue
+        if waited >= MAX_WAIT_S:
+            return False
+        time.sleep(WAIT_STEP_S)
+        waited += WAIT_STEP_S
+    return True
 
 
 def test_candidate(exe: Path, path: str, out_dir: Path, timeout: int,
@@ -319,24 +351,24 @@ def test_candidate(exe: Path, path: str, out_dir: Path, timeout: int,
         # same" gpkg concurrently died on a Windows sharing violation.
         import hashlib
         digest = hashlib.sha1(path.encode("utf-8")).hexdigest()[:10]
-        if free_gb(out_dir) < MIN_FREE_GB:
-            freed = reclaim(out_dir)
-            if freed:
-                print(f"  reclaimed {freed / 1e9:.1f} GB of working files",
-                      flush=True)
-        if free_gb(out_dir) < MIN_FREE_GB:
-            # Recording this rather than failing keeps the distinction between
-            # "this card is a problem" and "this machine ran out of room".
-            r.status = "skipped-disk"
-            r.error = f"only {free_gb(out_dir):.1f} GB free"
-            r.seconds = time.time() - t0
-            return r
-
         safe = "".join(ch if ch.isalnum() else "_" for ch in path)[-80:]
         gpkg = out_dir / f"{safe}_{digest}.gpkg"
         gpkg.unlink(missing_ok=True)
 
-        imp = run_sidecar(exe, ["import", path, str(gpkg)], timeout=timeout)
+        if not wait_for_space(out_dir, gpkg):
+            # Recording this rather than failing keeps the distinction between
+            # "this card is a problem" and "this machine ran out of room".
+            r.status = "skipped-disk"
+            r.error = f"only {free_gb(out_dir):.1f} GB free after waiting"
+            r.seconds = time.time() - t0
+            return r
+        with _active_lock:
+            _active.add(str(gpkg))
+        try:
+            imp = run_sidecar(exe, ["import", path, str(gpkg)], timeout=timeout)
+        finally:
+            with _active_lock:
+                _active.discard(str(gpkg))
         if not imp.get("ok") and is_transient(str(imp.get("error", ""))):
             # The vault lives on a Google Drive shared drive, where a read can
             # fail with "Incorrect function." while the file is perfectly fine.
@@ -597,6 +629,10 @@ def main() -> int:
                          "this. Readers search recursively, so detection on the "
                          "top of a vault walks the whole share for an answer that "
                          "is discarded anyway")
+    ap.add_argument("--min-scan-fraction", type=float, default=0.75,
+                    help="refuse to run if the scan finds less than this "
+                         "fraction of the directories the last run found; "
+                         "0 disables the check")
     ap.add_argument("--reuse-scan", action="store_true",
                     help="reuse the scan.json from a previous discovery walk "
                          "instead of walking the tree again")
@@ -635,6 +671,24 @@ def main() -> int:
         readers, unclaimed = discover(exe, args.root, args.depth, args.cap,
                                       args.scan_timeout, out_dir,
                                       args.reuse_scan, args.min_depth)
+        # A Google Drive mount short of local cache space enumerates FEWER
+        # directories instead of failing, so a scan can shrink silently. The
+        # previous run is the yardstick: a big drop means the mount was
+        # degraded, not that the data was deleted.
+        prior = results_path.with_name("scan_baseline.json")
+        walked = len(readers) + len(unclaimed)
+        if prior.is_file():
+            was = json.loads(prior.read_text()).get("walked", 0)
+            if was and walked < was * args.min_scan_fraction:
+                print(f"\nSCAN LOOKS DEGRADED: {walked:,} directories now vs "
+                      f"{was:,} last time ({walked / was:.0%}).", file=sys.stderr)
+                print("Refusing to overwrite good results with a partial sweep. "
+                      "Check free disk space and that the drive is fully mounted, "
+                      "then re-run; pass --min-scan-fraction 0 to override.",
+                      file=sys.stderr)
+                return 3
+        prior.write_text(json.dumps({"walked": walked, "root": args.root}))
+
         nested = len(readers)
         readers = deepest_cards(readers)
         print(f"  {len(readers)} cards claimed ({nested - len(readers)} outer "

@@ -111,7 +111,9 @@ def phases(args) -> list[dict]:
             "what": f"Full sweep: {name}",
             "cmd": [PY, "tools/vault_test.py", "--root", root,
                     "--out", f"analysis/campaign/{key}",
-                    "--depth", "14", "--cap", "200000", "--workers", "5",
+                    # Three workers, not five: a wide card writes several GB and the reserve
+                    # has to cover every worker holding one at once.
+                    "--depth", "14", "--cap", "200000", "--workers", "3",
                     "--min-depth", "2", "--timeout", "7200",
                     "--scan-timeout", "43200"],
             "timeout": 20 * 3600,
