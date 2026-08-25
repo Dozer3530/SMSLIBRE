@@ -75,3 +75,10 @@ docs/sample.gpkg
 analysis/campaign/.done-*
 analysis/campaign/*.log
 analysis/campaign/scan_baseline.json
+# The driver writes one subdirectory per drive, so the flat patterns above miss
+# the files that actually get produced: ~9 MB of regenerable scan output per
+# campaign. results.json and determinism.json ARE tracked — they are the
+# evidence; the raw walk and its logs are not.
+analysis/campaign/*/scan.json
+analysis/campaign/*/scan.log
+analysis/campaign/*/scan_baseline.json

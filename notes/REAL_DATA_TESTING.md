@@ -11,9 +11,17 @@ Run it with:
 python tools/vault_test.py --root "G:/Shared drives/Olds College Smart Farm Vault" --out analysis/vault --depth 12 --cap 200000 --workers 5 --min-depth 2
 ```
 
-It writes `analysis/vault/results.json` (the corpus the regression tests read)
-and `analysis/vault/COVERAGE.md` (the report). `--only-detected` re-imports just
-the claimed folders after a sidecar change; `--reuse-scan` skips the walk.
+It writes `analysis/vault/results.json` and `analysis/vault/COVERAGE.md` (the
+report). `--only-detected` re-imports just the claimed folders after a sidecar
+change; `--reuse-scan` skips the walk.
+
+The regression tests read **every** `results.json` on disk — each
+`analysis/campaign/<drive>/` plus the single-drive `analysis/vault/` — and merge
+them by card path, keeping the richest record for a card that appears twice.
+That is 568 cards rather than the vault's 428. The reader set happens to be the
+same nine either way, so the test count does not move; what moves is the pool
+each reader's representative is drawn from, and the reach of the
+no-bad-geometry assertion, which now covers all three drives.
 
 ## Headline (three drives, August 24 2026 campaign)
 

@@ -13,11 +13,17 @@ namespace SmsLibre.Tests;
 /// Regression cover driven by a real corpus rather than invented fixtures.
 ///
 /// <c>tools/vault_test.py</c> walks a data vault, imports every card it can find
-/// and records the outcome in <c>analysis/vault/results.json</c>. These tests
-/// re-import the cards that previously succeeded and assert they still do, with
-/// no fewer layers or features than before. That catches the failure mode this
-/// project actually suffers from: a change that silently drops data on one
-/// vendor's format while the others keep working.
+/// and records the outcome in a <c>results.json</c>. These tests re-import the
+/// cards that previously succeeded and assert they still do, with no fewer
+/// layers or features than before. That catches the failure mode this project
+/// actually suffers from: a change that silently drops data on one vendor's
+/// format while the others keep working.
+///
+/// EVERY corpus on disk is loaded, not just the vault's. The campaign sweeps
+/// each drive into its own file, and the drives do not hold the same formats —
+/// pinning this to the vault alone left STAAR's 82 imported cards and 67 M
+/// features untested, so a reader exercised only there had no regression cover
+/// at all.
 ///
 /// The corpus references the user's own data, so these tests skip cleanly when
 /// it is absent (CI, a fresh clone, another machine).
@@ -39,24 +45,60 @@ public class CorpusRegressionTests
         return "";
     }
 
+    /// <summary>Every corpus file a sweep may have written, newest layout first.</summary>
+    private static IEnumerable<string> CorpusFiles(string root)
+    {
+        string campaign = Path.Combine(root, "analysis", "campaign");
+        if (Directory.Exists(campaign))
+            foreach (string d in Directory.EnumerateDirectories(campaign).OrderBy(x => x))
+            {
+                string f = Path.Combine(d, "results.json");
+                if (File.Exists(f)) yield return f;
+            }
+
+        // The single-drive layout predates the campaign. Still honoured so a
+        // machine that has only ever run tools/vault_test.py keeps its cover.
+        string legacy = Path.Combine(root, "analysis", "vault", "results.json");
+        if (File.Exists(legacy)) yield return legacy;
+    }
+
     private static List<CorpusEntry> LoadCorpus()
     {
         string root = RepoRoot();
         if (root.Length == 0) return new();
-        string p = Path.Combine(root, "analysis", "vault", "results.json");
-        if (!File.Exists(p)) return new();
 
-        using var doc = JsonDocument.Parse(File.ReadAllText(p));
-        var list = new List<CorpusEntry>();
-        foreach (var e in doc.RootElement.EnumerateArray())
+        // Keyed by path: the same card can appear in two corpora (a re-sweep, or
+        // a drive walked twice). Keep the richest record so a card is never
+        // held to a weaker expectation than one already met.
+        var best = new Dictionary<string, CorpusEntry>(StringComparer.OrdinalIgnoreCase);
+        foreach (string file in CorpusFiles(root))
         {
-            string Str(string n) => e.TryGetProperty(n, out var v) ? v.GetString() ?? "" : "";
-            int Int(string n) => e.TryGetProperty(n, out var v) && v.TryGetInt32(out int i) ? i : 0;
-            list.Add(new CorpusEntry(Str("path"), Str("detected"), Str("status"),
-                Int("layers"), Int("features"), Int("max_channels"),
-                Int("invalid_geom"), Int("out_of_range")));
+            JsonDocument doc;
+            // A sweep killed mid-write leaves a truncated file. That is a broken
+            // corpus, not a broken importer, so drop it and use the others
+            // rather than failing every test in the suite.
+            try { doc = JsonDocument.Parse(File.ReadAllText(file)); }
+            catch (JsonException) { continue; }
+            catch (IOException) { continue; }
+
+            using (doc)
+            {
+                if (doc.RootElement.ValueKind != JsonValueKind.Array) continue;
+                foreach (var e in doc.RootElement.EnumerateArray())
+                {
+                    string Str(string n) => e.TryGetProperty(n, out var v) ? v.GetString() ?? "" : "";
+                    int Int(string n) => e.TryGetProperty(n, out var v) && v.TryGetInt32(out int i) ? i : 0;
+                    var entry = new CorpusEntry(Str("path"), Str("detected"), Str("status"),
+                        Int("layers"), Int("features"), Int("max_channels"),
+                        Int("invalid_geom"), Int("out_of_range"));
+                    if (entry.Path.Length == 0) continue;
+                    if (!best.TryGetValue(entry.Path, out var prev) ||
+                        entry.Features > prev.Features)
+                        best[entry.Path] = entry;
+                }
+            }
         }
-        return list;
+        return best.Values.ToList();
     }
 
     /// <summary>Cards that imported successfully last time the corpus was built.</summary>
