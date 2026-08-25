@@ -431,15 +431,34 @@ def deepest_cards(paths: dict[str, list[str]]) -> dict[str, list[str]]:
 
 
 def _distinct_cards(rows: list[dict]) -> list[dict]:
-    """The report's view of `deepest_cards`, applied to result rows.
+    """One row per card, collapsing a nest that holds the same data twice.
 
-    Rows carry only the first claimant, so this sees single-reader claim sets —
-    the full-set collapse already happened during discovery, and rows exist only
-    for directories that survived it.
+    Discovery collapses on the full claim set; this cannot, because a result row
+    records only the reader that imported it. So it collapses on a stronger
+    signal: a card is folded into a descendant only when that descendant
+    ACTUALLY PRODUCED DATA.
+
+    Without that test the report kept the wrong half of a nest. The Brandt
+    Seeding card is claimed by ISOv4 for a guidance-line TASKDATA sitting beside
+    a JD-Data tree; both the card and its TASKDATA subfolder end up as rows with
+    the same reader, the subfolder imports nothing, and collapsing to the deeper
+    row credited the card's 7,049,181 points to an empty folder — three times
+    over, understating the vault by 21 million features that had imported
+    perfectly well.
     """
-    readers = {r["path"]: [r["detected"]] for r in rows}
-    keep = deepest_cards(readers)
-    return [r for r in rows if r["path"] in keep]
+    by_path = {r["path"]: r for r in rows}
+    keep = []
+    for r in rows:
+        prefix = r["path"] + os.sep
+        covered = any(
+            other.startswith(prefix)
+            and by_path[other]["detected"] == r["detected"]
+            and by_path[other]["features"] > 0
+            for other in by_path
+        )
+        if not covered:
+            keep.append(r)
+    return keep
 
 
 def nested_duplicates(cards: list[dict]) -> set[str]:

@@ -15,27 +15,30 @@ It writes `analysis/vault/results.json` (the corpus the regression tests read)
 and `analysis/vault/COVERAGE.md` (the report). `--only-detected` re-imports just
 the claimed folders after a sidecar change; `--reuse-scan` skips the walk.
 
-## Headline (both drives, August 19 2026 sweep — all nine readers final)
+## Headline (three drives, August 24 2026 campaign)
+
+An unattended 8-phase campaign: unit tests, a full sweep of every shared drive,
+a re-import of each drive to prove the results reproduce, and a combined report.
+15.4 hours.
 
 | Drive | Dirs walked | Cards | Imported | Features |
 |---|--:|--:|--:|--:|
-| Smart Farm Vault | 13,458 | 800 | 553 | **108,864,986** |
-| 210600 STAAR | 9,240 | 116 | 82 | **67,377,366** |
+| Smart Farm Vault | 13,472 | 801 | 554 | **108,857,115** |
+| 210600 STAAR | 9,260 | 116 | 82 | **67,377,366** |
+| M: sfdata | 10,339 | 455 | 3 | **99,674** |
+| **All** | **33,071** | **1,372** | **639** | **176,334,155** |
 
-No invalid or out-of-range geometry survived import on either drive. STAAR has
-zero import failures. The vault has exactly six, none of them format gaps:
-one Trimble card (licence pending) and five Precision Planting claims that are
-drone-imagery folders, not machine data.
+No invalid or out-of-range geometry survived import on any drive. Six failures,
+all known: one Trimble licence, five Precision Planting claims on drone imagery.
 
-Landmarks of this sweep:
-- **Brandt Seeding**, empty in every earlier sweep, imports from all three of
-  its vault locations at 7,049,181 features each — multi-claimant routing
-  (ISOv4 claims its guidance-line TASKDATA and yields nothing; ProtobufPlugins
-  gets the next turn and reads the JD-Data tree).
-- **All three PreSeed cards** import at 2,054,311 features each after
-  CardRepair skips the one orphaned .fdl whose .fdd is missing.
-- **Raven Viper jobs carry agronomy**: rate_applied/rate_target (L/ha),
-  sections_on, heading and cross_track decoded from the native records.
+**Every card re-imported reproduced exactly** — 123 cards across the three
+drives, compared on layer count, feature count, channel count and operation
+list. Nothing drifts between runs.
+
+**M: holds almost no raw machine data.** 451 of its 455 claims are Precision
+Planting over-claiming folders it cannot read; the drive is analysis output,
+aerial imagery and planning documents. Three real cards (HyperLayer exports)
+import cleanly. That is the drive's true state, not a coverage gap.
 
 ### What still cannot import (the improvement backlog)
 

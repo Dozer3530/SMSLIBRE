@@ -133,7 +133,12 @@ def main() -> int:
               "that are not inside a card which was imported. This is the "
               "improvement backlog.", "",
               "| Drive | Extension | Folders |", "|---|---|--:|"]
-    DATA = {".jdp", ".jdl", ".db", ".bin", ".cn1", ".dat", ".ilf",
+    # ".db" and ".bin" are deliberately absent. Sampling the folders they
+    # flagged on M: found 54 Thumbs.db, 6 DJI drone databases and folders of
+    # DJI_* image bins — Windows thumbnail caches and aerial imagery, not
+    # machine data. Left in, they reported 600+ phantom gaps and buried the
+    # handful of real ones.
+    DATA = {".jdp", ".jdl", ".cn1", ".dat", ".ilf",
             ".yld", ".agdata", ".fmd", ".fld"}
     for key, name in DRIVES:
         rows = load(key)

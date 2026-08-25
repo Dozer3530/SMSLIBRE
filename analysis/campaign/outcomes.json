@@ -1,0 +1,58 @@
+[
+ {
+  "phase": 1,
+  "name": "unit-tests",
+  "ok": false,
+  "minutes": 0.0,
+  "detail": "exit 1"
+ },
+ {
+  "phase": 2,
+  "name": "sweep-vault",
+  "ok": true,
+  "minutes": 267.1,
+  "detail": "exit 0"
+ },
+ {
+  "phase": 3,
+  "name": "sweep-staar",
+  "ok": true,
+  "minutes": 134.4,
+  "detail": "exit 0"
+ },
+ {
+  "phase": 4,
+  "name": "sweep-sfdata",
+  "ok": true,
+  "minutes": 233.4,
+  "detail": "exit 0"
+ },
+ {
+  "phase": 5,
+  "name": "determinism-vault",
+  "ok": true,
+  "minutes": 222.0,
+  "detail": "exit 0"
+ },
+ {
+  "phase": 6,
+  "name": "determinism-staar",
+  "ok": true,
+  "minutes": 65.1,
+  "detail": "exit 0"
+ },
+ {
+  "phase": 7,
+  "name": "determinism-sfdata",
+  "ok": true,
+  "minutes": 0.4,
+  "detail": "exit 0"
+ },
+ {
+  "phase": 8,
+  "name": "summary",
+  "ok": true,
+  "minutes": 0.0,
+  "detail": "exit 0"
+ }
+]
